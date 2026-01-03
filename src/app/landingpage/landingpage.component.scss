@@ -1,0 +1,104 @@
+@use '../../styles/variables' as *;
+
+:host {
+  display: flex;
+  height: 100vh;
+  background-color: $main_green;
+  color: white;
+  padding: 12px 16px 0 16px;
+  overflow: hidden;
+}
+
+.landing {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.landing__header {
+  img {
+    width: 95px;
+    height: 32px;
+  }
+}
+
+.landing__content {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+
+  button {
+    font-size: 16px;
+    cursor: pointer;
+    width: 120px;
+    height: 52px;
+    border: none;
+    color: $main_green;
+    background-color: $light_cream;
+    font-weight: 600;
+
+    &:hover {
+      background-color: $dark_cream;
+    }
+  }
+}
+
+.landing__text {
+  display: flex;
+  flex-direction: column;
+
+  p {
+    font-size: 24px;
+    margin: 0;
+    font-weight: 600;
+    width: 204px;
+  }
+
+  h1 {
+    font-size: 64px;
+    margin: 0;
+    font-weight: 700;
+    width: 222px;
+  }
+}
+
+.landing__hero {
+  position: absolute;
+  right: 0;
+  margin: 0;
+}
+
+.landing__footer {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 48px;
+
+  h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 500;
+    width: 164px;
+    padding: 0 0 16px 16px;
+  }
+
+  a {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    font-weight: 500;
+    color: white;
+    padding: 16px 16px;
+    max-width: max-content;
+
+    img {
+      transform: rotate(180deg);
+    }
+
+    &:hover {
+      background-color: $very_light_cream;
+      background-color: rgba($very_light_cream, 0.2);
+    }
+  }
+}
