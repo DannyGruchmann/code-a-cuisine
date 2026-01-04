@@ -12,192 +12,362 @@
   color: $main_green;
   background-color: white;
   font-family: 'Quicksand';
+}
 
-  &__intro {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+.generate__intro {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 
-    h1 {
-      margin: 0;
-      font-size: 32px;
-      font-weight: 600;
-    }
-
-    p {
-      margin: 0;
-      font-size: 18px;
-      font-weight: 600;
-    }
+  h1 {
+    margin: 0;
+    font-size: 32px;
+    font-weight: 600;
   }
 
-  &__panel {
-    background-color: $light_green;
-    border-radius: 32px;
-    padding: 32px 24px;
+  p {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+  }
+}
+
+.generate__panel {
+  background-color: $light_green;
+  border-radius: 32px;
+  padding: 32px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  form {
     display: flex;
+    align-items: flex-start;
     flex-direction: column;
     gap: 24px;
 
-    form {
-      display: flex;
-      align-items: flex-start;
-      flex-direction: column;
-      gap: 24px;
-
-      div {
-        width: 100%;
-      }
-
-      label,
-      legend {
-        display: block;
-        font-size: 18px;
-        font-weight: 500;
-        margin-bottom: 8px;
-      }
-
-      input[type='text'] {
-        width: -webkit-fill-available;
-        height: 36px;
-        padding: 0 12px;
-        font-size: 18px;
-        border: none;
-        border-radius: 999px;
-        background-color: $light_cream;
-        color: $main_green;
-
-        &:focus {
-          outline: 2px solid rgba($main_green, 0.4);
-        }
-      }
-
-      fieldset {
-        border: none;
-        margin: 0;
-        padding: 0;
-
-        >div {
-          display: flex;
-          align-items: start;
-          gap: 12px;
-
-          input[type='number'] {
-            border: none;
-            border-radius: 999px;
-            background-color: $light_cream;
-            font-size: 18px;
-            width: 62px;
-            height: 36px;
-            text-align: center;
-            color: $main_green;
-
-            &:focus {
-              outline: 2px solid rgba($main_green, 0.4);
-            }
-          }
-
-          button[aria-haspopup='listbox'] {
-            border: none;
-            border-radius: 999px;
-            background-color: $light_cream;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 16px;
-            width: 72px;
-            height: 36px;
-            color: $main_green;
-            cursor: pointer;
-
-            &:focus-visible {
-              outline: 2px solid rgba($main_green, 0.4);
-              outline-offset: 2px;
-            }
-
-            svg {
-              transition: transform 120ms ease;
-            }
-
-            &[aria-expanded='true'] svg {
-              transform: rotate(180deg);
-            }
-          }
-
-          div {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-          }
-
-          ul {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            width: fit-content;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            max-height: 0;
-            opacity: 0;
-            overflow: hidden;
-            pointer-events: none;
-            transition:
-              max-height 200ms ease,
-              opacity 200ms ease,
-              margin-top 200ms ease;
-
-            &.is-open {
-              max-height: 200px;
-              opacity: 1;
-              margin-top: 8px;
-              pointer-events: auto;
-            }
-
-            li {
-              width: 100%;
-            }
-
-            button {
-              width: 100%;
-              border: none;
-              background-color: transparent;
-              text-align: left;
-              padding: 0;
-              font-size: 16px;
-              color: $main_green;
-              cursor: pointer;
-
-              &:hover,
-              &:focus-visible {
-                outline: none;
-                text-decoration: underline;
-              }
-            }
-          }
-
-          >button:last-child {
-            width: 36px;
-            height: 36px;
-            border: none;
-            background-color: transparent;
-            color: $main_green;
-            cursor: pointer;
-            align-items: center;
-
-            img {
-              width: 24px;
-              height: 24px;
-            }
-          }
-        }
-      }
-    }
-
-    p {
-      margin: 0;
+    legend {
+      display: block;
       font-size: 18px;
       font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    input[type='text'] {
+      width: -webkit-fill-available;
+      height: 36px;
+      padding: 0 12px;
+      font-size: 18px;
+      border: none;
+      border-radius: 999px;
+      background-color: $light_cream;
+      color: $main_green;
+
+      &:focus {
+        outline: 2px solid rgba($main_green, 0.4);
+      }
+    }
+
+    fieldset {
+      border: none;
+      margin: 0;
+      padding: 0;
     }
   }
+
+  p {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 500;
+  }
+
+  .ingredient_list {
+    ul {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    li {
+      display: flex;
+      align-items: center;
+      border-radius: 18px;
+      padding: 6px 2px;
+      transition: background-color 200ms ease;
+
+      &:not(.is-editing):hover {
+        background-color: $light_cream;
+      }
+    }
+
+    .ingredient_row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      width: 100%;
+    }
+
+    &__info {
+      display: flex;
+      align-items: center;
+      min-width: 0;
+    }
+
+    &__bullet {
+      font-size: 20px;
+      color: $main_green;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+    }
+
+    &__amount {
+      font-weight: 500;
+      font-size: 18px;
+      min-width: 54px;
+      display: inline-flex;
+      gap: 4px;
+    }
+
+    &__name {
+      font-size: 16px;
+      font-weight: 500;
+      min-width: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    &__actions {
+      display: flex;
+    }
+
+    .icon_button {
+      width: 32px;
+      height: 32px;
+      border: none;
+      background-color: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+
+      img {
+        width: 19px;
+        height: 19px;
+
+        &:hover {
+          background-color: rgba(45, 45, 45, 0.4);
+        }
+      }
+    }
+  }
+}
+
+.next_step {
+  width: 106px;
+  height: 52px;
+  background-color: $main_green;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.form_field {
+  width: 100%;
+
+  label {
+    display: block;
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+}
+
+.serving_group {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+
+  input[type='number'] {
+    border: none;
+    border-radius: 999px;
+    background-color: $light_cream;
+    font-size: 18px;
+    width: 62px;
+    height: 36px;
+    text-align: center;
+    color: $main_green;
+    appearance: textfield;
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  }
+}
+
+.unit_select {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &.unit_select--inline {
+    align-items: flex-start;
+  }
+
+  &__trigger {
+    border: none;
+    border-radius: 999px;
+    background-color: $light_cream;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 16px;
+    width: 72px;
+    height: 36px;
+    color: $main_green;
+    cursor: pointer;
+
+    &:focus-visible {
+      outline: 2px solid rgba($main_green, 0.4);
+      outline-offset: 2px;
+    }
+
+    img {
+      transition: transform 120ms ease;
+    }
+
+    &[aria-expanded='true'] img {
+      transform: rotate(180deg);
+    }
+  }
+
+  &__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
+    transition:
+      max-height 200ms ease,
+      opacity 200ms ease,
+      margin-top 200ms ease;
+
+    &.is_open {
+      max-height: 200px;
+      opacity: 1;
+      margin-top: 8px;
+      pointer-events: auto;
+    }
+
+    li {
+      width: 100%;
+    }
+
+    button {
+      width: 100%;
+      border: none;
+      background-color: transparent;
+      text-align: left;
+      padding: 0;
+      font-size: 16px;
+      color: $main_green;
+      cursor: pointer;
+
+      &:hover,
+      &:focus-visible {
+        outline: none;
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+.add_button {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background-color: transparent;
+  color: $main_green;
+  cursor: pointer;
+  align-items: center;
+  display: inline-flex;
+
+  img {
+    width: 24px;
+    height: 24px;
+  }
+
+  &:hover {
+    background-color: $light_cream;
+    border-radius: 8px;
+  }
+}
+
+.ingredient_edit {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+
+  &__header {
+    display: flex;
+  }
+
+  &__name {
+    border: none;
+    background: transparent;
+    font-size: 16px;
+    font-weight: 600;
+    color: $main_green;
+    padding: 0;
+    width: 100%;
+  }
+
+  &__controls {
+    display: flex;
+    align-items: start;
+    gap: 12px;
+  }
+
+  &__amount {
+    border: none;
+    border-radius: 999px;
+    background-color: $light_cream;
+    width: 72px;
+    height: 36px;
+    text-align: center;
+    font-size: 16px;
+    color: $main_green;
+    appearance: textfield;
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  }
+}
+
+.next_step_container {
+  display: flex;
+  justify-content: center;
 }
