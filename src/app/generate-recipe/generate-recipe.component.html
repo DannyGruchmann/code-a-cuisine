@@ -1,0 +1,49 @@
+<main class="generate">
+  <header class="generate__brand">
+    <app-header-green-logo></app-header-green-logo>
+  </header>
+
+  <section class="generate__intro">
+    <h1>Generate recipe</h1>
+    <p>Got random stuff in your kitchen? Pop it in—we’ve got the perfect recipe waiting.</p>
+  </section>
+
+  <section class="generate__panel" aria-labelledby="add-ingredient">
+    <form>
+      <div>
+        <label for="ingredient">Ingredient</label>
+        <input id="ingredient" type="text" name="ingredient" placeholder=" " autocomplete="off">
+      </div>
+
+      <fieldset>
+        <legend id="add-ingredient">Serving size</legend>
+        <div>
+          <input type="number" name="amount" value="100" min="1" aria-label="Amount">
+
+          <div>
+            <button type="button" aria-haspopup="listbox" [attr.aria-expanded]="unitDropdownOpen"
+              (click)="toggleUnitDropdown($event)">
+              <span>{{ selectedUnit }}</span>
+              <img src="assets/img/generate-recipe/arrow_drop_down.svg" alt="">
+            </button>
+
+            <ul role="listbox" aria-label="Units" [attr.aria-hidden]="!unitDropdownOpen"
+              [class.is-open]="unitDropdownOpen">
+              <li *ngFor="let unit of units">
+                <button type="button" (click)="selectUnit(unit, $event)">{{ unit }}</button>
+              </li>
+            </ul>
+          </div>
+
+          <button type="button" aria-label="Add ingredient">
+            <img src="assets/img/generate-recipe/add_2.svg" alt="add-sign">
+          </button>
+        </div>
+      </fieldset>
+    </form>
+  </section>
+
+  <section class="generate__panel" aria-labelledby="ingredient-list">
+    <p id="ingredient-list">List of your Ingredients</p>
+  </section>
+</main>

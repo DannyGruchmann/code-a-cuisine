@@ -12,18 +12,13 @@
 
 body {
     margin: 0;
-    font-family: 'Quicksand';
 }
 
 h1,
-h2 {
-    font-family: 'Ubuntu';
-    color: $light_cream;
-}
-
+h2,
 p,
 span,
 label,
 button {
-    color: $light_cream;
+    font-family: 'Quicksand';
 }

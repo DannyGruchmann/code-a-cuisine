@@ -1,13 +1,14 @@
 <section class="landing">
     <section class="landing__content">
-        <nav class="landing__header" aria-label="Code à Cuisine">
-            <img src="assets/img/landingpage/logo.svg" alt="Code à Cuisine logo">
-        </nav>
+        <app-header-cream-logo></app-header-cream-logo>
         <div class="landing__text">
             <p>AI-Powered recipe generator</p>
             <h1>Code à Cuisine</h1>
         </div>
-        <button type="button">Get started</button>
+        <button type="button" routerLink="/generate-recipe">Get started</button>
+        <figure class="landing__hero" aria-hidden="true">
+            <img src="assets/img/landingpage/landing-meals.svg" alt="">
+        </figure>
     </section>
 
     <footer class="landing__footer">
@@ -18,6 +19,3 @@
         </a>
     </footer>
 </section>
-<figure class="landing__hero" aria-hidden="true">
-    <img src="assets/img/landingpage/landing-meals.svg" alt="">
-</figure>

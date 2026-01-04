@@ -1,0 +1,203 @@
+@use '../../styles/variables' as *;
+
+:host {
+  height: 100vh;
+}
+
+.generate {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding: 24px 16px 48px;
+  color: $main_green;
+  background-color: white;
+  font-family: 'Quicksand';
+
+  &__intro {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    h1 {
+      margin: 0;
+      font-size: 32px;
+      font-weight: 600;
+    }
+
+    p {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 600;
+    }
+  }
+
+  &__panel {
+    background-color: $light_green;
+    border-radius: 32px;
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+
+    form {
+      display: flex;
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 24px;
+
+      div {
+        width: 100%;
+      }
+
+      label,
+      legend {
+        display: block;
+        font-size: 18px;
+        font-weight: 500;
+        margin-bottom: 8px;
+      }
+
+      input[type='text'] {
+        width: -webkit-fill-available;
+        height: 36px;
+        padding: 0 12px;
+        font-size: 18px;
+        border: none;
+        border-radius: 999px;
+        background-color: $light_cream;
+        color: $main_green;
+
+        &:focus {
+          outline: 2px solid rgba($main_green, 0.4);
+        }
+      }
+
+      fieldset {
+        border: none;
+        margin: 0;
+        padding: 0;
+
+        >div {
+          display: flex;
+          align-items: start;
+          gap: 12px;
+
+          input[type='number'] {
+            border: none;
+            border-radius: 999px;
+            background-color: $light_cream;
+            font-size: 18px;
+            width: 62px;
+            height: 36px;
+            text-align: center;
+            color: $main_green;
+
+            &:focus {
+              outline: 2px solid rgba($main_green, 0.4);
+            }
+          }
+
+          button[aria-haspopup='listbox'] {
+            border: none;
+            border-radius: 999px;
+            background-color: $light_cream;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+            width: 72px;
+            height: 36px;
+            color: $main_green;
+            cursor: pointer;
+
+            &:focus-visible {
+              outline: 2px solid rgba($main_green, 0.4);
+              outline-offset: 2px;
+            }
+
+            svg {
+              transition: transform 120ms ease;
+            }
+
+            &[aria-expanded='true'] svg {
+              transform: rotate(180deg);
+            }
+          }
+
+          div {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+          }
+
+          ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            width: fit-content;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            pointer-events: none;
+            transition:
+              max-height 200ms ease,
+              opacity 200ms ease,
+              margin-top 200ms ease;
+
+            &.is-open {
+              max-height: 200px;
+              opacity: 1;
+              margin-top: 8px;
+              pointer-events: auto;
+            }
+
+            li {
+              width: 100%;
+            }
+
+            button {
+              width: 100%;
+              border: none;
+              background-color: transparent;
+              text-align: left;
+              padding: 0;
+              font-size: 16px;
+              color: $main_green;
+              cursor: pointer;
+
+              &:hover,
+              &:focus-visible {
+                outline: none;
+                text-decoration: underline;
+              }
+            }
+          }
+
+          >button:last-child {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background-color: transparent;
+            color: $main_green;
+            cursor: pointer;
+            align-items: center;
+
+            img {
+              width: 24px;
+              height: 24px;
+            }
+          }
+        }
+      }
+    }
+
+    p {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 500;
+    }
+  }
+}
