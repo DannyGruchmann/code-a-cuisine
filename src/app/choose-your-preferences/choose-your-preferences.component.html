@@ -1,0 +1,81 @@
+<main class="preferences">
+  <header class="preferences__brand">
+    <app-header-green-logo></app-header-green-logo>
+    <div>
+      <button><img src="assets/img/choose-your-preferences/Arrow 11.svg" alt=""></button>
+    </div>
+  </header>
+
+  <section class="preferences__panel">
+    <h1>Choose your preferences</h1>
+
+    <article>
+      <h2>How many portions you need?</h2>
+      <div class="counter">
+        <button type="button" aria-label="Decrease portions" (click)="adjustPortions(-1)">
+          <img src="assets/img/choose-your-preferences/minus.svg" alt="">
+        </button>
+        <span><strong>{{ portions }}</strong> Portions</span>
+        <button type="button" aria-label="Increase portions" (click)="adjustPortions(1)">
+          <img src="assets/img/choose-your-preferences/plus.svg" alt="">
+        </button>
+      </div>
+    </article>
+
+    <article>
+      <h2>How many are cooking?</h2>
+      <div class="counter">
+        <button type="button" aria-label="Decrease cooks" (click)="adjustCooks(-1)">
+          <img src="assets/img/choose-your-preferences/minus.svg" alt="">
+        </button>
+        <span><strong>{{ cooks }}</strong> Person</span>
+        <button type="button" aria-label="Increase cooks" (click)="adjustCooks(1)">
+          <img src="assets/img/choose-your-preferences/plus.svg" alt="">
+        </button>
+      </div>
+    </article>
+  </section>
+
+  <section class="preferences__options">
+    <article>
+      <header>
+        <img src="assets/img/choose-your-preferences/time.svg" alt="" aria-hidden="true">
+        <h2>Cooking time</h2>
+      </header>
+
+      <ul>
+        <li *ngFor="let option of cookingOptions">
+          <button type="button" [class.is-active]="selectedCooking === option.label"
+            (click)="selectCooking(option.label)">{{ option.label }}</button>
+          <p>{{ option.description }}</p>
+        </li>
+      </ul>
+    </article>
+
+    <article>
+      <header>
+        <img src="assets/img/choose-your-preferences/globe.svg" alt="" aria-hidden="true">
+        <h2>Cuisine</h2>
+      </header>
+
+      <div class="pill-group">
+        <button type="button" *ngFor="let option of cuisineOptions" [class.is-active]="isCuisineSelected(option)"
+          (click)="selectCuisine(option)">{{ option }}</button>
+      </div>
+    </article>
+
+    <article>
+      <header>
+        <img src="assets/img/choose-your-preferences/cutlery.svg" alt="" aria-hidden="true">
+        <h2>Diet preferences</h2>
+      </header>
+
+      <div class="pill-group">
+        <button type="button" *ngFor="let option of dietOptions" [class.is-active]="isDietSelected(option)"
+          (click)="selectDiet(option)">{{ option }}</button>
+      </div>
+    </article>
+  </section>
+
+  <button type="button" class="preferences__submit">Generate recipe</button>
+</main>

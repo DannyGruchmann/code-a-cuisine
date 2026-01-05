@@ -116,6 +116,6 @@
     </div>
   </section>
   <div class="next_step_container">
-    <button *ngIf="hasIngredients" type="button" class="next_step">Next step</button>
+    <button *ngIf="hasIngredients" type="button" class="next_step" (click)="goToPreferences()">Next step</button>
   </div>
 </main>

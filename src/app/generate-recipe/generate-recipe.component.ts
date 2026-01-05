@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, HostListener } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { HeaderGreenLogoComponent } from '../header-green-logo/header-green-logo.component';
 
 @Component({
@@ -19,7 +20,7 @@ export class GenerateRecipeComponent {
   editingIndex: number | null = null;
   editingUnitDropdownIndex: number | null = null;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private router: Router) {
     this.ingredientForm = this.fb.group({
       name: ['', Validators.required],
       amount: [100, [Validators.required, Validators.min(1)]],
@@ -125,5 +126,12 @@ export class GenerateRecipeComponent {
   closeDropdown(): void {
     this.unitDropdownOpen = false;
     this.editingUnitDropdownIndex = null;
+  }
+
+  goToPreferences(): void {
+    if (!this.hasIngredients) {
+      return;
+    }
+    this.router.navigate(['choose-your-preferences']);
   }
 }
