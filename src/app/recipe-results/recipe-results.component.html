@@ -1,0 +1,40 @@
+<main class="results">
+  <header class="results__brand">
+    <app-header-green-logo></app-header-green-logo>
+  </header>
+
+  <section class="results__content" *ngIf="workflowStatus$ | async as status">
+    <div *ngIf="status === 'loading'" class="results__loader">
+      <div class="spinner" aria-hidden="true"></div>
+      <p>Creating your dishes based on the selected preferences...</p>
+    </div>
+
+    <ng-container *ngIf="status === 'success'">
+      <h1>Your curated dishes</h1>
+      <article class="summary-card" *ngFor="let recipe of recipeSummaries$ | async; trackBy: trackByIndex">
+        <div class="summary-card__icon" aria-hidden="true">
+          <img src="assets/img/choose-your-preferences/cutlery.svg" alt="" />
+        </div>
+        <div class="summary-card__body">
+          <span class="summary-card__label">Recipe {{ recipe.order }}</span>
+          <h2>{{ recipe.title }}</h2>
+          <div class="summary-card__meta">
+            <img src="assets/img/choose-your-preferences/time.svg" alt="" aria-hidden="true" />
+            <span>Cooking time: {{ recipe.cookingTimeMinutes }}min</span>
+          </div>
+        </div>
+        <button type="button" class="summary-card__action" (click)="viewRecipe(recipe.id)">View</button>
+      </article>
+
+      <div class="results__actions">
+        <button type="button" (click)="startOver()">Start another request</button>
+      </div>
+    </ng-container>
+
+    <div *ngIf="status === 'error'" class="results__error">
+      <h1>We hit a snag</h1>
+      <p>Please adjust your inputs and try to generate recipes again.</p>
+      <button type="button" (click)="retryWorkflow()">Try again</button>
+    </div>
+  </section>
+</main>

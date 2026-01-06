@@ -2,6 +2,8 @@ import { Routes } from '@angular/router';
 import { LandingpageComponent } from './landingpage/landingpage.component';
 import { GenerateRecipeComponent } from './generate-recipe/generate-recipe.component';
 import { ChooseYourPreferencesComponent } from './choose-your-preferences/choose-your-preferences.component';
+import { RecipeResultsComponent } from './recipe-results/recipe-results.component';
+import { RecipeDetailComponent } from './recipe-detail/recipe-detail.component';
 
 export const routes: Routes = [
   {
@@ -15,5 +17,13 @@ export const routes: Routes = [
   {
     path: 'choose-your-preferences',
     component: ChooseYourPreferencesComponent
+  },
+  {
+    path: 'recipe-results',
+    component: RecipeResultsComponent
+  },
+  {
+    path: 'recipe-results/:id',
+    component: RecipeDetailComponent
   }
 ];

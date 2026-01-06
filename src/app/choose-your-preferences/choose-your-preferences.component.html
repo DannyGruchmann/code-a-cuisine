@@ -45,8 +45,8 @@
 
       <ul>
         <li *ngFor="let option of cookingOptions">
-          <button type="button" [class.is-active]="selectedCooking === option.label"
-            (click)="selectCooking(option.label)">{{ option.label }}</button>
+          <button type="button" [class.is-active]="selectedCooking === option.value"
+            (click)="selectCooking(option.value)">{{ option.label }}</button>
           <p>{{ option.description }}</p>
         </li>
       </ul>
@@ -77,5 +77,5 @@
     </article>
   </section>
 
-  <button type="button" class="preferences__submit">Generate recipe</button>
+  <button type="button" class="preferences__submit" (click)="generateRecipe()">Generate recipe</button>
 </main>

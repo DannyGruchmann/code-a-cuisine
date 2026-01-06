@@ -1,8 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HeaderGreenLogoComponent } from '../header-green-logo/header-green-logo.component';
+import { IngredientEntry } from '../models/recipe-request.model';
+import { RecipeRequestService } from '../services/recipe-request.service';
 
 @Component({
   selector: 'app-generate-recipe',
@@ -11,7 +13,7 @@ import { HeaderGreenLogoComponent } from '../header-green-logo/header-green-logo
   templateUrl: './generate-recipe.component.html',
   styleUrls: ['./generate-recipe.component.scss']
 })
-export class GenerateRecipeComponent {
+export class GenerateRecipeComponent implements OnInit {
   units = ['piece', 'ml', 'gram'];
   selectedUnit = 'gram';
   unitDropdownOpen = false;
@@ -20,12 +22,25 @@ export class GenerateRecipeComponent {
   editingIndex: number | null = null;
   editingUnitDropdownIndex: number | null = null;
 
-  constructor(private fb: FormBuilder, private router: Router) {
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private recipeRequestService: RecipeRequestService
+  ) {
     this.ingredientForm = this.fb.group({
       name: ['', Validators.required],
       amount: [100, [Validators.required, Validators.min(1)]],
       unit: [this.selectedUnit, Validators.required]
     });
+  }
+
+  ngOnInit(): void {
+    const savedIngredients = this.recipeRequestService.getIngredientsSnapshot();
+    if (savedIngredients.length > 0) {
+      savedIngredients.forEach((ingredient: IngredientEntry) => {
+        this.ingredients.push(this.createIngredientGroup(ingredient));
+      });
+    }
   }
 
   get ingredientControls() {
@@ -43,10 +58,10 @@ export class GenerateRecipeComponent {
     }
 
     this.ingredients.push(
-      this.fb.group({
-        name: [this.ingredientForm.value.name, Validators.required],
-        amount: [this.ingredientForm.value.amount, [Validators.required, Validators.min(1)]],
-        unit: [this.ingredientForm.value.unit, Validators.required]
+      this.createIngredientGroup({
+        name: this.ingredientForm.value.name,
+        amount: this.ingredientForm.value.amount,
+        unit: this.ingredientForm.value.unit
       })
     );
 
@@ -132,6 +147,15 @@ export class GenerateRecipeComponent {
     if (!this.hasIngredients) {
       return;
     }
+    this.recipeRequestService.setIngredients(this.ingredients.value as IngredientEntry[]);
     this.router.navigate(['choose-your-preferences']);
+  }
+
+  private createIngredientGroup(ingredient?: IngredientEntry): FormGroup {
+    return this.fb.group({
+      name: [ingredient?.name ?? '', Validators.required],
+      amount: [ingredient?.amount ?? 100, [Validators.required, Validators.min(1)]],
+      unit: [ingredient?.unit ?? this.selectedUnit, Validators.required]
+    });
   }
 }
