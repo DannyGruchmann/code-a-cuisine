@@ -16,6 +16,7 @@ import {
   RecipeSummary,
   WorkflowStatus
 } from '../models/recipe-request.model';
+import { environment } from '../../environments/environment';
 
 interface FirestoreRecipeResults {
   summaries?: RecipeSummary[];
@@ -37,6 +38,7 @@ export class RecipeRequestService implements OnDestroy {
   private readonly workflowStatusSubject = new BehaviorSubject<WorkflowStatus>('idle');
   private readonly recipeSummariesSubject = new BehaviorSubject<RecipeSummary[]>([]);
   private readonly recipeDetailsSubject = new BehaviorSubject<Record<string, RecipeDetail>>({});
+  private readonly webhookUrl = environment.n8nWebhookUrl;
 
   private activeRequestId: string | null = null;
   private activeRequestSubscription: Subscription | null = null;
@@ -119,6 +121,7 @@ export class RecipeRequestService implements OnDestroy {
       this.activeRequestId = docRef.id;
       this.storeRequestId(docRef.id);
       this.attachRequestListener(docRef.id);
+      await this.triggerWorkflowWebhook(docRef.id, payload);
       return true;
     } catch (error) {
       console.error('Failed to create recipe request', error);
@@ -209,6 +212,28 @@ export class RecipeRequestService implements OnDestroy {
       return window.sessionStorage.getItem('activeRecipeRequestId');
     } catch {
       return null;
+    }
+  }
+
+  private async triggerWorkflowWebhook(requestId: string, payload: RecipeRequestPayload): Promise<void> {
+    if (!this.webhookUrl) {
+      console.warn('n8n webhook URL missing; skip webhook trigger');
+      return;
+    }
+    try {
+      const response = await fetch(this.webhookUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          requestId,
+          payload
+        })
+      });
+      if (!response.ok) {
+        console.error('Webhook responded with non-OK status', response.status, await response.text());
+      }
+    } catch (error) {
+      console.error('Failed to trigger n8n webhook', error);
     }
   }
 }

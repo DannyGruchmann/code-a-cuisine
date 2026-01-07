@@ -1,14 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { HeaderGreenLogoComponent } from '../header-green-logo/header-green-logo.component';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 import { CookTimePreference, PreferenceSelection } from '../models/recipe-request.model';
 import { RecipeRequestService } from '../services/recipe-request.service';
 
 @Component({
   selector: 'app-choose-your-preferences',
   standalone: true,
-  imports: [CommonModule, HeaderGreenLogoComponent, RouterLink],
+  imports: [CommonModule, HeaderGreenLogoComponent],
   templateUrl: './choose-your-preferences.component.html',
   styleUrls: ['./choose-your-preferences.component.scss']
 })
@@ -31,7 +32,8 @@ export class ChooseYourPreferencesComponent implements OnInit {
 
   constructor(
     private recipeRequestService: RecipeRequestService,
-    private router: Router
+    private router: Router,
+    private location: Location
   ) {}
 
   ngOnInit(): void {
@@ -82,6 +84,10 @@ export class ChooseYourPreferencesComponent implements OnInit {
     if (hasPayload) {
       this.router.navigate(['recipe-results']);
     }
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 
   private applySavedPreferences(preferences: PreferenceSelection): void {
