@@ -1,6 +1,6 @@
 <main class="results">
   <header class="results__brand">
-    <app-header-green-logo></app-header-green-logo>
+    <app-header-cream-logo></app-header-cream-logo>
   </header>
 
   <section class="results__content" *ngIf="workflowStatus$ | async as status">
@@ -10,13 +10,23 @@
     </div>
 
     <ng-container *ngIf="status === 'success'">
-      <h1>Your curated dishes</h1>
+
+      <article>
+        <h1>Generated recipes</h1>
+        <img src="assets/img/recipe-results/Visual.svg" alt="">
+        <p>We took what you have and let our AI do the thinking. Here are 3 easy recipes you can make right now!</p>
+        <button>Italian<!-- id of choosen Cuisine --></button>
+        <button>Quick<!-- id of choosen Cooking time --></button>
+      </article>
+
+
       <article class="summary-card" *ngFor="let recipe of recipeSummaries$ | async; trackBy: trackByIndex">
-        <div class="summary-card__icon" aria-hidden="true">
-          <img src="assets/img/choose-your-preferences/cutlery.svg" alt="" />
-        </div>
         <div class="summary-card__body">
-          <span class="summary-card__label">Recipe {{ recipe.order }}</span>
+          <div>
+            <img src="assets/img/recipe-results/ring.svg" alt="">
+            <span class="summary-card__label">Recipe {{ recipe.order }}</span>
+          </div>
+
           <h2>{{ recipe.title }}</h2>
           <div class="summary-card__meta">
             <img src="assets/img/choose-your-preferences/time.svg" alt="" aria-hidden="true" />

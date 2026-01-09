@@ -1,13 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { HeaderGreenLogoComponent } from '../header-green-logo/header-green-logo.component';
+import { HeaderCreamLogoComponent } from '../header-cream-logo/header-cream-logo.component';
 import { RecipeRequestService } from '../services/recipe-request.service';
 
 @Component({
   selector: 'app-recipe-results',
   standalone: true,
-  imports: [CommonModule, HeaderGreenLogoComponent],
+  imports: [CommonModule, HeaderCreamLogoComponent],
   templateUrl: './recipe-results.component.html',
   styleUrls: ['./recipe-results.component.scss']
 })

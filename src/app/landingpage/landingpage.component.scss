@@ -4,10 +4,9 @@
   display: flex;
   height: 100vh;
   background-color: $main_green;
-  color: white;
+  color: $light_cream;
   padding: 12px 16px 0 16px;
   overflow: hidden;
-  color: $light_cream;
 }
 
 .landing {
@@ -89,7 +88,7 @@
     align-items: center;
     font-size: 18px;
     font-weight: 500;
-    color: white;
+    color: $light_cream;
     padding: 16px 16px;
     max-width: max-content;
 
