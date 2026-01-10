@@ -11,40 +11,38 @@
 
     <ng-container *ngIf="status === 'success'">
 
-      <article>
+      <article class="header__article">
         <h1>Generated recipes</h1>
         <img src="assets/img/recipe-results/Visual.svg" alt="">
         <p>We took what you have and let our AI do the thinking. Here are 3 easy recipes you can make right now!</p>
-        <button>Italian<!-- id of choosen Cuisine --></button>
-        <button>Quick<!-- id of choosen Cooking time --></button>
-      </article>
-
-
-      <article class="summary-card" *ngFor="let recipe of recipeSummaries$ | async; trackBy: trackByIndex">
-        <div class="summary-card__body">
-          <div>
-            <img src="assets/img/recipe-results/ring.svg" alt="">
-            <span class="summary-card__label">Recipe {{ recipe.order }}</span>
-          </div>
-
-          <h2>{{ recipe.title }}</h2>
-          <div class="summary-card__meta">
-            <img src="assets/img/choose-your-preferences/time.svg" alt="" aria-hidden="true" />
-            <span>Cooking time: {{ recipe.cookingTimeMinutes }}min</span>
-          </div>
+        <div class="choosen__elements">
+          <button>Italian<!-- id of choosen Cuisine --></button>
+          <button>Quick<!-- id of choosen Cooking time --></button>
         </div>
-        <button type="button" class="summary-card__action" (click)="viewRecipe(recipe.id)">View</button>
       </article>
+
+      <section class="summery-card__section">
+        <article class="summary-card" *ngFor="let recipe of recipeSummaries$ | async; trackBy: trackByIndex">
+          <div class="summary-card__body">
+            <div class="summary-card__header">
+              <img src="assets/img/recipe-results/ring.svg" alt="">
+              <span class="summary-card__label">Recipe {{ recipe.order }}</span>
+            </div>
+
+            <h2>{{ recipe.title }}</h2>
+            <div class="summary-card__meta">
+              <img src="assets/img/choose-your-preferences/time.svg" alt="" aria-hidden="true" />
+              <span>Cooking time: {{ recipe.cookingTimeMinutes }}min</span>
+            </div>
+          </div>
+          <button type="button" class="summary-card__action" (click)="viewRecipe(recipe.id)">View</button>
+        </article>
+      </section>
 
       <div class="results__actions">
-        <button type="button" (click)="startOver()">Start another request</button>
+        <button type="button" (click)="startOver()">Start another request <img
+            src="assets/img/recipe-results/Arrow 18.svg" alt=""></button>
       </div>
     </ng-container>
-
-    <div *ngIf="status === 'error'" class="results__error">
-      <h1>We hit a snag</h1>
-      <p>Please adjust your inputs and try to generate recipes again.</p>
-      <button type="button" (click)="retryWorkflow()">Try again</button>
-    </div>
   </section>
 </main>
