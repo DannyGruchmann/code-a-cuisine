@@ -1,91 +1,117 @@
 <ng-container *ngIf="detail$ | async as detail">
   <main class="detail">
-    <header class="detail__brand">
-      <button type="button" aria-label="Go back" (click)="goBack()">
-        <img src="assets/img/choose-your-preferences/Arrow 11.svg" alt="" />
-      </button>
+    <header class="preferences__brand">
       <app-header-green-logo></app-header-green-logo>
+      <div>
+        <button type="button" (click)="goBack()" aria-label="Go back">
+          <img src="assets/img/choose-your-preferences/Arrow 11.svg" alt="">
+        </button>
+      </div>
     </header>
 
-    <section class="detail__summary">
-      <div class="detail__time">
-        <img src="assets/img/choose-your-preferences/time.svg" alt="" aria-hidden="true" />
-        <span>Cooking time: {{ detail.cookingTimeMinutes }}min</span>
-      </div>
-      <h1>{{ detail.title }}</h1>
-      <div class="detail__chefs">
-        <span *ngFor="let chef of detail.helperLabels; index as idx">
-          <img src="assets/img/choose-your-preferences/cutlery.svg" alt="" aria-hidden="true" />
-          Chef {{ idx + 1 }}
-        </span>
-      </div>
 
-      <div class="detail__nutrition">
-        <h2>Nutritional information</h2>
-        <div class="detail__nutrition-grid">
-          <div>
-            <span>Energy</span>
-            <strong>{{ detail.nutritionalInformation.energyKcal }} kcal</strong>
-          </div>
-          <div>
-            <span>Protein</span>
-            <strong>{{ detail.nutritionalInformation.proteinGrams }} g</strong>
-          </div>
-          <div>
-            <span>Fat</span>
-            <strong>{{ detail.nutritionalInformation.fatGrams }} g</strong>
-          </div>
-          <div>
-            <span>Carbs</span>
-            <strong>{{ detail.nutritionalInformation.carbsGrams }} g</strong>
-          </div>
-        </div>
-      </div>
-
-      <div class="detail__tags">
-        <span *ngFor="let tag of detail.tags">{{ tag }}</span>
-      </div>
-    </section>
-
-    <section class="detail__ingredients">
-      <h2>Ingredients</h2>
-      <div class="detail__ingredients-columns">
-        <div>
-          <h3>Your ingredients</h3>
-          <ul>
-            <li *ngFor="let ingredient of detail.primaryIngredients">
-              {{ ingredient.amount }}{{ ingredient.unit }} {{ ingredient.name }}
-            </li>
-          </ul>
-        </div>
-        <div>
-          <h3>Extra ingredients</h3>
-          <ul>
-            <li *ngFor="let ingredient of detail.extraIngredients">
-              {{ ingredient.amount }}{{ ingredient.unit }} {{ ingredient.name }}
-            </li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <section class="detail__directions">
-      <header>
-        <h2>Directions</h2>
-        <span class="detail__hearts">❤️ {{ detail.hearts }}</span>
-      </header>
-      <ol>
-        <li *ngFor="let step of detail.directions; trackBy: trackByOrder">
-          <div class="step__title">
-            <span class="step__index">{{ step.order }}</span>
-            <div>
-              <h3>{{ step.title }}</h3>
-              <small>Chef {{ step.assignedChefIndex + 1 }}</small>
+    <div class="cooking__details">
+      <div>
+        <section class="detail__summary">
+          <div class="summery__upper_container">
+            <div class="detail__time">
+              <label class="cooking__time">
+                <img src="assets/img/choose-your-preferences/time.svg" alt="" aria-hidden="true" />
+                <span>Cooking time: {{ detail.cookingTimeMinutes }}min</span>
+              </label>
+              <h1>Pasta with spinach and cherry tommatoes <!-- placeholder -->{{ detail.title }}</h1>
+            </div>
+            <div class="detail__chefs">
+              <button *ngFor="let chef of detail.helperLabels; index as idx">
+                <img src="assets/img/recipe-detail/chef-hut.svg" alt="" aria-hidden="true" />
+                Chef {{ idx + 1 }}
+              </button>
             </div>
           </div>
-          <p>{{ step.instruction }}</p>
-        </li>
-      </ol>
+          <div class="summery__lower_container">
+            <div class="detail__nutrition">
+              <h2>Nutritional information</h2>
+              <div class="detail__nutrition-grid">
+                <div class="energy__info">
+                  <p>Energy</p>
+                  <p>{{ detail.nutritionalInformation.energyKcal }} kcal</p>
+                </div>
+                <div class="protein__info">
+                  <p>Protein</p>
+                  <p>{{ detail.nutritionalInformation.proteinGrams }} g</p>
+                </div>
+                <div class="fat__info">
+                  <p>Fat</p>
+                  <p>{{ detail.nutritionalInformation.fatGrams }} g</p>
+                </div>
+                <div class="carbs__info">
+                  <p>Carbs</p>
+                  <p>{{ detail.nutritionalInformation.carbsGrams }} g</p>
+                </div>
+              </div>
+            </div>
+            <div class="detail__tags">
+              <label>vegetarian <!-- placeholder --></label>
+              <label>Medium <!-- placeholder --></label>
+              <button>66 <img src="assets/img/recipe-detail/heart.svg" alt=""></button>
+            </div>
+          </div>
+        </section>
+        <article>
+          <section class="detail__ingredients">
+            <img src="assets/img/recipe-detail/Property 1=Ingredients Mob..svg" alt="">
+            <div class="detail__ingredients-columns">
+              <div>
+                <h3>Your ingredients</h3>
+                <ul>
+                  <li *ngFor="let ingredient of detail.primaryIngredients">
+                    {{ ingredient.amount }}{{ ingredient.unit }} {{ ingredient.name }}
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <h3>Extra ingredients</h3>
+                <ul>
+                  <li *ngFor="let ingredient of detail.extraIngredients">
+                    {{ ingredient.amount }}{{ ingredient.unit }} {{ ingredient.name }}
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <button>Hide your ingredients <img src="assets/img/recipe-detail/arrow_drop_up.svg" alt=""></button>
+          </section>
+          <section class="detail__directions">
+            <img src="assets/img/recipe-detail/Property 1=Directions Mob..svg" alt="">
+            <ol>
+              <li *ngFor="let step of detail.directions; trackBy: trackByOrder">
+                <div class="step__title">
+                  <span class="step__index">{{ step.order }}</span>
+                  <div>
+                    <h3>{{ step.title }}</h3>
+                    <span><img src="assets/img/recipe-detail/chef-hut.svg" alt="">Chef {{ step.assignedChefIndex + 1
+                      }}</span>
+                  </div>
+                </div>
+                <p>{{ step.instruction }}</p>
+              </li>
+            </ol>
+          </section>
+          <button>Hide your ingredients <img src="assets/img/recipe-detail/arrow_drop_up.svg" alt=""></button>
+        </article>
+      </div>
+      <section class="like__section">
+        <div class="font__container">
+          <h3>Just finished this meal? </h3>
+          <p>Give it a heart, so that the others know this is delicious.</p>
+        </div>
+        <img src="assets/img/recipe-detail/heart.svg" alt="">
+      </section>
+    </div>
+    <section class="go_to_cookbook">
+      <h3>Find inspiration for your next culinary adventure!</h3>
+      <button>Cookbook</button>
     </section>
+
+
   </main>
 </ng-container>

@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { HeaderGreenLogoComponent } from '../header-green-logo/header-green-logo.component';
 import { IngredientEntry } from '../models/recipe-request.model';
 import { RecipeRequestService } from '../services/recipe-request.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-generate-recipe',
@@ -25,7 +26,7 @@ export class GenerateRecipeComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private recipeRequestService: RecipeRequestService
+    private recipeRequestService: RecipeRequestService,
   ) {
     this.ingredientForm = this.fb.group({
       name: ['', Validators.required],
