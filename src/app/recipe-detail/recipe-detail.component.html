@@ -51,29 +51,31 @@
               </div>
             </div>
             <div class="detail__tags">
-              <label>vegetarian <!-- placeholder --></label>
-              <label>Medium <!-- placeholder --></label>
-              <button>66 <img src="assets/img/recipe-detail/heart.svg" alt=""></button>
+              <button>Vegetarian <!-- placeholder --></button>
+              <button>Medium <!-- placeholder --></button>
+              <button class="like__button"><img src="assets/img/recipe-detail/favorite.svg" alt="">66</button>
             </div>
           </div>
         </section>
         <article>
           <section class="detail__ingredients">
             <img src="assets/img/recipe-detail/Property 1=Ingredients Mob..svg" alt="">
-            <div class="detail__ingredients-columns">
+            <div class="detail__ingredients_lists">
               <div>
                 <h3>Your ingredients</h3>
-                <ul>
-                  <li *ngFor="let ingredient of detail.primaryIngredients">
-                    {{ ingredient.amount }}{{ ingredient.unit }} {{ ingredient.name }}
+                <ul *ngFor="let ingredient of detail.primaryIngredients">
+                  <li>
+                    <span>{{ ingredient.amount }}<span>{{ ingredient.unit }}</span>
+                      <span>{{ ingredient.name }}</span></span>
                   </li>
                 </ul>
               </div>
               <div>
                 <h3>Extra ingredients</h3>
-                <ul>
-                  <li *ngFor="let ingredient of detail.extraIngredients">
-                    {{ ingredient.amount }}{{ ingredient.unit }} {{ ingredient.name }}
+                <ul *ngFor="let ingredient of detail.extraIngredients">
+                  <li>
+                    <span>{{ ingredient.amount }}<span>{{ ingredient.unit }}</span>
+                      <span>{{ ingredient.name }}</span></span>
                   </li>
                 </ul>
               </div>
@@ -81,12 +83,12 @@
             <button>Hide your ingredients <img src="assets/img/recipe-detail/arrow_drop_up.svg" alt=""></button>
           </section>
           <section class="detail__directions">
-            <img src="assets/img/recipe-detail/Property 1=Directions Mob..svg" alt="">
+            <img class="detail__directions_img" src="assets/img/recipe-detail/Property 1=Directions Mob..svg" alt="">
             <ol>
               <li *ngFor="let step of detail.directions; trackBy: trackByOrder">
                 <div class="step__title">
                   <span class="step__index">{{ step.order }}</span>
-                  <div>
+                  <div class="directions__headings">
                     <h3>{{ step.title }}</h3>
                     <span><img src="assets/img/recipe-detail/chef-hut.svg" alt="">Chef {{ step.assignedChefIndex + 1
                       }}</span>
@@ -95,8 +97,8 @@
                 <p>{{ step.instruction }}</p>
               </li>
             </ol>
+            <button>Hide your ingredients <img src="assets/img/recipe-detail/arrow_drop_up.svg" alt=""></button>
           </section>
-          <button>Hide your ingredients <img src="assets/img/recipe-detail/arrow_drop_up.svg" alt=""></button>
         </article>
       </div>
       <section class="like__section">

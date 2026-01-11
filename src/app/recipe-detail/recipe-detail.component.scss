@@ -32,7 +32,8 @@
 
   &__chefs {
     display: flex;
-    gap: 8px;
+    flex-wrap: wrap;
+    gap: 5px;
 
     button {
       display: flex;
@@ -60,26 +61,14 @@
   }
 
   &__nutrition-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 12px;
-
-    div {
-      background: #f3f8f2;
-      border-radius: 16px;
-      padding: 12px;
-      text-align: center;
-    }
+    display: flex;
+    gap: 15px;
 
     span {
       display: block;
-      color: #4a5b4b;
-      font-size: 0.85rem;
-    }
-
-    strong {
-      font-size: 1.1rem;
-      color: #1d3a29;
+      color: $main_green;
+      font-size: 18px;
+      font-weight: 600;
     }
   }
 
@@ -89,47 +78,98 @@
     gap: 10px;
     margin-top: 16px;
 
-    span {
-      padding: 6px 14px;
+    button {
+      border: none;
+      background-color: $darker_green;
       border-radius: 999px;
-      background: #f4f1e8;
-      color: #3c3b37;
-      font-size: 0.85rem;
-      font-weight: 600;
+      font-size: 16px;
+      color: $main_green;
+      min-width: 64px;
+      height: 32px;
+      padding: 0 12px;
+    }
+
+    .like__button {
+      display: flex;
+      align-items: center;
+      height: 32px;
+      font-size: 16px;
+      font-weight: 500;
+      justify-content: center;
+      gap: 4px;
     }
   }
 
-  &__ingredients-columns {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 24px;
-    margin-top: 16px;
+  &__ingredients {
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
 
-    h3 {
-      margin-bottom: 8px;
-      color: #1d3a29;
+    img {
+      width: 100%;
     }
 
-    ul {
-      list-style: disc;
-      margin: 0;
-      padding-left: 20px;
-      color: #374151;
+    h3 {
+      color: $lighting_green;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    li {
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 16px;
+      font-weight: 500;
+      background-color: unset;
+      border: unset;
+      color: $main_green;
+
+      img {
+        width: 14px;
+        height: 8px;
+      }
     }
   }
 
   &__directions {
-    header {
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+
+    p {
+      font-size: 16px;
+      font-weight: 500;
+      color: $main_green;
+    }
+
+    button {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      margin-bottom: 16px;
+      justify-content: center;
+      gap: 6px;
+      font-size: 16px;
+      font-weight: 500;
+      background-color: unset;
+      border: unset;
+      color: $main_green;
+
+      img {
+        width: 14px;
+        height: 8px;
+      }
     }
   }
+}
 
-  &__hearts {
-    font-size: 1.2rem;
-  }
+.detail__directions_img {
+  margin-block-end: 1em;
 }
 
 .detail__directions ol {
@@ -139,12 +179,6 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-
-  li {
-    background: #f9f9f3;
-    border-radius: 18px;
-    padding: 16px;
-  }
 }
 
 .step__title {
@@ -162,15 +196,42 @@
 }
 
 .step__index {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: #1f4b34;
-  color: #fff;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
+  background: $light_cream;
+  color: $main_green;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.directions__headings {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+
+  h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: $main_green;
+  }
+
+  span {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 3px;
+    min-width: 92px;
+    height: 27px;
+    font-size: 18px;
+    font-weight: 500;
+    padding: 3px;
+    background-color: #D7DFD7;
+    border-radius: 6px;
+  }
 }
 
 .summery__upper_container {
@@ -213,5 +274,66 @@
     font-size: 24px;
     font-weight: 600;
     color: $main_green;
+  }
+}
+
+.detail__ingredients_lists {
+
+  ul {
+    padding-left: 24px;
+  }
+
+  span {
+    margin: 0;
+    display: flex;
+    gap: 4px;
+  }
+}
+
+.font__container {
+  h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  p {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 500;
+  }
+}
+
+.like__section {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+
+  img {
+    width: 40px;
+    height: 36px;
+  }
+}
+
+.go_to_cookbook {
+  display: flex;
+  padding: 12px 20px;
+  background-color: $light_green;
+  border-radius: 16px;
+
+  h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 500;
+  }
+
+  button {
+    border: unset;
+    width: 110px;
+    height: 52px;
+    font-size: 16px;
+    font-weight: 600;
+    color: $very_light_cream;
+    background-color: $main_green;
   }
 }

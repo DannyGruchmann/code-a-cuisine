@@ -48,7 +48,7 @@ export class ChooseYourPreferencesComponent implements OnInit {
   }
 
   adjustCooks(amount: number): void {
-    this.cooks = Math.min(3, Math.max(1, this.cooks + amount));
+    this.cooks = Math.min(4, Math.max(1, this.cooks + amount));
   }
 
   selectCooking(option: CookTimePreference): void {
