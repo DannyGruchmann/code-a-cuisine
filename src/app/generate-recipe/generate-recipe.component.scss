@@ -35,7 +35,7 @@
 .generate__panel {
   background-color: $light_green;
   border-radius: 32px;
-  padding: 32px 24px;
+  padding: 32px 20px;
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -133,6 +133,7 @@
     }
 
     &__name {
+      flex: 1;
       font-size: 16px;
       font-weight: 500;
       min-width: 0;

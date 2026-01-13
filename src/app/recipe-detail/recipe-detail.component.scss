@@ -97,6 +97,7 @@
       font-weight: 500;
       justify-content: center;
       gap: 4px;
+      cursor: pointer;
     }
   }
 
@@ -130,6 +131,7 @@
       background-color: unset;
       border: unset;
       color: $main_green;
+      cursor: pointer;
 
       img {
         width: 14px;
@@ -159,6 +161,7 @@
       background-color: unset;
       border: unset;
       color: $main_green;
+      cursor: pointer;
 
       img {
         width: 14px;
@@ -309,10 +312,17 @@
   align-items: center;
   padding: 16px;
 
-  img {
-    width: 40px;
-    height: 36px;
+  button {
+    border-style: unset;
+    background: transparent;
+    cursor: pointer;
+
+    img {
+      width: 40px;
+      height: 36px;
+    }
   }
+
 }
 
 .go_to_cookbook {
@@ -335,5 +345,6 @@
     font-weight: 600;
     color: $very_light_cream;
     background-color: $main_green;
+    cursor: pointer;
   }
 }
