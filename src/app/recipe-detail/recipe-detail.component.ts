@@ -39,6 +39,10 @@ export class RecipeDetailComponent {
     this.router.navigate(['recipe-results']);
   }
 
+  goToCookbook(): void {
+    this.router.navigate(['cookbook']);
+  }
+
   trackByOrder(_index: number, step: { order: number }): number {
     return step.order;
   }

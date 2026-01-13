@@ -4,6 +4,7 @@ import { GenerateRecipeComponent } from './generate-recipe/generate-recipe.compo
 import { ChooseYourPreferencesComponent } from './choose-your-preferences/choose-your-preferences.component';
 import { RecipeResultsComponent } from './recipe-results/recipe-results.component';
 import { RecipeDetailComponent } from './recipe-detail/recipe-detail.component';
+import { CookbookComponent } from './cookbook/cookbook.component';
 
 export const routes: Routes = [
   {
@@ -25,5 +26,9 @@ export const routes: Routes = [
   {
     path: 'recipe-results/:id',
     component: RecipeDetailComponent
+  },
+  {
+    path: 'cookbook',
+    component: CookbookComponent
   }
 ];

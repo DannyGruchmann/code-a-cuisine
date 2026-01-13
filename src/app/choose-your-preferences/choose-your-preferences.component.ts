@@ -13,6 +13,7 @@ import { RecipeRequestService } from '../services/recipe-request.service';
   templateUrl: './choose-your-preferences.component.html',
   styleUrls: ['./choose-your-preferences.component.scss']
 })
+
 export class ChooseYourPreferencesComponent implements OnInit {
   cookingOptions = [
     { label: 'Quick', description: 'up to 20min', value: 'under20' as CookTimePreference },
