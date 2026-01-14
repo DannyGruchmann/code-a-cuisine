@@ -1,4 +1,96 @@
 <main class="cookbook">
-  <h1>Cookbook</h1>
-  <p>Coming soon.</p>
+  <header class="preferences__brand">
+    <app-header-green-logo></app-header-green-logo>
+    <div>
+      <button type="button" (click)="goBack()" aria-label="Go back">
+        <img src="assets/img/choose-your-preferences/Arrow 11.svg" alt="">
+      </button>
+    </div>
+  </header>
+
+  <div class="cookbook_header_container">
+    <section class="header_upper_container">
+      <h1>Cookbook</h1>
+      <p>From quick bites to gourmet delights, explore them all in our ultimate cookbook and get inspired for your next
+        culinary adventure.</p>
+    </section>
+
+    <div class="header_lower_container">
+      <section class="liked_heading">
+        <h2>Most liked recipes</h2>
+        <img src="assets/img/cookbook/Heart.svg" alt="">
+      </section>
+
+      <section class="liked_article">
+
+        <!-- Artikel dann später noch auf einen artikel verringern und mit ngFor mit variablen 5x erstellen -->
+
+        <article>
+          <div class="single_moste_liked_recipe">
+            <div class="inner_container_schedule">
+              <img src="assets/img/cookbook/schedule.svg" alt="">
+              <span>Cooking time: 20min <!-- placeholder for timestamp --></span>
+            </div>
+            <p>Pasta with spinach and cherry tomatoes<!-- palceholder for recipe heading --></p>
+          </div>
+          <button><img src="assets/img/cookbook/favorite.svg" alt="">66<!-- placeholder collected likes --></button>
+        </article>
+
+        <article>
+          <div>
+            <div class="inner_container_schedule">
+              <img src="assets/img/cookbook/schedule.svg" alt="">
+              <span>Cooking time: 20min <!-- placeholder for timestamp --></span>
+            </div>
+            <p>Pasta with spinach and cherry tomatoes<!-- palceholder for recipe heading --></p>
+          </div>
+          <button><img src="assets/img/cookbook/favorite.svg" alt="">66<!-- placeholder collected likes --></button>
+        </article>
+
+
+      </section>
+
+    </div>
+  </div>
+
+
+  <section class="country_cuisine">
+
+    <article>
+      <h2> Italian cuisine <img src="#" alt=""></h2> <!-- small icon -->
+      <a href="#"><img src="#" alt=""><!-- big image --></a>
+    </article>
+
+    <article>
+      <h2> German cuisine <img src="#" alt=""></h2> <!-- small icon -->
+      <a href="#"><img src="#" alt=""><!-- big image --></a>
+    </article>
+
+    <article>
+      <h2> Japanese cuisine <img src="#" alt=""></h2> <!-- small icon -->
+      <a href="#"><img src="#" alt=""><!-- big image --></a>
+    </article>
+
+    <article>
+      <h2> Gourmet cuisine <img src="#" alt=""></h2> <!-- small icon -->
+      <a href="#"><img src="#" alt=""><!-- big image --></a>
+    </article>
+
+    <article>
+      <h2> Indian cuisine <img src="#" alt=""></h2> <!-- small icon -->
+      <a href="#"><img src="#" alt=""><!-- big image --></a>
+    </article>
+
+    <article>
+      <h2> Fusion cuisine <img src="#" alt=""></h2> <!-- small icon -->
+      <a href="#"><img src="#" alt=""><!-- big image --></a>
+    </article>
+
+  </section>
+
+  <div class="results__actions">
+    <button type="button" (click)="startOver()">Generate new recipe <img src="assets/img/recipe-results/Arrow 18.svg"
+        alt=""></button>
+  </div>
+
 </main>

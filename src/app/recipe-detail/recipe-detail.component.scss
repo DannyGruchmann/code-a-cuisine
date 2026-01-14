@@ -182,6 +182,15 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+  max-height: 2000px;
+  opacity: 1;
+  overflow: hidden;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+
+.detail__directions ol.is-collapsed {
+  max-height: 0;
+  opacity: 0;
 }
 
 .step__title {
@@ -281,6 +290,10 @@
 }
 
 .detail__ingredients_lists {
+  max-height: 1000px;
+  opacity: 1;
+  overflow: hidden;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
 
   ul {
     padding-left: 24px;
@@ -291,6 +304,11 @@
     display: flex;
     gap: 4px;
   }
+}
+
+.detail__ingredients_lists.is-collapsed {
+  max-height: 0;
+  opacity: 0;
 }
 
 .font__container {

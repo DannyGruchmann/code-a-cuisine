@@ -14,6 +14,10 @@ import { RecipeRequestService } from '../services/recipe-request.service';
   styleUrls: ['./recipe-detail.component.scss']
 })
 export class RecipeDetailComponent {
+  ingredientsCollapsed = false;
+  directionsCollapsed = false;
+  isRecipeLiked = false;
+
   detail$ = combineLatest([this.route.paramMap, this.recipeRequestService.recipeDetails$]).pipe(
     map(([params, details]) => {
       const recipeId = params.get('id');
@@ -41,6 +45,18 @@ export class RecipeDetailComponent {
 
   goToCookbook(): void {
     this.router.navigate(['cookbook']);
+  }
+
+  toggleIngredients(): void {
+    this.ingredientsCollapsed = !this.ingredientsCollapsed;
+  }
+
+  toggleDirections(): void {
+    this.directionsCollapsed = !this.directionsCollapsed;
+  }
+
+  toggleLike(): void {
+    this.isRecipeLiked = !this.isRecipeLiked;
   }
 
   trackByOrder(_index: number, step: { order: number }): number {

@@ -26,3 +26,24 @@ strong,
 li {
     font-family: 'Quicksand';
 }
+
+/* Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: $main_green transparent;
+}
+
+/* Chrome / Edge / Safari */
+*::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: $main_green;
+    border-radius: 999px;
+}
+
+*::-webkit-scrollbar-track {
+    background-color: transparent;
+}
