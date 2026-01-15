@@ -19,13 +19,19 @@ import {
 import { environment } from '../../environments/environment';
 
 interface FirestoreRecipeResults {
-  summaries?: RecipeSummary[];
+  summaries?: RecipeSummary[] | Record<string, RecipeSummary>;
   details?: Record<string, RecipeDetail>;
 }
 
 interface FirestoreRecipeRequest {
-  status?: WorkflowStatus;
-  results?: FirestoreRecipeResults;
+  status?: WorkflowStatus | 'pending' | 'processing' | 'completed' | 'done';
+  results?: FirestoreRecipeResults | RecipeSummary[];
+  summaries?: RecipeSummary[] | Record<string, RecipeSummary>;
+  details?: Record<string, RecipeDetail>;
+  recipes?: RecipeSummary[] | Record<string, RecipeSummary>;
+  recipeSummaries?: RecipeSummary[] | Record<string, RecipeSummary>;
+  recipeDetails?: Record<string, RecipeDetail>;
+  items?: RecipeSummary[] | Record<string, RecipeSummary>;
   errorMessage?: string;
 }
 
@@ -36,6 +42,7 @@ export class RecipeRequestService implements OnDestroy {
   private readonly ingredientsSubject = new BehaviorSubject<IngredientEntry[]>([]);
   private readonly preferencesSubject = new BehaviorSubject<PreferenceSelection | null>(null);
   private readonly workflowStatusSubject = new BehaviorSubject<WorkflowStatus>('idle');
+  private readonly generatingSubject = new BehaviorSubject<boolean>(false);
   private readonly recipeSummariesSubject = new BehaviorSubject<RecipeSummary[]>([]);
   private readonly recipeDetailsSubject = new BehaviorSubject<Record<string, RecipeDetail>>({});
   private readonly webhookUrl = environment.n8nWebhookUrl;
@@ -46,6 +53,7 @@ export class RecipeRequestService implements OnDestroy {
   readonly ingredients$ = this.ingredientsSubject.asObservable();
   readonly preferences$ = this.preferencesSubject.asObservable();
   readonly workflowStatus$ = this.workflowStatusSubject.asObservable();
+  readonly generating$ = this.generatingSubject.asObservable();
   readonly recipeSummaries$ = this.recipeSummariesSubject.asObservable();
   readonly recipeDetails$ = this.recipeDetailsSubject.asObservable();
 
@@ -95,9 +103,11 @@ export class RecipeRequestService implements OnDestroy {
   }
 
   async beginWorkflowSimulation(): Promise<boolean> {
+    this.generatingSubject.next(true);
     const payload = this.getRequestPayload();
     if (!payload) {
       this.workflowStatusSubject.next('error');
+      this.generatingSubject.next(false);
       return false;
     }
 
@@ -121,11 +131,12 @@ export class RecipeRequestService implements OnDestroy {
       this.activeRequestId = docRef.id;
       this.storeRequestId(docRef.id);
       this.attachRequestListener(docRef.id);
-      await this.triggerWorkflowWebhook(docRef.id, payload);
+      void this.triggerWorkflowWebhook(docRef.id, payload);
       return true;
     } catch (error) {
       console.error('Failed to create recipe request', error);
       this.workflowStatusSubject.next('error');
+      this.generatingSubject.next(false);
       return false;
     }
   }
@@ -134,6 +145,7 @@ export class RecipeRequestService implements OnDestroy {
     this.ingredientsSubject.next([]);
     this.preferencesSubject.next(null);
     this.workflowStatusSubject.next('idle');
+    this.generatingSubject.next(false);
     this.recipeSummariesSubject.next([]);
     this.recipeDetailsSubject.next({});
     this.clearStoredRequestId();
@@ -155,13 +167,25 @@ export class RecipeRequestService implements OnDestroy {
         }
         const data = snapshot.data() as FirestoreRecipeRequest;
         if (data.status) {
-          this.workflowStatusSubject.next(data.status);
+          const normalizedStatus = this.normalizeWorkflowStatus(data.status);
+          this.workflowStatusSubject.next(normalizedStatus);
+          if (normalizedStatus === 'success' || normalizedStatus === 'error') {
+            this.generatingSubject.next(false);
+          }
         }
-        if (data.results?.summaries) {
-          this.recipeSummariesSubject.next(data.results.summaries);
+        const { summaries, details } = this.extractResults(data);
+        const normalizedSummaries = this.normalizeSummaries(summaries, details);
+        if (normalizedSummaries) {
+          this.recipeSummariesSubject.next(normalizedSummaries);
+          if (normalizedSummaries.length > 0) {
+            this.generatingSubject.next(false);
+          }
         }
-        if (data.results?.details) {
-          this.recipeDetailsSubject.next(data.results.details);
+        if (details) {
+          this.recipeDetailsSubject.next(details);
+          if (Object.keys(details).length > 0) {
+            this.generatingSubject.next(false);
+          }
         }
         if (data.status === 'error' && data.errorMessage) {
           console.error('Recipe workflow error:', data.errorMessage);
@@ -180,6 +204,72 @@ export class RecipeRequestService implements OnDestroy {
       this.activeRequestSubscription = null;
     }
     this.activeRequestId = null;
+  }
+
+  private normalizeWorkflowStatus(status: FirestoreRecipeRequest['status']): WorkflowStatus {
+    if (!status) {
+      return 'idle';
+    }
+    if (status === 'pending' || status === 'processing') {
+      return 'loading';
+    }
+    if (status === 'completed' || status === 'done') {
+      return 'success';
+    }
+    if (status === 'idle' || status === 'loading' || status === 'success' || status === 'error') {
+      return status;
+    }
+    return 'loading';
+  }
+
+  private normalizeSummaries(
+    summaries?: FirestoreRecipeResults['summaries'],
+    details?: FirestoreRecipeResults['details']
+  ): RecipeSummary[] | null {
+    if (Array.isArray(summaries)) {
+      return summaries;
+    }
+    if (summaries && typeof summaries === 'object') {
+      return Object.values(summaries as Record<string, RecipeSummary>);
+    }
+    if (details && typeof details === 'object') {
+      return Object.entries(details).map(([id, detail], index) => ({
+        id: detail.id ?? id,
+        order: detail.order ?? index + 1,
+        title: detail.title,
+        cookingTimeMinutes: detail.cookingTimeMinutes,
+        cookingTimeLabel: detail.cookingTimeLabel ?? '',
+        tags: detail.tags ?? []
+      }));
+    }
+    return null;
+  }
+
+  private extractResults(data: FirestoreRecipeRequest): {
+    summaries?: FirestoreRecipeResults['summaries'];
+    details?: FirestoreRecipeResults['details'];
+  } {
+    const results = data.results;
+    if (Array.isArray(results)) {
+      return { summaries: results };
+    }
+    const resultsAny =
+      results && typeof results === 'object' ? (results as Record<string, unknown>) : undefined;
+    return {
+      summaries:
+        (results as FirestoreRecipeResults | undefined)?.summaries ??
+        data.summaries ??
+        (resultsAny?.['recipes'] as FirestoreRecipeResults['summaries']) ??
+        (resultsAny?.['recipeSummaries'] as FirestoreRecipeResults['summaries']) ??
+        (resultsAny?.['items'] as FirestoreRecipeResults['summaries']) ??
+        data.recipes ??
+        data.recipeSummaries ??
+        data.items,
+      details:
+        (results as FirestoreRecipeResults | undefined)?.details ??
+        data.details ??
+        data.recipeDetails
+    };
   }
 
   private storeRequestId(id: string): void {

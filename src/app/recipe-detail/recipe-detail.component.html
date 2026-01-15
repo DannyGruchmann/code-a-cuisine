@@ -22,8 +22,8 @@
               <h1>Pasta with spinach and cherry tommatoes <!-- placeholder -->{{ detail.title }}</h1>
             </div>
             <div class="detail__chefs">
-              <button *ngFor="let chef of detail.helperLabels; index as idx">
-                <img src="assets/img/recipe-detail/chef-hut.svg" alt="" aria-hidden="true" />
+              <button *ngFor="let chef of detail.helperLabels; index as idx" [style.backgroundColor]="chefAssets[idx].bg">
+                <img [src]="chefAssets[idx].img" alt="" aria-hidden="true" />
                 Chef {{ idx + 1 }}
               </button>
             </div>
@@ -50,9 +50,9 @@
                 </div>
               </div>
             </div>
-            <div class="detail__tags">
-              <button>Vegetarian <!-- placeholder --></button>
-              <button>Medium <!-- placeholder --></button>
+            <div class="detail__tags" *ngIf="preferences$ | async as preferences">
+              <button>{{ preferences.cuisine || '' }}</button>
+              <button>{{ cookTimeLabels[preferences.cookTime] || '' }}</button>
               <button class="like__button"><img src="assets/img/recipe-detail/favorite.svg" alt="">66</button>
             </div>
           </div>
@@ -95,8 +95,10 @@
                   <span class="step__index">{{ step.order }}</span>
                   <div class="directions__headings">
                     <h3>{{ step.title }}</h3>
-                    <span><img src="assets/img/recipe-detail/chef-hut.svg" alt="">Chef {{ step.assignedChefIndex + 1
-                      }}</span>
+                    <span [style.backgroundColor]="chefAssets[step.assignedChefIndex].bg">
+                      <img [src]="chefAssets[step.assignedChefIndex].img" alt="" aria-hidden="true" />
+                      Chef {{ step.assignedChefIndex + 1 }}
+                    </span>
                   </div>
                 </div>
                 <p>{{ step.instruction }}</p>

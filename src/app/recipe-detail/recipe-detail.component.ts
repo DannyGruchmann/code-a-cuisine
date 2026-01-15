@@ -17,19 +17,49 @@ export class RecipeDetailComponent {
   ingredientsCollapsed = false;
   directionsCollapsed = false;
   isRecipeLiked = false;
+  readonly chefAssets = [
+    {
+      bg: '#D7DFD7',
+      img: 'assets/img/recipe-detail/chef-hut.svg'
+    },
+    {
+      bg: '#FFD9B3',
+      img: 'assets/img/recipe-detail/soup-chef.svg'
+    },
+    {
+      bg: '#F2F3B2',
+      img: 'assets/img/recipe-detail/beginner-chef.svg'
+    },
+    {
+      bg: '#99CC99',
+      img: 'assets/img/recipe-detail/helper-chef-hut.svg'
+    }
+  ];
+  preferences$ = this.recipeRequestService.preferences$;
+  readonly cookTimeLabels: Record<string, string> = {
+    under20: 'Quick',
+    '25to40': 'Medium',
+    over45: 'Complex'
+  };
 
-  detail$ = combineLatest([this.route.paramMap, this.recipeRequestService.recipeDetails$]).pipe(
-    map(([params, details]) => {
+  detail$ = combineLatest([
+    this.route.paramMap,
+    this.recipeRequestService.recipeDetails$,
+    this.recipeRequestService.recipeSummaries$
+  ]).pipe(
+    map(([params, details, summaries]) => {
       const recipeId = params.get('id');
       if (!recipeId) {
         this.router.navigate(['recipe-results']);
         return null;
       }
       const detail = details[recipeId] as RecipeDetail | undefined;
-      if (!detail && this.recipeRequestService.getWorkflowStatusSnapshot() === 'success') {
+      const summary = summaries.find((recipe) => recipe.id === recipeId);
+      const mergedDetail = detail ? ({ ...(summary ?? {}), ...detail } as RecipeDetail) : undefined;
+      if (!mergedDetail && this.recipeRequestService.getWorkflowStatusSnapshot() === 'success') {
         this.router.navigate(['recipe-results']);
       }
-      return detail ?? null;
+      return mergedDetail ?? null;
     })
   );
 

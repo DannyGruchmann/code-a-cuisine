@@ -1,0 +1,197 @@
+@use '../../styles/variables' as *;
+
+.loading-screen {
+  position: fixed;
+  inset: 0;
+  background-color: $main_green;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px 16px 32px;
+  z-index: 1000;
+}
+
+.loading-screen__brand {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.loading-screen__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+}
+
+.loading-screen__animation {
+  width: min(360px, 90vw);
+  height: min(360px, 50vh);
+  background-color: $background_green_article_cookbook;
+  border-radius: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  position: relative;
+  overflow: hidden;
+}
+
+.loading-screen__text {
+  margin: 0;
+  color: $very_light_cream;
+  font-size: 32px;
+  font-weight: 600;
+}
+
+.loading-screen__dots {
+  display: inline-flex;
+  width: 1.1em;
+  gap: 0.1em;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+
+.loading-screen__dots span {
+  display: inline-block;
+  width: 0.3em;
+  opacity: 0;
+}
+
+.loading-screen__dots span:nth-child(1) {
+  animation: dot-one 1.2s step-end infinite;
+}
+
+.loading-screen__dots span:nth-child(2) {
+  animation: dot-two 1.2s step-end infinite;
+}
+
+.loading-screen__dots span:nth-child(3) {
+  animation: dot-three 1.2s step-end infinite;
+}
+
+@keyframes dot-one {
+  0% {
+    opacity: 0;
+  }
+  1%,
+  75% {
+    opacity: 1;
+  }
+  76%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes dot-two {
+  0%,
+  24% {
+    opacity: 0;
+  }
+  25%,
+  75% {
+    opacity: 1;
+  }
+  76%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes dot-three {
+  0%,
+  49% {
+    opacity: 0;
+  }
+  50%,
+  75% {
+    opacity: 1;
+  }
+  76%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.loading-screen__steam {
+  position: relative;
+  width: 120px;
+  height: 90px;
+}
+
+.loading-screen__steam span {
+  position: absolute;
+  bottom: 0;
+  width: 18px;
+  height: 40px;
+  border-radius: 50%;
+  border: 3px solid rgba(57, 96, 57, 0.35);
+  border-color: rgba(57, 96, 57, 0.35) transparent transparent transparent;
+  animation: steam-rise 2.2s ease-in-out infinite;
+}
+
+.loading-screen__steam span:nth-child(1) {
+  left: 8px;
+  animation-delay: 0s;
+}
+
+.loading-screen__steam span:nth-child(2) {
+  left: 48px;
+  animation-delay: 0.4s;
+}
+
+.loading-screen__steam span:nth-child(3) {
+  left: 88px;
+  animation-delay: 0.8s;
+}
+
+.loading-screen__pot {
+  width: 140px;
+  height: 90px;
+  position: relative;
+}
+
+.loading-screen__pot-body {
+  width: 140px;
+  height: 56px;
+  border-radius: 0 0 24px 24px;
+  border: 5px solid $main_green;
+  border-top: none;
+  background: transparent;
+}
+
+.loading-screen__pot-base {
+  width: 110px;
+  height: 10px;
+  background: $main_green;
+  border-radius: 999px;
+  margin: 6px auto 0;
+}
+
+.loading-screen__pot-handle {
+  position: absolute;
+  left: -18px;
+  top: 18px;
+  width: 20px;
+  height: 30px;
+  border: 5px solid $main_green;
+  border-right: none;
+  border-radius: 12px 0 0 12px;
+}
+
+@keyframes steam-rise {
+  0% {
+    transform: translateY(10px) scale(0.9);
+    opacity: 0;
+  }
+  30% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(-28px) scale(1.05);
+    opacity: 0;
+  }
+}
