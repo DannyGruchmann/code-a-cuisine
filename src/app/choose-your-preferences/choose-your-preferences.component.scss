@@ -191,5 +191,36 @@
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  &__quota-loading {
+    text-align: center;
+    margin: 0;
+    font-size: 14px;
+  }
+
+  &__quota {
+    text-align: center;
+    font-size: 14px;
+
+    p {
+      margin: 4px 0;
+    }
+  }
+
+  &__quota-note {
+    opacity: 0.7;
+  }
+
+  &__quota-error {
+    text-align: center;
+    margin: 0;
+    font-size: 14px;
+    color: #c1433c;
   }
 }

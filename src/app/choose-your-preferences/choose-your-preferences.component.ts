@@ -30,6 +30,10 @@ export class ChooseYourPreferencesComponent implements OnInit {
   selectedCooking: CookTimePreference = this.cookingOptions[0].value;
   selectedCuisine: string | null = null;
   selectedDiet: string | null = null;
+  hasTriedGenerate = false;
+  readonly quota$ = this.recipeRequestService.quota$;
+  readonly quotaError$ = this.recipeRequestService.quotaError$;
+  readonly quotaLoading$ = this.recipeRequestService.quotaLoading$;
 
   constructor(
     private recipeRequestService: RecipeRequestService,
@@ -42,6 +46,7 @@ export class ChooseYourPreferencesComponent implements OnInit {
     if (savedPreferences) {
       this.applySavedPreferences(savedPreferences);
     }
+    void this.recipeRequestService.refreshQuota();
   }
 
   adjustPortions(amount: number): void {
@@ -73,6 +78,7 @@ export class ChooseYourPreferencesComponent implements OnInit {
   }
 
   async generateRecipe(): Promise<void> {
+    this.hasTriedGenerate = true;
     const preferences: PreferenceSelection = {
       portions: this.portions,
       helpers: this.cooks,
@@ -81,13 +87,10 @@ export class ChooseYourPreferencesComponent implements OnInit {
       dietPreferences: this.selectedDiet ? [this.selectedDiet] : []
     };
     this.recipeRequestService.setPreferences(preferences);
-    const startPromise = this.recipeRequestService.beginWorkflowSimulation();
-    this.router.navigate(['recipe-results']);
-    void startPromise.then((hasPayload) => {
-      if (!hasPayload) {
-        this.router.navigate(['generate-recipe']);
-      }
-    });
+    const started = await this.recipeRequestService.beginWorkflowSimulation();
+    if (started) {
+      this.router.navigate(['recipe-results']);
+    }
   }
 
   goBack(): void {

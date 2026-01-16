@@ -8,5 +8,7 @@ export const environment = {
     appId: '1:49165876764:web:ea118648373490b11ca9d9',
     measurementId: 'G-1ZK0SS5MZW'
   },
-  n8nWebhookUrl: 'https://n8n.srv1139834.hstgr.cloud/webhook-test/3c9eac64-47c3-4c75-b5d3-76c69dfa93fd'
+  n8nWebhookUrl:
+    'https://n8n.srv1139834.hstgr.cloud/webhook-test/3c9eac64-47c3-4c75-b5d3-76c69dfa93fd',
+  n8nQuotaUrl: ''
 };

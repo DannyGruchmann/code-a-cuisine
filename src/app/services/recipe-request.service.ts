@@ -6,7 +6,8 @@ import {
   collection,
   doc,
   docSnapshots,
-  serverTimestamp
+  serverTimestamp,
+  updateDoc
 } from '@angular/fire/firestore';
 import {
   IngredientEntry,
@@ -17,6 +18,13 @@ import {
   WorkflowStatus
 } from '../models/recipe-request.model';
 import { environment } from '../../environments/environment';
+
+interface QuotaStatus {
+  remainingIp: number;
+  remainingGlobal: number;
+  dateKey: string;
+  timeZone: string;
+}
 
 interface FirestoreRecipeResults {
   summaries?: RecipeSummary[] | Record<string, RecipeSummary>;
@@ -45,7 +53,11 @@ export class RecipeRequestService implements OnDestroy {
   private readonly generatingSubject = new BehaviorSubject<boolean>(false);
   private readonly recipeSummariesSubject = new BehaviorSubject<RecipeSummary[]>([]);
   private readonly recipeDetailsSubject = new BehaviorSubject<Record<string, RecipeDetail>>({});
+  private readonly quotaSubject = new BehaviorSubject<QuotaStatus | null>(null);
+  private readonly quotaErrorSubject = new BehaviorSubject<string | null>(null);
+  private readonly quotaLoadingSubject = new BehaviorSubject<boolean>(false);
   private readonly webhookUrl = environment.n8nWebhookUrl;
+  private readonly quotaUrl = environment.n8nQuotaUrl;
 
   private activeRequestId: string | null = null;
   private activeRequestSubscription: Subscription | null = null;
@@ -56,6 +68,9 @@ export class RecipeRequestService implements OnDestroy {
   readonly generating$ = this.generatingSubject.asObservable();
   readonly recipeSummaries$ = this.recipeSummariesSubject.asObservable();
   readonly recipeDetails$ = this.recipeDetailsSubject.asObservable();
+  readonly quota$ = this.quotaSubject.asObservable();
+  readonly quotaError$ = this.quotaErrorSubject.asObservable();
+  readonly quotaLoading$ = this.quotaLoadingSubject.asObservable();
 
   constructor(private firestore: Firestore) {
     const existingRequestId = this.getStoredRequestId();
@@ -115,6 +130,7 @@ export class RecipeRequestService implements OnDestroy {
     this.recipeSummariesSubject.next([]);
     this.recipeDetailsSubject.next({});
     this.detachRequestListener();
+    this.quotaErrorSubject.next(null);
 
     try {
       const docRef = await addDoc(collection(this.firestore, 'recipeRequests'), {
@@ -128,10 +144,31 @@ export class RecipeRequestService implements OnDestroy {
         }
       });
 
+      const webhookResult = await this.triggerWorkflowWebhook(docRef.id, payload);
+      if (!webhookResult.ok) {
+        const errorMessage = webhookResult.message ?? 'Request failed. Please try again later.';
+        this.quotaErrorSubject.next(errorMessage);
+        try {
+          await updateDoc(docRef, {
+            status: 'error',
+            errorMessage,
+            updatedAt: serverTimestamp()
+          });
+        } catch (err) {
+          console.warn('Failed to update request error status', err);
+        }
+        this.workflowStatusSubject.next('error');
+        this.generatingSubject.next(false);
+        return false;
+      }
+
+      if (webhookResult.quota) {
+        this.quotaSubject.next(webhookResult.quota);
+      }
+
       this.activeRequestId = docRef.id;
       this.storeRequestId(docRef.id);
       this.attachRequestListener(docRef.id);
-      void this.triggerWorkflowWebhook(docRef.id, payload);
       return true;
     } catch (error) {
       console.error('Failed to create recipe request', error);
@@ -148,6 +185,7 @@ export class RecipeRequestService implements OnDestroy {
     this.generatingSubject.next(false);
     this.recipeSummariesSubject.next([]);
     this.recipeDetailsSubject.next({});
+    this.quotaErrorSubject.next(null);
     this.clearStoredRequestId();
     this.detachRequestListener();
   }
@@ -305,25 +343,61 @@ export class RecipeRequestService implements OnDestroy {
     }
   }
 
-  private async triggerWorkflowWebhook(requestId: string, payload: RecipeRequestPayload): Promise<void> {
-    if (!this.webhookUrl) {
-      console.warn('n8n webhook URL missing; skip webhook trigger');
+  async refreshQuota(): Promise<void> {
+    if (!this.quotaUrl) {
       return;
+    }
+    this.quotaLoadingSubject.next(true);
+    this.quotaErrorSubject.next(null);
+    try {
+      const response = await fetch(this.quotaUrl);
+      const data = await response.json().catch(() => null);
+      if (!response.ok) {
+        const message =
+          (data && typeof data === 'object' && 'message' in data ? String(data.message) : null) ??
+          'Unable to load quota.';
+        this.quotaErrorSubject.next(message);
+        return;
+      }
+      if (data && typeof data === 'object') {
+        this.quotaSubject.next(data as QuotaStatus);
+      }
+    } catch (error) {
+      console.error('Failed to load quota', error);
+      this.quotaErrorSubject.next('Unable to load quota.');
+    } finally {
+      this.quotaLoadingSubject.next(false);
+    }
+  }
+
+  private async triggerWorkflowWebhook(
+    requestId: string,
+    payload: RecipeRequestPayload
+  ): Promise<{ ok: boolean; message?: string; quota?: QuotaStatus }> {
+    if (!this.webhookUrl) {
+      return { ok: false, message: 'Webhook URL missing. Please contact support.' };
     }
     try {
       const response = await fetch(this.webhookUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          requestId,
-          payload
-        })
+        body: JSON.stringify({ requestId, payload })
       });
+      const data = await response.json().catch(() => null);
       if (!response.ok) {
-        console.error('Webhook responded with non-OK status', response.status, await response.text());
+        const message =
+          (data && typeof data === 'object' && 'message' in data ? String(data.message) : null) ??
+          'Request failed. Please try again later.';
+        const quota =
+          data && typeof data === 'object' && 'quota' in data ? (data.quota as QuotaStatus) : undefined;
+        return { ok: false, message, quota };
       }
+      const quota =
+        data && typeof data === 'object' && 'quota' in data ? (data.quota as QuotaStatus) : undefined;
+      return { ok: true, quota };
     } catch (error) {
       console.error('Failed to trigger n8n webhook', error);
+      return { ok: false, message: 'Request failed. Please try again later.' };
     }
   }
 }

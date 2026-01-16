@@ -79,5 +79,23 @@
     </article>
   </section>
 
-  <button type="button" class="preferences__submit" (click)="generateRecipe()">Generate recipe</button>
+  <button
+    type="button"
+    class="preferences__submit"
+    (click)="generateRecipe()"
+    [disabled]="(quota$ | async)?.remainingIp === 0 || (quota$ | async)?.remainingGlobal === 0"
+  >
+    Generate recipe
+  </button>
+  <p class="preferences__quota-loading" *ngIf="quotaLoading$ | async">Checking quota...</p>
+  <div class="preferences__quota" *ngIf="quota$ | async as quota">
+    <p>
+      Remaining today: <strong>{{ quota.remainingIp }}</strong>/3 for your IP,
+      <strong>{{ quota.remainingGlobal }}</strong>/12 total.
+    </p>
+    <p class="preferences__quota-note">Reset daily at 00:00 ({{ quota.timeZone }}).</p>
+  </div>
+  <p class="preferences__quota-error" *ngIf="hasTriedGenerate && (quotaError$ | async) as error">
+    {{ error }}
+  </p>
 </main>
