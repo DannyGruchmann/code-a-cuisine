@@ -5,6 +5,7 @@ import { ChooseYourPreferencesComponent } from './choose-your-preferences/choose
 import { RecipeResultsComponent } from './recipe-results/recipe-results.component';
 import { RecipeDetailComponent } from './recipe-detail/recipe-detail.component';
 import { CookbookComponent } from './cookbook/cookbook.component';
+import { RecipeLibraryComponent } from './recipe-library/recipe-library.component';
 
 export const routes: Routes = [
   {
@@ -26,6 +27,15 @@ export const routes: Routes = [
   {
     path: 'recipe-results/:id',
     component: RecipeDetailComponent
+  },
+  {
+    path: 'cookbook/:cuisine/:id',
+    component: RecipeDetailComponent,
+    data: { source: 'library' }
+  },
+  {
+    path: 'cookbook/:cuisine',
+    component: RecipeLibraryComponent
   },
   {
     path: 'cookbook',

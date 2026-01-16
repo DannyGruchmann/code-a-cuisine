@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, HostListener, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HeaderGreenLogoComponent } from '../header-green-logo/header-green-logo.component';
 import { IngredientEntry } from '../models/recipe-request.model';
@@ -33,6 +33,8 @@ export class GenerateRecipeComponent implements OnInit {
       amount: [100, [Validators.required, Validators.min(1)]],
       unit: [this.selectedUnit, Validators.required]
     });
+    const nameControl = this.ingredientForm.get('name') as FormControl;
+    this.normalizeNameControl(nameControl);
   }
 
   ngOnInit(): void {
@@ -153,10 +155,31 @@ export class GenerateRecipeComponent implements OnInit {
   }
 
   private createIngredientGroup(ingredient?: IngredientEntry): FormGroup {
-    return this.fb.group({
+    const group = this.fb.group({
       name: [ingredient?.name ?? '', Validators.required],
       amount: [ingredient?.amount ?? 100, [Validators.required, Validators.min(1)]],
       unit: [ingredient?.unit ?? this.selectedUnit, Validators.required]
     });
+    this.normalizeNameControl(group.get('name') as FormControl);
+    return group;
+  }
+
+  private normalizeNameControl(control: FormControl): void {
+    control.valueChanges.subscribe((value) => {
+      if (typeof value !== 'string') {
+        return;
+      }
+      const normalized = this.capitalizeFirst(value);
+      if (value !== normalized) {
+        control.setValue(normalized, { emitEvent: false });
+      }
+    });
+  }
+
+  private capitalizeFirst(value: string): string {
+    if (!value) {
+      return value;
+    }
+    return value.charAt(0).toUpperCase() + value.slice(1);
   }
 }

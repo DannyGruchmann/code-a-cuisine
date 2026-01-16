@@ -2,11 +2,12 @@ import { Component } from '@angular/core';
 import { HeaderGreenLogoComponent } from '../header-green-logo/header-green-logo.component';
 import { Router } from '@angular/router';
 import { RecipeRequestService } from '../services/recipe-request.service';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-cookbook',
   standalone: true,
-  imports: [HeaderGreenLogoComponent],
+  imports: [HeaderGreenLogoComponent, RouterModule],
   templateUrl: './cookbook.component.html',
   styleUrls: ['./cookbook.component.scss']
 })
@@ -27,4 +28,3 @@ export class CookbookComponent {
     this.router.navigate(['generate-recipe']);
   }
 }
-

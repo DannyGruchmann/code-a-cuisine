@@ -87,10 +87,13 @@ export class ChooseYourPreferencesComponent implements OnInit {
       dietPreferences: this.selectedDiet ? [this.selectedDiet] : []
     };
     this.recipeRequestService.setPreferences(preferences);
-    const started = await this.recipeRequestService.beginWorkflowSimulation();
-    if (started) {
-      this.router.navigate(['recipe-results']);
-    }
+    const startPromise = this.recipeRequestService.beginWorkflowSimulation();
+    this.router.navigate(['recipe-results']);
+    void startPromise.then((started) => {
+      if (!started) {
+        this.router.navigate(['generate-recipe']);
+      }
+    });
   }
 
   goBack(): void {

@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { combineLatest, map } from 'rxjs';
+import { Observable, combineLatest, map, of, switchMap } from 'rxjs';
 import { HeaderGreenLogoComponent } from '../header-green-logo/header-green-logo.component';
 import { RecipeDetail } from '../models/recipe-request.model';
+import { RecipeLibraryDetail, RecipeLibraryService } from '../services/recipe-library.service';
 import { RecipeRequestService } from '../services/recipe-request.service';
 
 @Component({
@@ -42,34 +43,60 @@ export class RecipeDetailComponent {
     over45: 'Complex'
   };
 
-  detail$ = combineLatest([
-    this.route.paramMap,
-    this.recipeRequestService.recipeDetails$,
-    this.recipeRequestService.recipeSummaries$
-  ]).pipe(
-    map(([params, details, summaries]) => {
-      const recipeId = params.get('id');
-      if (!recipeId) {
-        this.router.navigate(['recipe-results']);
-        return null;
+  private readonly isLibraryDetail = this.route.snapshot.data['source'] === 'library';
+  detail$: Observable<RecipeDetail | RecipeLibraryDetail | null> = this.route.data.pipe(
+    switchMap((data) => {
+      if (data['source'] === 'library') {
+        return this.route.paramMap.pipe(
+          switchMap((params) => {
+            const recipeId = params.get('id');
+            if (!recipeId) {
+              this.router.navigate(['cookbook']);
+              return of(null);
+            }
+            return this.libraryService.getRecipeById(recipeId);
+          })
+        );
       }
-      const detail = details[recipeId] as RecipeDetail | undefined;
-      const summary = summaries.find((recipe) => recipe.id === recipeId);
-      const mergedDetail = detail ? ({ ...(summary ?? {}), ...detail } as RecipeDetail) : undefined;
-      if (!mergedDetail && this.recipeRequestService.getWorkflowStatusSnapshot() === 'success') {
-        this.router.navigate(['recipe-results']);
-      }
-      return mergedDetail ?? null;
+
+      return combineLatest([
+        this.route.paramMap,
+        this.recipeRequestService.recipeDetails$,
+        this.recipeRequestService.recipeSummaries$
+      ]).pipe(
+        map(([params, details, summaries]) => {
+          const recipeId = params.get('id');
+          if (!recipeId) {
+            this.router.navigate(['recipe-results']);
+            return null;
+          }
+          const detail = details[recipeId] as RecipeDetail | undefined;
+          const summary = summaries.find((recipe) => recipe.id === recipeId);
+          const mergedDetail = detail
+            ? ({ ...(summary ?? {}), ...detail } as RecipeDetail)
+            : undefined;
+          if (!mergedDetail && this.recipeRequestService.getWorkflowStatusSnapshot() === 'success') {
+            this.router.navigate(['recipe-results']);
+          }
+          return mergedDetail ?? null;
+        })
+      );
     })
   );
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private recipeRequestService: RecipeRequestService
+    private recipeRequestService: RecipeRequestService,
+    private libraryService: RecipeLibraryService
   ) {}
 
   goBack(): void {
+    if (this.isLibraryDetail) {
+      const cuisine = this.route.snapshot.paramMap.get('cuisine');
+      this.router.navigate(cuisine ? ['cookbook', cuisine] : ['cookbook']);
+      return;
+    }
     this.router.navigate(['recipe-results']);
   }
 
