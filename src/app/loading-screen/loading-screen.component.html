@@ -5,16 +5,15 @@
 
   <section class="loading-screen__content">
     <div class="loading-screen__animation" aria-hidden="true">
-      <div class="loading-screen__steam">
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
-      <div class="loading-screen__pot">
-        <div class="loading-screen__pot-handle"></div>
-        <div class="loading-screen__pot-body"></div>
-        <div class="loading-screen__pot-base"></div>
-      </div>
+      <lottie-player
+        class="loading-screen__lottie"
+        src="/assets/animations/animation.json"
+        background="transparent"
+        speed="1"
+        loop
+        autoplay
+        aria-hidden="true"
+      ></lottie-player>
     </div>
     <p class="loading-screen__text">
       Generating
