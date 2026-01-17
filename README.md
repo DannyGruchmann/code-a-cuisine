@@ -1,27 +1,65 @@
-# CodeACuisine
+# Code A Cuisine
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.0.6.
+Generate recipes from your available ingredients, save them to a library, and revisit favorites by cuisine.
 
-## Development server
+## Features
+- Ingredient-based recipe generation with preferences (cuisine, diet, cook time, portions).
+- Recipe results with summaries and full details.
+- Cookbook page with cuisine navigation.
+- Cuisine library with pagination and recipe detail view.
+- IP and global quota enforcement via n8n (with user-facing messages).
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## Tech Stack
+- Angular 17 (standalone components)
+- Firebase Firestore
+- n8n for orchestration and AI workflow
 
-## Code scaffolding
+## Getting Started
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### Prerequisites
+- Node.js + npm
+- Firebase project with Firestore enabled
+- n8n instance (self-hosted or cloud)
 
-## Build
+### Install
+```bash
+npm install
+```
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+### Run
+```bash
+npm start
+```
+Then open `http://localhost:4200`.
 
-## Running unit tests
+## Configuration
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Edit `src/environments/environment.ts`:
+- `firebase`: your Firebase app config
+- `n8nWebhookUrl`: the n8n webhook used for recipe generation
+- `n8nQuotaUrl`: optional endpoint to display remaining quota before generation
 
-## Running end-to-end tests
+## Data Model (Firestore)
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+Collections used:
+- `recipeRequests`: request status and generated results
+- `recipes`: flattened recipe library entries used by the cuisine pages
+- `quotaIpDaily` / `quotaGlobalDaily`: daily quota counters (written by n8n)
 
-## Further help
+## n8n Integration
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+n8n is used to handle recipe generation and quota checks. For detailed workflow setup, contact the repository owner.
+
+## Scripts
+- `npm start`: run the dev server
+- `npm run build`: build the app
+- `npm test`: run unit tests
+
+## Notes
+
+- The cuisine library page relies on Firestore indexes for queries by `cuisine` and `createdAt`.
+- If a query error mentions missing indexes, create the suggested index in Firebase Console.
+
+## Contact
+
+For workflow details or setup questions, contact the maintainer.

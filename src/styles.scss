@@ -1,5 +1,30 @@
 @use './styles/variables' as *;
 
+.preferences,
+.library,
+.impressum {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 24px 16px 48px;
+  color: $main_green;
+  background-color: white;
+  font-family: 'Quicksand';
+}
+
+.preferences__brand {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  button {
+    border-style: unset;
+    background-color: transparent;
+    cursor: pointer;
+  }
+}
+
 @font-face {
     font-family: 'Quicksand';
     src: url('assets/fonts/Quicksand/Quicksand-VariableFont_wght.ttf') format('truetype');
@@ -19,6 +44,7 @@ h2,
 h3,
 h4,
 p,
+a,
 span,
 label,
 button,
