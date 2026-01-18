@@ -9,7 +9,7 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   imports: [HeaderGreenLogoComponent, RouterModule],
   templateUrl: './cookbook.component.html',
-  styleUrls: ['./cookbook.component.scss']
+  styleUrls: ['./cookbook.component.scss', './cookbook_responsive.component.scss']
 })
 export class CookbookComponent {
 

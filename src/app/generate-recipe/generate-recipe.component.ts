@@ -12,7 +12,7 @@ import { Location } from '@angular/common';
   standalone: true,
   imports: [CommonModule, HeaderGreenLogoComponent, ReactiveFormsModule],
   templateUrl: './generate-recipe.component.html',
-  styleUrls: ['./generate-recipe.component.scss']
+  styleUrls: ['./generate-recipe.component.scss', './generate-recipe_responsive.component.scss']
 })
 export class GenerateRecipeComponent implements OnInit {
   units = ['piece', 'ml', 'gram'];

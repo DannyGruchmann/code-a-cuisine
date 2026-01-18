@@ -42,3 +42,10 @@ testem.log
 Thumbs.db
 node_modules/
 node_modules_old/
+
+# Temporary files
+node_modules/
+dist/
+.angular/
+node_modules_bad/
+package-lock.bad

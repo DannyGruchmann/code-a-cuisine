@@ -22,7 +22,8 @@
               <h1>Pasta with spinach and cherry tommatoes <!-- placeholder -->{{ detail.title }}</h1>
             </div>
             <div class="detail__chefs">
-              <button *ngFor="let chef of detail.helperLabels; index as idx" [style.backgroundColor]="chefAssets[idx].bg">
+              <button *ngFor="let chef of detail.helperLabels; index as idx"
+                [style.backgroundColor]="chefAssets[idx].bg">
                 <img [src]="chefAssets[idx].img" alt="" aria-hidden="true" />
                 Chef {{ idx + 1 }}
               </button>
@@ -58,7 +59,8 @@
               </ng-container>
               <ng-template #libraryTags>
                 <button *ngFor="let tag of detail.tags">{{ tag }}</button>
-                <button class="like__button"><img src="assets/img/recipe-detail/favorite.svg" alt="">{{ detail.hearts }}</button>
+                <button class="like__button"><img src="assets/img/recipe-detail/favorite.svg" alt="">{{ detail.hearts
+                  }}</button>
               </ng-template>
             </div>
           </div>
@@ -131,10 +133,13 @@
         </button>
       </section>
     </div>
-    <section class="go_to_cookbook">
-      <h3>Find inspiration for your next culinary adventure!</h3>
-      <button type="button" (click)="goToCookbook()">Cookbook</button>
-    </section>
+    <div class="go_to_cookbook_outer">
+      <section class="go_to_cookbook">
+        <h3>Find inspiration for your next culinary adventure!</h3>
+        <button type="button" (click)="goToCookbook()">Cookbook</button>
+      </section>
+    </div>
+
 
 
   </main>

@@ -11,7 +11,7 @@ import { RecipeRequestService } from '../services/recipe-request.service';
   standalone: true,
   imports: [CommonModule, HeaderGreenLogoComponent],
   templateUrl: './choose-your-preferences.component.html',
-  styleUrls: ['./choose-your-preferences.component.scss']
+  styleUrls: ['./choose-your-preferences.component.scss', './choose-your-preferences_responsive.component.scss']
 })
 
 export class ChooseYourPreferencesComponent implements OnInit {

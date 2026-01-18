@@ -1,0 +1,56 @@
+@media (min-width: 376px) {
+    .landing__hero {
+        position: fixed;
+        right: 0;
+        top: 20px;
+        margin: 0;
+    }
+}
+
+@media (min-width: 481px) {
+
+    :host {
+        padding: 24px 16px 0 20px;
+    }
+
+    .landing__text {
+        p {
+            font-size: 32px;
+            width: 294px;
+        }
+
+        h1 {
+            font-size: 84px;
+            width: 264px;
+        }
+    }
+
+    .landing__content {
+        button {
+            font-size: 20px;
+            width: 143px;
+            height: 64px;
+        }
+    }
+
+    .landing__footer {
+        h2 {
+            font-size: 32px;
+        }
+
+        span {
+            font-size: 24px;
+        }
+    }
+}
+
+@media (min-width: 600px) {
+    :host {
+            padding: 24px 16px 0 24px;
+    }
+
+    .landing__hero {
+        right: -36%;
+        top: 0;
+    }
+}

@@ -7,7 +7,7 @@ import { HeaderCreamLogoComponent } from '../header-cream-logo/header-cream-logo
   standalone: true,
   imports: [HeaderCreamLogoComponent, RouterLink],
   templateUrl: './landingpage.component.html',
-  styleUrls: ['./landingpage.component.scss','./landingpage_responisve.component.scss']
+  styleUrls: ['./landingpage.component.scss','./landingpage_responsive.component.scss']
 })
 export class LandingpageComponent {
 

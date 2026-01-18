@@ -1,0 +1,38 @@
+@media (min-width: 481px) {
+    .detail__ingredients {
+        align-items: center;
+
+        img {
+            width: 415px;
+        }
+    }
+
+    .detail__directions {
+        align-items: center;
+
+        img {
+            width: 415px;
+        }
+
+        span {
+            img {
+                width: unset;
+            }
+        }
+    }
+
+    .like__section {
+        justify-content: center;
+    }
+
+    .go_to_cookbook_outer {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .go_to_cookbook {
+        width: 400px;
+    }
+
+}

@@ -1,0 +1,32 @@
+@media (min-width: 481px) {
+    .preferences__panel {
+        h1 {
+            font-size: 28px;
+        }
+
+        article {
+            h2 {
+                font-size: 18px;
+            }
+        }
+    }
+
+    .counter {
+        span {
+            font-size: 20px !important;
+        }
+    }
+
+    .preferences__options {
+        article {
+            h2 {
+                font-size: 26px;
+            }
+
+            button {
+                font-size: 18px !important;
+                padding: 0 12px !important;
+            }
+        }
+    }
+}

@@ -6,6 +6,6 @@ import { RouterLink } from '@angular/router';
   standalone: true,
   imports: [RouterLink],
   templateUrl: './header-cream-logo.component.html',
-  styleUrls: ['./header-cream-logo.component.scss']
+  styleUrls: ['./header-cream-logo.component.scss', './header-cream-logo_responsive.component.scss']
 })
 export class HeaderCreamLogoComponent {}

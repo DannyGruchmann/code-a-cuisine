@@ -1,0 +1,20 @@
+@media (min-width: 481px) {
+    .country_cuisine {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    article {
+        h2 {
+            font-size: 32px;
+        }
+
+        a {
+            img {
+                width: 432px !important;
+                height: auto !important;
+            }
+        }
+    }
+}

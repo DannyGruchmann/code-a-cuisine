@@ -12,7 +12,7 @@ import { RecipeRequestService } from '../services/recipe-request.service';
   standalone: true,
   imports: [CommonModule, HeaderGreenLogoComponent],
   templateUrl: './recipe-detail.component.html',
-  styleUrls: ['./recipe-detail.component.scss']
+  styleUrls: ['./recipe-detail.component.scss', './recipe-detail_responsive.component.scss']
 })
 export class RecipeDetailComponent {
   ingredientsCollapsed = false;
