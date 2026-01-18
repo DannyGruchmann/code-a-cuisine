@@ -4,89 +4,92 @@
     <div>
       <button type="button" (click)="goBack()" aria-label="Go back">
         <img src="assets/img/choose-your-preferences/Arrow 11.svg" alt="">
+        <p class="ingedients d_none">Ingredients</p>
       </button>
     </div>
   </header>
 
-  <section class="preferences__panel">
-    <h1>Choose your preferences</h1>
+  <div class="preferences__body">
+    <section class="preferences__panel">
+      <h1>Choose your preferences</h1>
+      <div class="preferences__heading__inner">
+        <article>
+          <h2>How many portions you need?</h2>
+          <div class="counter">
+            <button type="button" aria-label="Decrease portions" (click)="adjustPortions(-1)">
+              <img src="assets/img/choose-your-preferences/minus.svg" alt="">
+            </button>
+            <span><strong>{{ portions }}</strong> Portions</span>
+            <button type="button" aria-label="Increase portions" (click)="adjustPortions(1)">
+              <img src="assets/img/choose-your-preferences/plus.svg" alt="">
+            </button>
+          </div>
+        </article>
 
-    <article>
-      <h2>How many portions you need?</h2>
-      <div class="counter">
-        <button type="button" aria-label="Decrease portions" (click)="adjustPortions(-1)">
-          <img src="assets/img/choose-your-preferences/minus.svg" alt="">
-        </button>
-        <span><strong>{{ portions }}</strong> Portions</span>
-        <button type="button" aria-label="Increase portions" (click)="adjustPortions(1)">
-          <img src="assets/img/choose-your-preferences/plus.svg" alt="">
-        </button>
+        <article>
+          <h2>How many are cooking?</h2>
+          <div class="counter">
+            <button type="button" aria-label="Decrease cooks" (click)="adjustCooks(-1)">
+              <img src="assets/img/choose-your-preferences/minus.svg" alt="">
+            </button>
+            <span><strong>{{ cooks }}</strong> Person</span>
+            <button type="button" aria-label="Increase cooks" (click)="adjustCooks(1)">
+              <img src="assets/img/choose-your-preferences/plus.svg" alt="">
+            </button>
+          </div>
+        </article>
       </div>
-    </article>
+    </section>
 
-    <article>
-      <h2>How many are cooking?</h2>
-      <div class="counter">
-        <button type="button" aria-label="Decrease cooks" (click)="adjustCooks(-1)">
-          <img src="assets/img/choose-your-preferences/minus.svg" alt="">
-        </button>
-        <span><strong>{{ cooks }}</strong> Person</span>
-        <button type="button" aria-label="Increase cooks" (click)="adjustCooks(1)">
-          <img src="assets/img/choose-your-preferences/plus.svg" alt="">
-        </button>
-      </div>
-    </article>
-  </section>
+    <section class="preferences__options">
+      <article>
+        <header>
+          <img src="assets/img/choose-your-preferences/time.svg" alt="" aria-hidden="true">
+          <h2>Cooking time</h2>
+        </header>
 
-  <section class="preferences__options">
-    <article>
-      <header>
-        <img src="assets/img/choose-your-preferences/time.svg" alt="" aria-hidden="true">
-        <h2>Cooking time</h2>
-      </header>
+        <ul>
+          <li *ngFor="let option of cookingOptions">
+            <button type="button" [class.is-active]="selectedCooking === option.value"
+              (click)="selectCooking(option.value)">{{ option.label }}</button>
+            <p>{{ option.description }}</p>
+          </li>
+        </ul>
+      </article>
 
-      <ul>
-        <li *ngFor="let option of cookingOptions">
-          <button type="button" [class.is-active]="selectedCooking === option.value"
-            (click)="selectCooking(option.value)">{{ option.label }}</button>
-          <p>{{ option.description }}</p>
-        </li>
-      </ul>
-    </article>
+      <article>
+        <header>
+          <img src="assets/img/choose-your-preferences/globe.svg" alt="" aria-hidden="true">
+          <h2>Cuisine</h2>
+        </header>
 
-    <article>
-      <header>
-        <img src="assets/img/choose-your-preferences/globe.svg" alt="" aria-hidden="true">
-        <h2>Cuisine</h2>
-      </header>
+        <div class="pill-group">
+          <button type="button" *ngFor="let option of cuisineOptions" [class.is-active]="isCuisineSelected(option)"
+            (click)="selectCuisine(option)">{{ option }}</button>
+        </div>
+      </article>
 
-      <div class="pill-group">
-        <button type="button" *ngFor="let option of cuisineOptions" [class.is-active]="isCuisineSelected(option)"
-          (click)="selectCuisine(option)">{{ option }}</button>
-      </div>
-    </article>
+      <article>
+        <header>
+          <img src="assets/img/choose-your-preferences/cutlery.svg" alt="" aria-hidden="true">
+          <h2>Diet preferences</h2>
+        </header>
 
-    <article>
-      <header>
-        <img src="assets/img/choose-your-preferences/cutlery.svg" alt="" aria-hidden="true">
-        <h2>Diet preferences</h2>
-      </header>
+        <div class="pill-group">
+          <button type="button" *ngFor="let option of dietOptions"
+            [class.is-active]="isDietSelected(option)" (click)="selectDiet(option)">{{ option }}</button>
+        </div>
+      </article>
+    </section>
+  </div>
 
-      <div class="pill-group">
-        <button type="button" *ngFor="let option of dietOptions" [class.is-active]="isDietSelected(option)"
-          (click)="selectDiet(option)">{{ option }}</button>
-      </div>
-    </article>
-  </section>
+  <div class="submit__container">
+    <button type="button" class="preferences__submit" (click)="generateRecipe()"
+      [disabled]="(quota$ | async)?.remainingIp === 0 || (quota$ | async)?.remainingGlobal === 0">
+      Generate recipe
+    </button>
+  </div>
 
-  <button
-    type="button"
-    class="preferences__submit"
-    (click)="generateRecipe()"
-    [disabled]="(quota$ | async)?.remainingIp === 0 || (quota$ | async)?.remainingGlobal === 0"
-  >
-    Generate recipe
-  </button>
   <p class="preferences__quota-loading" *ngIf="quotaLoading$ | async">Checking quota...</p>
   <div class="preferences__quota" *ngIf="quota$ | async as quota">
     <p>

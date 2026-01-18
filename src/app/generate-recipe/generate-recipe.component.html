@@ -3,119 +3,134 @@
     <app-header-green-logo></app-header-green-logo>
   </header>
 
-  <section class="generate__intro">
-    <h1>Generate recipe</h1>
-    <p>Got random stuff in your kitchen? Pop it in—we’ve got the perfect recipe waiting.</p>
-  </section>
+  <div class="whole_body">
+    <div class="whole_body_inner">
+      <div class="generate__recipe_body">
+        <section class="generate__intro">
+          <h1>Generate recipe</h1>
+          <p>Got random stuff in your kitchen? Pop it in—we’ve got the perfect recipe waiting.</p>
+        </section>
 
-  <section class="generate__panel" aria-labelledby="add-ingredient">
-    <form [formGroup]="ingredientForm" (ngSubmit)="addIngredient()">
-      <div class="form_field">
-        <label for="ingredient">Ingredient</label>
-        <input id="ingredient" type="text" formControlName="name" placeholder=" " autocomplete="off">
+        <div class="prep_meal_container">
+          <section class="generate__panel height_176px" aria-labelledby="add-ingredient">
+            <form [formGroup]="ingredientForm" (ngSubmit)="addIngredient()">
+              <div class="form_field">
+                <label for="ingredient">Ingredient</label>
+                <input id="ingredient" type="text" formControlName="name" placeholder=" " autocomplete="off">
+              </div>
+
+              <fieldset>
+                <legend id="add-ingredient">Serving size</legend>
+                <div class="serving_group">
+                  <input type="number" formControlName="amount" min="1" aria-label="Amount">
+
+                  <div class="unit_select">
+                    <button type="button" aria-haspopup="listbox" class="unit_select__trigger"
+                      [attr.aria-expanded]="unitDropdownOpen" (click)="toggleUnitDropdown($event)">
+                      <span>{{ ingredientForm.value.unit }}</span>
+                      <img src="assets/img/generate-recipe/arrow_drop_down.svg" alt="">
+                    </button>
+
+                    <ul class="unit_select__list" role="listbox" aria-label="Units"
+                      [attr.aria-hidden]="!unitDropdownOpen" [class.is_open]="unitDropdownOpen">
+                      <li *ngFor="let unit of units">
+                        <button type="button" (click)="selectUnit(unit, $event)">{{ unit }}</button>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <button type="submit" class="add_button" aria-label="Add ingredient">
+                    <img src="assets/img/generate-recipe/add_2.svg" alt="add-sign">
+                  </button>
+                </div>
+              </fieldset>
+            </form>
+          </section>
+
+          <section class="generate__panel" aria-labelledby="ingredient-list">
+            <p id="ingredient-list">List of your Ingredients</p>
+
+            <div *ngIf="hasIngredients" class="ingredient_list">
+              <ul>
+                <li *ngFor="let ingredient of ingredientControls; let i = index" [formGroup]="ingredient"
+                  [class.is-editing]="isEditing(i)">
+                  <ng-container *ngIf="!isEditing(i); else editIngredientTemplate">
+                    <div class="ingredient_row">
+                      <div class="ingredient_list__info">
+                        <span class="ingredient_list__bullet" aria-hidden="true">•</span>
+                        <span class="ingredient_list__amount">
+                          {{ ingredient.value.amount }}
+                          <ng-container *ngIf="ingredient.value.unit === 'gram'">g</ng-container>
+                          <ng-container *ngIf="ingredient.value.unit === 'ml'">ml</ng-container>
+                        </span>
+                        <span class="ingredient_list__name">{{ ingredient.value.name }}</span>
+                      </div>
+                      <div class="ingredient_list__actions">
+                        <button type="button" aria-label="Edit ingredient" (click)="editIngredient(i)"
+                          class="icon_button">
+                          <img src="assets/img/generate-recipe/edit.svg" alt="edit ingredient" width="19" height="19">
+                        </button>
+                        <button type="button" aria-label="Delete ingredient" (click)="removeIngredient(i)"
+                          class="icon_button">
+                          <img src="assets/img/generate-recipe/delete.svg" alt="delete ingredient" width="19"
+                            height="19">
+                        </button>
+                      </div>
+                    </div>
+                  </ng-container>
+
+                  <ng-template #editIngredientTemplate>
+                    <div class="ingredient_edit">
+                      <div class="ingredient_edit__header">
+                        <input type="text" class="ingredient_edit__name" formControlName="name">
+                        <div class="ingredient_list__actions">
+                          <button type="button" aria-label="Confirm ingredient edits" (click)="confirmIngredientEdit(i)"
+                            class="icon_button">
+                            <img src="assets/img/generate-recipe/check.svg" alt="confirm ingredient changes" width="19"
+                              height="19">
+                          </button>
+                          <button type="button" aria-label="Delete ingredient" (click)="removeIngredient(i)"
+                            class="icon_button">
+                            <img src="assets/img/generate-recipe/delete.svg" alt="delete ingredient" width="19"
+                              height="19">
+                          </button>
+                        </div>
+                      </div>
+
+                      <div class="ingredient_edit__controls">
+                        <span class="ingredient_list__bullet" aria-hidden="true">•</span>
+                        <input type="number" class="ingredient_edit__amount" formControlName="amount" min="1">
+                        <div class="unit_select unit_select--inline">
+                          <button type="button" aria-haspopup="listbox" class="unit_select__trigger"
+                            [attr.aria-expanded]="editingUnitDropdownIndex === i"
+                            (click)="toggleEditingUnitDropdown(i, $event)">
+                            <span>{{ ingredient.value.unit }}</span>
+                            <img src="assets/img/generate-recipe/arrow_drop_down.svg" alt="">
+                          </button>
+
+                          <ul class="unit_select__list" role="listbox" aria-label="Units"
+                            [attr.aria-hidden]="editingUnitDropdownIndex !== i"
+                            [class.is_open]="editingUnitDropdownIndex === i">
+                            <li *ngFor="let unit of units">
+                              <button type="button" (click)="selectEditingUnit(unit, i, $event)">{{ unit }}</button>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-template>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </div>
       </div>
 
-      <fieldset>
-        <legend id="add-ingredient">Serving size</legend>
-        <div class="serving_group">
-          <input type="number" formControlName="amount" min="1" aria-label="Amount">
-
-          <div class="unit_select">
-            <button type="button" aria-haspopup="listbox" class="unit_select__trigger"
-              [attr.aria-expanded]="unitDropdownOpen" (click)="toggleUnitDropdown($event)">
-              <span>{{ ingredientForm.value.unit }}</span>
-              <img src="assets/img/generate-recipe/arrow_drop_down.svg" alt="">
-            </button>
-
-            <ul class="unit_select__list" role="listbox" aria-label="Units" [attr.aria-hidden]="!unitDropdownOpen"
-              [class.is_open]="unitDropdownOpen">
-              <li *ngFor="let unit of units">
-                <button type="button" (click)="selectUnit(unit, $event)">{{ unit }}</button>
-              </li>
-            </ul>
-          </div>
-
-          <button type="submit" class="add_button" aria-label="Add ingredient">
-            <img src="assets/img/generate-recipe/add_2.svg" alt="add-sign">
-          </button>
-        </div>
-      </fieldset>
-    </form>
-  </section>
-
-  <section class="generate__panel" aria-labelledby="ingredient-list">
-    <p id="ingredient-list">List of your Ingredients</p>
-
-    <div *ngIf="hasIngredients" class="ingredient_list">
-      <ul>
-        <li *ngFor="let ingredient of ingredientControls; let i = index" [formGroup]="ingredient"
-          [class.is-editing]="isEditing(i)">
-          <ng-container *ngIf="!isEditing(i); else editIngredientTemplate">
-            <div class="ingredient_row">
-              <div class="ingredient_list__info">
-                <span class="ingredient_list__bullet" aria-hidden="true">•</span>
-                <span class="ingredient_list__amount">
-                  {{ ingredient.value.amount }}
-                  <ng-container *ngIf="ingredient.value.unit === 'gram'">g</ng-container>
-                  <ng-container *ngIf="ingredient.value.unit === 'ml'">ml</ng-container>
-                </span>
-                <span class="ingredient_list__name">{{ ingredient.value.name }}</span>
-              </div>
-              <div class="ingredient_list__actions">
-                <button type="button" aria-label="Edit ingredient" (click)="editIngredient(i)" class="icon_button">
-                  <img src="assets/img/generate-recipe/edit.svg" alt="edit ingredient" width="19" height="19">
-                </button>
-                <button type="button" aria-label="Delete ingredient" (click)="removeIngredient(i)" class="icon_button">
-                  <img src="assets/img/generate-recipe/delete.svg" alt="delete ingredient" width="19" height="19">
-                </button>
-              </div>
-            </div>
-          </ng-container>
-
-          <ng-template #editIngredientTemplate>
-            <div class="ingredient_edit">
-              <div class="ingredient_edit__header">
-                <input type="text" class="ingredient_edit__name" formControlName="name">
-              <div class="ingredient_list__actions">
-                  <button type="button" aria-label="Confirm ingredient edits" (click)="confirmIngredientEdit(i)"
-                    class="icon_button">
-                    <img src="assets/img/generate-recipe/check.svg" alt="confirm ingredient changes" width="19"
-                      height="19">
-                  </button>
-                  <button type="button" aria-label="Delete ingredient" (click)="removeIngredient(i)"
-                    class="icon_button">
-                    <img src="assets/img/generate-recipe/delete.svg" alt="delete ingredient" width="19" height="19">
-                  </button>
-                </div>
-              </div>
-
-              <div class="ingredient_edit__controls">
-                <span class="ingredient_list__bullet" aria-hidden="true">•</span>
-                <input type="number" class="ingredient_edit__amount" formControlName="amount" min="1">
-                <div class="unit_select unit_select--inline">
-                  <button type="button" aria-haspopup="listbox" class="unit_select__trigger"
-                    [attr.aria-expanded]="editingUnitDropdownIndex === i"
-                    (click)="toggleEditingUnitDropdown(i, $event)">
-                    <span>{{ ingredient.value.unit }}</span>
-                    <img src="assets/img/generate-recipe/arrow_drop_down.svg" alt="">
-                  </button>
-
-                  <ul class="unit_select__list" role="listbox" aria-label="Units"
-                    [attr.aria-hidden]="editingUnitDropdownIndex !== i"
-                    [class.is_open]="editingUnitDropdownIndex === i">
-                    <li *ngFor="let unit of units">
-                      <button type="button" (click)="selectEditingUnit(unit, i, $event)">{{ unit }}</button>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </ng-template>
-        </li>
-      </ul>
+      <div class="next_step_container">
+        <button *ngIf="hasIngredients" type="button" class="next_step" (click)="goToPreferences()">Next step</button>
+      </div>
     </div>
-  </section>
-  <div class="next_step_container">
-    <button *ngIf="hasIngredients" type="button" class="next_step" (click)="goToPreferences()">Next step</button>
   </div>
+
+
 </main>

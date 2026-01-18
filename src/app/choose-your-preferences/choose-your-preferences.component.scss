@@ -154,10 +154,14 @@
     }
   }
 
+  .preferences__body {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
   &__submit {
-    width: 100%;
-    max-width: 156px;
-    margin: 0 auto;
+    width: 156px;
     height: 52px;
     border: none;
     background-color: $main_green;
@@ -197,4 +201,9 @@
     font-size: 14px;
     color: #c1433c;
   }
+}
+
+.submit__container {
+  display: flex;
+  justify-content: center;
 }

@@ -22,11 +22,139 @@
             h2 {
                 font-size: 26px;
             }
+        }
 
-            button {
-                font-size: 18px !important;
-                padding: 0 12px !important;
+        ul li button,
+        .pill-group button {
+            font-size: 18px;
+            padding: 0 12px;
+        }
+    }
+}
+
+@media (min-width: 768px) {
+    .ingedients {
+        display: block;
+        font-size: 16px;
+        margin: 0;
+    }
+
+    .preferences__panel {
+        align-items: center;
+        width: 721px;
+    }
+
+    .preferences__brand {
+        button {
+            display: flex;
+            gap: 12px;
+        }
+    }
+
+    .preferences__heading__inner {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .preferences__body {
+        align-items: center;
+    }
+
+    .preferences__options {
+        width: 673px;
+    }
+
+    .preferences__submit {
+        height: 62px;
+        width: 258px;
+        font-size: 24px;
+    }
+}
+
+@media (min-width: 1440px) {
+    .preferences__panel {
+        h1 {
+            font-size: 36px;
+        }
+
+        button {
+            width: 34px;
+            height: 34px;
+        }
+    }
+
+    .preferences__heading__inner {
+        h2 {
+            font-size: 22px !important;
+        }
+    }
+
+    .counter {
+        span {
+            font-size: 22px !important;
+        }
+    }
+
+    .preferences__options {
+        ul li button,
+        .pill-group button {
+            font-size: 20px;
+        }
+
+        p {
+            font-size: 16px;
+        }
+    }
+}
+
+@media (min-width: 1920px) {
+    .preferences__panel {
+        width: 921px;
+
+        h1 {
+            font-size: 52px;
+        }
+    }
+
+    .preferences__heading__inner {
+        h2 {
+            font-size: 32px !important;
+        }
+    }
+
+    .preferences__options {
+        width: 873px;
+    }
+
+    .counter {
+        span {
+            font-size: 32px !important;
+        }
+
+        button {
+            width: 24px;
+            height: 24px;
+
+            img {
+                width: 24px !important;
+                height: 24px !important;
             }
+        }
+    }
+
+    .preferences__options {
+        article {
+            h2 {
+                font-size: 30px;
+            }
+        }
+
+        ul li button,
+        .pill-group button {
+            height: 32px;
+            font-size: 21px;
+            padding: 0 20px;
         }
     }
 }

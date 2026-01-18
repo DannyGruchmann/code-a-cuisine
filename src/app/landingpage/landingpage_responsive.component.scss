@@ -9,7 +9,7 @@
 
 @media (min-width: 481px) {
 
-    :host {
+    .landing {
         padding: 24px 16px 0 20px;
     }
 
@@ -20,7 +20,7 @@
         }
 
         h1 {
-            font-size: 84px;
+            font-size: 78px;
             width: 264px;
         }
     }
@@ -29,7 +29,7 @@
         button {
             font-size: 20px;
             width: 143px;
-            height: 64px;
+            height: 60px;
         }
     }
 
@@ -45,12 +45,151 @@
 }
 
 @media (min-width: 600px) {
-    :host {
-            padding: 24px 16px 0 24px;
+    .landing {
+        padding: 24px 16px 0 24px;
     }
 
     .landing__hero {
-        right: -36%;
+        right: -18%;
         top: 0;
+
+        img {
+            height: 100vh;
+        }
+    }
+}
+
+@media (min-width: 769px) {
+    .landing__text {
+        p {
+            width: max-content;
+        }
+
+        h1 {
+            width: max-content;
+        }
+    }
+
+    .landing__footer {
+        gap: 16px;
+        padding-bottom: 148px;
+
+        h2 {
+            padding: 0;
+            width: unset;
+        }
+
+        a {
+            padding: 0;
+        }
+    }
+}
+
+@media (min-width: 912px) {
+    .landing__hero {
+        right: -15%;
+    }
+}
+
+@media (min-width: 1024px) {
+    .landing__hero {
+        right: -5%;
+    }
+}
+
+@media (min-width: 1280px) {
+    .landing__text {
+        p {
+            font-size: 48px;
+        }
+
+        h1 {
+            font-size: 104px;
+        }
+    }
+
+    .landing__content {
+        button {
+            font-size: 24px;
+            width: 183px;
+            height: 60px;
+        }
+    }
+
+    .landing__hero {
+        right: 4%;
+    }
+
+    .landing__footer {
+        flex-direction: row;
+        gap: 32px;
+    }
+}
+
+@media (min-width: 1920px) {
+    .landing__text {
+        p {
+            font-size: 56px;
+        }
+
+        h1 {
+            font-size: 132px;
+        }
+    }
+
+    .landing__hero {
+        right: 10%;
+    }
+
+    .landing__content {
+        button {
+            font-size: 28px;
+            width: 204px;
+            height: 72px;
+        }
+    }
+
+    .landing__footer {
+        h2 {
+            font-size: 48px;
+        }
+
+        span {
+            font-size: 36px;
+        }
+
+        img {
+            width: 52px;
+            height: auto;
+        }
+    }
+}
+
+@media (min-width: 2560px) {
+
+    .landing {
+        padding: 52px 16px 0 52px;
+    }
+
+    .landing__text {
+        gap: 20px;
+
+        p {
+            font-size: 78px;
+        }
+
+        h1 {
+            font-size: 182px;
+        }
+    }
+
+    .landing__content {
+        gap: 104px;
+
+        button {
+            font-size: 36px;
+            width: 254px;
+            height: 102px;
+        }
     }
 }

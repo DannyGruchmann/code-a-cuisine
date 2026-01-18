@@ -1,9 +1,16 @@
-
 @media (min-width: 481px) {
     .landing__header {
         img {
             width: 132px;
             height: auto;
+        }
+    }
+}
+
+@media (min-width: 2560px) {
+    .landing__header {
+        img {
+            width: 204px;
         }
     }
 }

@@ -46,3 +46,142 @@
         }
     }
 }
+
+@media (min-width: 768px) {
+    .generate__intro {
+        h1 {
+            display: flex;
+            justify-content: center;
+        }
+
+        p {
+            display: flex;
+            justify-content: center;
+            text-align: center;
+        }
+    }
+
+    .prep_meal_container {
+        flex-direction: row;
+        justify-content: space-between;
+
+        section {
+            width: -webkit-fill-available;
+        }
+    }
+
+    .ingredient_list__name {
+        max-width: 150px;
+    }
+}
+
+@media (min-width: 1024px) {
+
+    .height_176px {
+        height: 112px;
+
+        form {
+            flex-direction: row;
+        }
+    }
+
+    .next_step_container {
+        justify-content: end;
+
+        button {
+            width: 162px;
+            height: 62px;
+        }
+    }
+
+    .whole_body {
+        display: flex;
+        justify-content: center;
+    }
+
+    .whole_body_inner {
+        display: flex;
+        flex-direction: column;
+        width: 1087px;
+        gap: 32px;
+    }
+}
+
+@media (min-width: 1280px) {
+    .generate__intro {
+        h1 {
+            font-size: 54px;
+        }
+
+        p {
+            font-size: 24px;
+        }
+    }
+
+    .generate__recipe_body {
+        align-items: center;
+    }
+
+    .prep_meal_container {
+        width: 1087px;
+    }
+
+    .ingredient_list__name {
+        font-size: 18px !important;
+    }
+}
+
+@media (min-width: 2560px) {
+    .generate__intro {
+        h1 {
+            font-size: 74px;
+        }
+
+        p {
+            font-size: 36px;
+        }
+    }
+
+    .form_field {
+
+        label,
+        input {
+            font-size: 28px;
+            margin-bottom: 16px;
+        }
+    }
+
+    .generate__panel {
+
+        p,
+        legend {
+            font-size: 28px !important;
+            margin-bottom: 16px !important;
+        }
+    }
+
+    .serving_group {
+        font-size: 24px !important;
+    }
+
+    .unit_select {
+        font-size: 24px !important;
+        width: max-content;
+    }
+
+    .ingredient_list__amount,
+    .ingredient_list__name {
+        font-size: 24px !important;
+    }
+
+    .ingredient_list__actions {
+        gap: 12px;
+    }
+
+    .icon_button {
+        img {
+            width: 32px;
+            height: 32px;
+        }
+    }
+}
