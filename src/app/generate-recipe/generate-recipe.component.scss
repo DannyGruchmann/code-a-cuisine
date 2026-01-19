@@ -386,3 +386,9 @@
   display: flex;
   justify-content: center;
 }
+
+.whole_body_inner {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}

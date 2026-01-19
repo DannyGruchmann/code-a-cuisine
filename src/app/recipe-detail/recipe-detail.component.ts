@@ -104,6 +104,11 @@ export class RecipeDetailComponent {
     this.router.navigate(['cookbook']);
   }
 
+  startOver(): void {
+    this.recipeRequestService.reset();
+    this.router.navigate(['generate-recipe']);
+  }
+
   toggleIngredients(): void {
     this.ingredientsCollapsed = !this.ingredientsCollapsed;
   }
@@ -119,4 +124,5 @@ export class RecipeDetailComponent {
   trackByOrder(_index: number, step: { order: number }): number {
     return step.order;
   }
+
 }

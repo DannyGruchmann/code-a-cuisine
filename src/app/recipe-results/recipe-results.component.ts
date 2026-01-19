@@ -11,7 +11,7 @@ import { combineLatest, map } from 'rxjs';
   standalone: true,
   imports: [CommonModule, HeaderCreamLogoComponent, LoadingScreenComponent],
   templateUrl: './recipe-results.component.html',
-  styleUrls: ['./recipe-results.component.scss']
+  styleUrls: ['./recipe-results.component.scss', './recipe-results_responsive.component.scss']
 })
 export class RecipeResultsComponent implements OnInit {
   generating$ = this.recipeRequestService.generating$;

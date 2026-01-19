@@ -18,3 +18,197 @@
         }
     }
 }
+
+@media (min-width: 768px) {
+
+    .cookbook {
+        padding: 28px;
+    }
+
+    .cookbook_header_container {
+        display: flex;
+        gap: 48px;
+        padding: 24px 12px;
+    }
+
+    .header_lower_container {
+        min-width: 0;
+        flex: 1;
+    }
+
+    .liked_article {
+        max-width: 100%;
+    }
+
+    .header_upper_container {
+        p {
+            width: 270px;
+        }
+    }
+
+    .country_cuisine {
+        gap: 48px;
+        flex-wrap: wrap;
+        justify-content: center;
+        flex-direction: unset;
+    }
+
+    article a img {
+        width: 302px !important;
+    }
+}
+
+@media (min-width: 1280px) {
+    article a img {
+        width: 376px !important;
+    }
+
+    .header_upper_container {
+        h1 {
+            font-size: 64px;
+        }
+
+        p {
+            font-size: 24px;
+            width: 430px;
+        }
+    }
+
+    .liked_article {
+
+        article {
+            p {
+                font-size: 24px;
+            }
+        }
+    }
+
+    .liked_article article {
+        width: 345px;
+    }
+}
+
+@media (min-width: 1441px) {
+
+    .cookbook_header_container__inner {
+        display: flex;
+        justify-content: center;
+    }
+
+    .cookbook_header_container {
+        width: 1440px;
+    }
+
+    .country_cuisine__inner {
+        display: flex;
+        justify-content: center;
+    }
+
+    .country_cuisine {
+        max-width: 1440px;
+    }
+
+    article a img {
+        width: 429px !important;
+    }
+
+    .results__actions {
+        button {
+            font-size: 24px;
+        }
+    }
+
+    .impressum_container {
+        a {
+            font-size: 20px;
+        }
+    }
+}
+
+@media (min-width: 1921px) {
+    .cookbook_header_container {
+        width: 1920px;
+    }
+
+    .country_cuisine {
+        min-width: 1920px;
+    }
+
+    article a img {
+        width: 589px !important;
+    }
+
+    .country_cuisine {
+        h2 {
+            font-size: 40px;
+        }
+
+        img {
+            height: 40px;
+            width: 40px;
+        }
+    }
+
+    .header_upper_container {
+        h1 {
+            font-size: 80px;
+        }
+
+        p {
+            font-size: 34px;
+            width: 680px;
+        }
+    }
+
+    .liked_heading {
+        h2 {
+            font-size: 36px;
+        }
+
+        img {
+            width: 34px;
+            height: 34px;
+        }
+    }
+
+    .liked_article {
+        article {
+            width: 395px;
+            height: 152px;
+            gap: 16px;
+            padding: 16px 24px;
+
+            img {
+                width: 24px;
+                height: 24px;
+            }
+
+            span {
+                font-size: 22px;
+            }
+
+            p {
+                font-size: 32px;
+            }
+
+            button {
+                font-size: 24px;
+                width: 100px;
+                height: 36px;
+                justify-content: center;
+            }
+        }
+    }
+
+    .results__actions {
+        button {
+            font-size: 32px;
+        }
+    }
+
+    .impressum_container {
+        a {
+            font-size: 26px;
+        }
+    }
+}

@@ -273,6 +273,7 @@
   span {
     font-size: 18px;
     font-weight: 500;
+    color: $main_green;
   }
 }
 
@@ -364,5 +365,23 @@
     color: $very_light_cream;
     background-color: $main_green;
     cursor: pointer;
+  }
+}
+
+.detail__actions {
+  display: none;
+  justify-content: end;
+
+  button {
+    background: transparent;
+    border: none;
+    color: $main_green;
+    font-size: 20px;
+    font-weight: 500;
+    cursor: pointer;
+
+    img {
+      width: 20px;
+    }
   }
 }

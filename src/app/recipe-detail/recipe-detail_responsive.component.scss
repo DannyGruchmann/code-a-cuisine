@@ -36,3 +36,309 @@
     }
 
 }
+
+@media (min-width: 1024px) {
+    .inner__body {
+        display: flex;
+        flex-direction: column;
+        gap: 48px;
+        align-items: center;
+    }
+
+    .detail {
+        padding: 32px 60px;
+    }
+
+    .detail__summary {
+        flex-direction: row;
+    }
+
+    .cooking__time {
+        span {
+            font-size: 20px;
+        }
+    }
+
+    .detail__time {
+        h1 {
+            font-size: 40px;
+            max-width: 620px;
+        }
+    }
+
+    .summery__lower_container {
+        display: flex;
+        flex-direction: column-reverse;
+        width: 510px;
+        justify-content: space-between;
+        align-items: end;
+    }
+
+    .detail__nutrition-grid {
+        p {
+            width: max-content;
+            font-size: 20px;
+        }
+    }
+
+    .detail__chefs {
+        gap: 12px;
+    }
+
+    .detail__ingredients {
+        img {
+            height: 147px;
+            width: 100%;
+        }
+    }
+
+    .detail__ingredients_lists {
+        display: flex;
+        gap: 152px;
+    }
+
+    .detail__directions {
+        img {
+            height: 147px;
+            width: 100%;
+        }
+    }
+
+    .detail__directions ol {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 24px 32px;
+    }
+
+    .detail__directions ol li {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .detail__actions {
+        display: flex;
+        justify-content: end;
+        width: 100%;
+    }
+
+    .detail__ingredients>button,
+    .detail__directions>button {
+        display: none;
+    }
+
+    .detail__ingredients_lists {
+        h3 {
+            font-size: 22px;
+        }
+
+        span {
+            font-size: 22px;
+        }
+    }
+
+    .directions__headings {
+        img {
+            width: 27px;
+            height: 22px;
+        }
+
+        h3 {
+            font-size: 24px;
+        }
+    }
+
+    .detail__directions {
+        p {
+            font-size: 18px;
+        }
+    }
+
+    .like__section {
+        gap: 12px;
+    }
+
+    .font__container {
+        display: flex;
+        gap: 16px;
+
+        h3 {
+            font-size: 18px;
+        }
+    }
+
+    .go_to_cookbook {
+        width: 100%;
+        justify-content: center;
+        gap: 40px;
+        height: 142px;
+        align-items: center;
+
+        h3 {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+        }
+
+        button {
+            width: 169px;
+            height: 62px;
+            font-size: 24px;
+        }
+    }
+
+    .detail__tags {
+        width: 277px;
+    }
+}
+
+
+@media (min-width: 1441px) {
+    .cooking__details__inner {
+        display: flex;
+        justify-content: center;
+    }
+
+    .cooking__details {
+        max-width: 1440px;
+    }
+
+    .inner__body {
+        display: flex;
+        flex-direction: column;
+        gap: 48px;
+        align-items: center;
+    }
+
+    .go_to_cookbook_outer {
+        max-width: 1440px;
+    }
+
+    .detail__summary {
+        margin: 56px 80px 0 80px;
+    }
+
+    .detail__actions {
+        width: 1440px;
+    }
+}
+
+@media (min-width: 1921px) {
+    .cooking__time {
+        span {
+            font-size: 22px;
+        }
+
+        img {
+            height: 24px;
+            width: 24px;
+        }
+    }
+
+    .detail__time {
+        h1 {
+            font-size: 54px;
+        }
+    }
+
+    .detail__tags {
+        button {
+            font-size: 22px;
+        }
+    }
+
+    .detail__chefs {
+        button {
+            gap: 6px;
+            min-width: 102px;
+            height: 32px;
+            font-size: 20px;
+            padding: 8px;
+        }
+    }
+
+    .detail__nutrition {
+        h2 {
+            font-size: 22px;
+        }
+    }
+
+    .detail__nutrition-grid {
+        p {
+            font-size: 22px;
+        }
+    }
+
+    .detail__ingredients_lists {
+        h3 {
+            font-size: 26px;
+        }
+
+        span {
+            font-size: 26px;
+        }
+    }
+
+    .step__index {
+        font-size: 24px;
+        width: 40px;
+        height: 40px;
+    }
+
+    .directions__headings {
+        h3 {
+            font-size: 26px;
+        }
+    }
+
+    .detail__directions {
+        p {
+            font-size: 22px;
+        }
+    }
+
+    .directions__headings {
+        gap: 6px;
+        min-width: 102px;
+        height: 32px;
+        font-size: 20px;
+        padding: 8px;
+    }
+
+    .font__container {
+        h3 {
+            font-size: 22px;
+        }
+
+        p {
+            font-size: 20px;
+        }
+    }
+
+    .like__section button img {
+        width: 48px;
+        height: 44px;
+    }
+
+    .go_to_cookbook {
+        h3 {
+            font-size: 26px;
+        }
+
+        button {
+            width: 192px;
+            height: 72px;
+            font-size: 26px;
+        }
+    }
+
+    .detail__actions {
+        button {
+            font-size: 24px;
+        }
+
+        img {
+            width: 26px;
+        }
+    }
+}

@@ -8,97 +8,101 @@
     </div>
   </header>
 
-  <div class="cookbook_header_container">
-    <section class="header_upper_container">
-      <h1>Cookbook</h1>
-      <p>From quick bites to gourmet delights, explore them all in our ultimate cookbook and get inspired for your next
-        culinary adventure.</p>
-    </section>
-
-    <div class="header_lower_container">
-      <section class="liked_heading">
-        <h2>Most liked recipes</h2>
-        <img src="assets/img/cookbook/Heart.svg" alt="">
+  <div class="cookbook_header_container__inner">
+    <div class="cookbook_header_container">
+      <section class="header_upper_container">
+        <h1>Cookbook</h1>
+        <p>From quick bites to gourmet delights, explore them all in our ultimate cookbook and get inspired for your
+          next
+          culinary adventure.</p>
       </section>
 
-      <section class="liked_article">
+      <div class="header_lower_container">
+        <section class="liked_heading">
+          <h2>Most liked recipes</h2>
+          <img src="assets/img/cookbook/Heart.svg" alt="">
+        </section>
 
-        <!-- Artikel dann später noch auf einen artikel verringern und mit ngFor mit variablen 5x erstellen -->
+        <section class="liked_article">
 
-        <article>
-          <div class="single_moste_liked_recipe">
-            <div class="inner_container_schedule">
-              <img src="assets/img/cookbook/schedule.svg" alt="">
-              <span>Cooking time: 20min <!-- placeholder for timestamp --></span>
+          <!-- Artikel dann später noch auf einen artikel verringern und mit ngFor mit variablen 5x erstellen -->
+
+          <article>
+            <div class="single_moste_liked_recipe">
+              <div class="inner_container_schedule">
+                <img src="assets/img/cookbook/schedule.svg" alt="">
+                <span>Cooking time: 20min <!-- placeholder for timestamp --></span>
+              </div>
+              <p>Pasta with spinach and cherry tomatoes<!-- palceholder for recipe heading --></p>
             </div>
-            <p>Pasta with spinach and cherry tomatoes<!-- palceholder for recipe heading --></p>
-          </div>
-          <button><img src="assets/img/cookbook/favorite.svg" alt="">66<!-- placeholder collected likes --></button>
-        </article>
+            <button><img src="assets/img/cookbook/favorite.svg" alt="">66<!-- placeholder collected likes --></button>
+          </article>
 
-        <article>
-          <div>
-            <div class="inner_container_schedule">
-              <img src="assets/img/cookbook/schedule.svg" alt="">
-              <span>Cooking time: 20min <!-- placeholder for timestamp --></span>
+          <article>
+            <div class="single_moste_liked_recipe">
+              <div class="inner_container_schedule">
+                <img src="assets/img/cookbook/schedule.svg" alt="">
+                <span>Cooking time: 20min <!-- placeholder for timestamp --></span>
+              </div>
+              <p>Pasta with spinach and cherry tomatoes<!-- palceholder for recipe heading --></p>
             </div>
-            <p>Pasta with spinach and cherry tomatoes<!-- palceholder for recipe heading --></p>
-          </div>
-          <button><img src="assets/img/cookbook/favorite.svg" alt="">66<!-- placeholder collected likes --></button>
-        </article>
+            <button><img src="assets/img/cookbook/favorite.svg" alt="">66<!-- placeholder collected likes --></button>
+          </article>
 
 
-      </section>
+        </section>
 
+      </div>
     </div>
   </div>
 
+  <div class="country_cuisine__inner">
+    <section class="country_cuisine">
 
-  <section class="country_cuisine">
+      <article>
+        <h2> Italian cuisine <img src="assets/img/cookbook/nice.png" alt=""></h2> <!-- small icon -->
+        <a [routerLink]="['/cookbook', 'italian']">
+          <img src="assets/img/cookbook/italiano.svg" alt="">
+        </a>
+      </article>
 
-    <article>
-      <h2> Italian cuisine <img src="assets/img/cookbook/nice.png" alt=""></h2> <!-- small icon -->
-      <a [routerLink]="['/cookbook', 'italian']">
-        <img src="assets/img/cookbook/italiano.svg" alt="">
-      </a>
-    </article>
+      <article>
+        <h2> German cuisine <img src="assets/img/cookbook/braezle.png" alt=""></h2> <!-- small icon -->
+        <a [routerLink]="['/cookbook', 'german']">
+          <img src="assets/img/cookbook/german.svg" alt="">
+        </a>
+      </article>
 
-    <article>
-      <h2> German cuisine <img src="assets/img/cookbook/braezle.png" alt=""></h2> <!-- small icon -->
-      <a [routerLink]="['/cookbook', 'german']">
-        <img src="assets/img/cookbook/german.svg" alt="">
-      </a>
-    </article>
+      <article>
+        <h2> Japanese cuisine <img src="assets/img/cookbook/staebche.png" alt=""></h2> <!-- small icon -->
+        <a [routerLink]="['/cookbook', 'japanese']">
+          <img src="assets/img/cookbook/japanese.svg" alt="">
+        </a>
+      </article>
 
-    <article>
-      <h2> Japanese cuisine <img src="assets/img/cookbook/staebche.png" alt=""></h2> <!-- small icon -->
-      <a [routerLink]="['/cookbook', 'japanese']">
-        <img src="assets/img/cookbook/japanese.svg" alt="">
-      </a>
-    </article>
+      <article>
+        <h2> Gourmet cuisine <img src="assets/img/cookbook/stars.png" alt=""></h2> <!-- small icon -->
+        <a [routerLink]="['/cookbook', 'gourmet']">
+          <img src="assets/img/cookbook/gourmet.svg" alt="">
+        </a>
+      </article>
 
-    <article>
-      <h2> Gourmet cuisine <img src="assets/img/cookbook/stars.png" alt=""></h2> <!-- small icon -->
-      <a [routerLink]="['/cookbook', 'gourmet']">
-        <img src="assets/img/cookbook/gourmet.svg" alt="">
-      </a>
-    </article>
+      <article>
+        <h2> Indian cuisine <img src="assets/img/cookbook/chicken-rice.png" alt=""></h2> <!-- small icon -->
+        <a [routerLink]="['/cookbook', 'indian']">
+          <img src="assets/img/cookbook/indien.svg" alt="">
+        </a>
+      </article>
 
-    <article>
-      <h2> Indian cuisine <img src="assets/img/cookbook/chicken-rice.png" alt=""></h2> <!-- small icon -->
-      <a [routerLink]="['/cookbook', 'indian']">
-        <img src="assets/img/cookbook/indien.svg" alt="">
-      </a>
-    </article>
+      <article>
+        <h2> Fusion cuisine <img src="assets/img/cookbook/fusion.png" alt=""></h2> <!-- small icon -->
+        <a [routerLink]="['/cookbook', 'fusion']">
+          <img src="assets/img/cookbook/fusion.svg" alt="">
+        </a>
+      </article>
 
-    <article>
-      <h2> Fusion cuisine <img src="assets/img/cookbook/fusion.png" alt=""></h2> <!-- small icon -->
-      <a [routerLink]="['/cookbook', 'fusion']">
-        <img src="assets/img/cookbook/fusion.svg" alt="">
-      </a>
-    </article>
-
-  </section>
+    </section>
+  </div>
 
   <div class="results__actions">
     <button type="button" (click)="startOver()">Generate new recipe <img src="assets/img/cookbook/arrow-left.svg"
