@@ -8,45 +8,65 @@
     </div>
   </header>
 
-  <img class="library__hero-image" [src]="vm.config.hero" alt="" aria-hidden="true">
-
-  <section class="library__list">
-    <a class="recipe-card" *ngFor="let recipe of vm.recipes; index as idx; trackBy: trackRecipe"
-      [class.is-alt]="idx % 2 === 1" [routerLink]="['/cookbook', vm.cuisineKey, getRecipeId(recipe)]">
-      <div class="recipe-card__meta">
-        <span class="recipe-card__index">{{ (vm.currentPage - 1) * 20 + idx + 1 }}.</span>
-        <img src="assets/img/cookbook/schedule.svg" alt="" aria-hidden="true">
-        <span>Cooking time: {{ recipe.cookingTimeMinutes }}min</span>
+  <div class="library__inner">
+    <div class="library__hero">
+      <div class="library__hero-actions">
+        <button type="button" class="library__actions-button" routerLink="/generate-recipe">
+          Generate recipe
+        </button>
       </div>
-      <h2>{{ recipe.title }}</h2>
-      <div class="recipe-card__tags">
-        <span class="tag" *ngIf="recipe.diet">{{ recipe.diet }}</span>
-        <span class="tag" *ngIf="recipe.cookTimeTag">{{ recipe.cookTimeTag }}</span>
-        <span class="tag tag--heart">
-          <img src="assets/img/cookbook/favorite.svg" alt="" aria-hidden="true">
-          {{ recipe.hearts }}
-        </span>
-      </div>
-    </a>
-    <p class="library__empty" *ngIf="vm.recipes.length === 0">
-      No recipes yet. Generate a few and come back for inspiration.
-    </p>
-  </section>
+      <picture>
+        <source media="(min-width: 768px)" [srcset]="vm.config.heroResponsive">
+        <img class="library__hero-image" [src]="vm.config.hero" alt="" aria-hidden="true">
+      </picture>
+    </div>
 
-  <nav class="library__pagination" *ngIf="vm.totalPages > 1">
-    <button type="button" (click)="setPage(vm.currentPage - 1)" [disabled]="vm.currentPage === 1">
-      &lt;
-    </button>
-    <button type="button" *ngFor="let page of vm.pages" [class.is-active]="page === vm.currentPage"
-      (click)="setPage(page)">
-      {{ page }}
-    </button>
-    <button type="button" (click)="setPage(vm.currentPage + 1)" [disabled]="vm.currentPage === vm.totalPages">
-      &gt;
-    </button>
-  </nav>
+    <section class="library__list">
+      <a class="recipe-card" *ngFor="let recipe of vm.recipes; index as idx; trackBy: trackRecipe"
+        [class.is-alt]="idx % 2 === 1" [routerLink]="['/cookbook', vm.cuisineKey, getRecipeId(recipe)]">
 
-  <div class="library__actions">
-    <button type="button" routerLink="/generate-recipe">Generate recipe</button>
+        <div class="recipe-card__index_outer">
+          <span class="recipe-card__index">{{ (vm.currentPage - 1) * 20 + idx + 1 }}.</span>
+          <div class="recipe-card__meta">
+            <div class="recipe_card_meta_inner">
+              <img src="assets/img/cookbook/schedule.svg" alt="" aria-hidden="true">
+              <span>Cooking time: {{ recipe.cookingTimeMinutes }}min</span>
+            </div>
+            <h2>{{ recipe.title }}</h2>
+          </div>
+        </div>
+
+        <div class="recipe-card__tags">
+          <span class="tag" *ngIf="recipe.diet">{{ recipe.diet }}</span>
+          <span class="tag" *ngIf="recipe.cookTimeTag">{{ recipe.cookTimeTag }}</span>
+          <span class="tag tag--heart">
+            <img src="assets/img/cookbook/favorite.svg" alt="" aria-hidden="true">
+            {{ recipe.hearts }}
+          </span>
+        </div>
+
+      </a>
+      <p class="library__empty" *ngIf="vm.recipes.length === 0">
+        No recipes yet. Generate a few and come back for inspiration.
+      </p>
+    </section>
+
+    <nav class="library__pagination" *ngIf="vm.totalPages > 1">
+      <button type="button" (click)="setPage(vm.currentPage - 1)" [disabled]="vm.currentPage === 1">
+        &lt;
+      </button>
+      <button type="button" *ngFor="let page of vm.pages" [class.is-active]="page === vm.currentPage"
+        (click)="setPage(page)">
+        {{ page }}
+      </button>
+      <button type="button" (click)="setPage(vm.currentPage + 1)" [disabled]="vm.currentPage === vm.totalPages">
+        &gt;
+      </button>
+    </nav>
+
+    <div class="library__actions">
+      <button type="button" routerLink="/generate-recipe">Generate recipe</button>
+    </div>
   </div>
+
 </main>

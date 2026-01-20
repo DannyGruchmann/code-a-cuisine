@@ -1,6 +1,17 @@
 @use '../../styles/variables' as *;
 
 .library {
+  &__hero {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  &__hero-actions {
+    display: none;
+    justify-content: flex-end;
+  }
+
   &__hero-image {
     width: 100%;
   }
@@ -53,25 +64,32 @@
       background-color: $main_green;
       color: white;
       border: none;
-      border-radius: 6px;
       padding: 12px 20px;
       font-size: 14px;
       font-weight: 600;
       cursor: pointer;
     }
   }
+
+  &__actions-button {
+    background-color: $main_green;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
 }
 
 .recipe-card {
-  position: relative;
   display: flex;
   flex-direction: column;
   gap: 8px;
   padding: 16px 16px 14px;
   border-radius: 16px;
-  background-color: white;
   text-decoration: none;
-  color: inherit;
+  color: $main_green;
 
   &.is-alt {
     background-color: $light_cream;
@@ -137,5 +155,15 @@
   img {
     width: 14px;
     height: 14px;
+  }
+}
+
+@media (min-width: 768px) {
+  .library__actions {
+    display: none;
+  }
+
+  .library__hero-actions {
+    display: flex;
   }
 }

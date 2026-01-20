@@ -9,36 +9,42 @@ type CuisineKey = 'italian' | 'german' | 'japanese' | 'gourmet' | 'indian' | 'fu
 
 const CUISINE_CONFIG: Record<
   CuisineKey,
-  { label: string; hero: string; accent: string }
+  { label: string; hero: string; heroResponsive: string; accent: string }
 > = {
   italian: {
     label: 'Italian cuisine',
     hero: 'assets/img/libary/Property 1=Italian.svg',
+    heroResponsive: 'assets/img/libary/responsive/Property%201=Italian.svg',
     accent: 'assets/img/cookbook/nice.png'
   },
   german: {
     label: 'German cuisine',
     hero: 'assets/img/libary/Property 1=German.svg',
+    heroResponsive: 'assets/img/libary/responsive/Property%201=German.svg',
     accent: 'assets/img/cookbook/braezle.png'
   },
   japanese: {
     label: 'Japanese cuisine',
     hero: 'assets/img/libary/Property 1=Japanese.svg',
+    heroResponsive: 'assets/img/libary/responsive/Property%201=Japanese.svg',
     accent: 'assets/img/cookbook/staebche.png'
   },
   gourmet: {
     label: 'Gourmet cuisine',
     hero: 'assets/img/libary/Property 1=Gourmet.svg',
+    heroResponsive: 'assets/img/libary/responsive/Property%201=Gourmet.svg',
     accent: 'assets/img/cookbook/stars.png'
   },
   indian: {
     label: 'Indian cuisine',
     hero: 'assets/img/libary/Property 1=Indian.svg',
+    heroResponsive: 'assets/img/libary/responsive/Property%201=Indian.svg',
     accent: 'assets/img/cookbook/chicken-rice.png'
   },
   fusion: {
     label: 'Fusion cuisine',
     hero: 'assets/img/libary/Property 1=Fusion.svg',
+    heroResponsive: 'assets/img/libary/responsive/Property%201=Fusion.svg',
     accent: 'assets/img/cookbook/fusion.png'
   }
 };
@@ -50,7 +56,7 @@ const PAGE_SIZE = 20;
   standalone: true,
   imports: [CommonModule, RouterModule, HeaderGreenLogoComponent],
   templateUrl: './recipe-library.component.html',
-  styleUrls: ['./recipe-library.component.scss']
+  styleUrls: ['./recipe-library.component.scss', './recipe-library_responsive.component.scss']
 })
 export class RecipeLibraryComponent {
   private readonly pageSubject = new BehaviorSubject<number>(1);

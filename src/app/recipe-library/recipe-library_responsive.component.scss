@@ -1,0 +1,126 @@
+@media (min-width: 768px) {
+    .library__hero-actions {
+        button {
+            width: 188px;
+            height: 52px;
+            font-size: 18px;
+        }
+    }
+
+    .recipe-card {
+        flex-direction: row;
+        align-items: end;
+        justify-content: space-between;
+    }
+
+    .recipe-card__meta {
+        flex-direction: column;
+        align-items: self-start;
+    }
+
+    .recipe_card_meta_inner {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+    }
+
+    .recipe-card__tags {
+        flex-wrap: nowrap;
+
+        span {
+            width: max-content;
+        }
+    }
+
+    .recipe-card__index_outer {
+        display: flex;
+        align-items: flex-end;
+        gap: 8px;
+    }
+}
+
+@media (min-width: 1280px) {
+
+    .library__inner {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .library__actions {
+        max-width: 1200px;
+    }
+
+    .library__list {
+        max-width: 900px;
+    }
+
+    .library__hero {
+        max-width: 1200px;
+    }
+
+    .library__hero-actions {
+        button {
+            width: 258px;
+            height: 62px;
+            font-size: 24px;
+        }
+    }
+
+    .recipe-card {
+        h2 {
+            font-size: 24px;
+        }
+    }
+}
+
+@media (min-width: 1441px) {
+    .library__hero-actions button {
+        width: 278px;
+        height: 68px;
+        font-size: 26px;
+    }
+
+    .recipe-card__index {
+        width: 40px;
+        height: 40px;
+        font-size: 22px;
+    }
+
+    .recipe-card__meta {
+        img {
+            width: 20px;
+            height: 20px;
+        }
+
+        span {
+            font-size: 18px;
+        }
+    }
+
+    .recipe-card {
+        h2 {
+            font-size: 26px;
+        }
+    }
+
+    .recipe-card__tags {
+        span {
+            font-size: 22px;
+        }
+    }
+
+    .recipe-card__index_outer {
+        gap: 12px;
+    }
+}
+
+@media (min-width: 1921px) {
+    .library__hero {
+        width: 1440px;
+    }
+
+    .library__list {
+        max-width: 1200px;
+    }
+}
