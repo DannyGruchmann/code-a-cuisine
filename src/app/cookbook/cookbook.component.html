@@ -24,32 +24,24 @@
         </section>
 
         <section class="liked_article">
-
-          <!-- Artikel dann später noch auf einen artikel verringern und mit ngFor mit variablen 5x erstellen -->
-
-          <article>
+          <article *ngFor="let recipe of mostLikedRecipes$ | async; trackBy: trackByRecipe"
+            (click)="navigateToRecipe(recipe)" role="button" tabindex="0"
+            (keydown.enter)="navigateToRecipe(recipe)">
             <div class="single_moste_liked_recipe">
               <div class="inner_container_schedule">
                 <img src="assets/img/cookbook/schedule.svg" alt="">
-                <span>Cooking time: 20min <!-- placeholder for timestamp --></span>
+                <span>Cooking time: {{ recipe.cookingTimeMinutes }}min</span>
               </div>
-              <p>Pasta with spinach and cherry tomatoes<!-- palceholder for recipe heading --></p>
+              <p>{{ recipe.title }}</p>
             </div>
-            <button><img src="assets/img/cookbook/favorite.svg" alt="">66<!-- placeholder collected likes --></button>
+            <button type="button">
+              <img src="assets/img/cookbook/favorite.svg" alt="">{{ recipe.hearts }}
+            </button>
           </article>
 
-          <article>
-            <div class="single_moste_liked_recipe">
-              <div class="inner_container_schedule">
-                <img src="assets/img/cookbook/schedule.svg" alt="">
-                <span>Cooking time: 20min <!-- placeholder for timestamp --></span>
-              </div>
-              <p>Pasta with spinach and cherry tomatoes<!-- palceholder for recipe heading --></p>
-            </div>
-            <button><img src="assets/img/cookbook/favorite.svg" alt="">66<!-- placeholder collected likes --></button>
-          </article>
-
-
+          <p *ngIf="(mostLikedRecipes$ | async)?.length === 0">
+            No likes yet. Be the first to heart a recipe.
+          </p>
         </section>
 
       </div>

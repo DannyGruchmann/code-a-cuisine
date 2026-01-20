@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, combineLatest, map, of, switchMap } from 'rxjs';
+import { Observable, combineLatest, map, of, switchMap, tap } from 'rxjs';
 import { HeaderGreenLogoComponent } from '../header-green-logo/header-green-logo.component';
 import { RecipeDetail } from '../models/recipe-request.model';
 import { RecipeLibraryDetail, RecipeLibraryService } from '../services/recipe-library.service';
@@ -18,6 +18,9 @@ export class RecipeDetailComponent {
   ingredientsCollapsed = false;
   directionsCollapsed = false;
   isRecipeLiked = false;
+  likeCount = 0;
+  likePending = false;
+  currentRecipeId: string | null = null;
   readonly chefAssets = [
     {
       bg: '#D7DFD7',
@@ -43,7 +46,7 @@ export class RecipeDetailComponent {
     over45: 'Complex'
   };
 
-  private readonly isLibraryDetail = this.route.snapshot.data['source'] === 'library';
+  readonly isLibraryDetail = this.route.snapshot.data['source'] === 'library';
   detail$: Observable<RecipeDetail | RecipeLibraryDetail | null> = this.route.data.pipe(
     switchMap((data) => {
       if (data['source'] === 'library') {
@@ -81,7 +84,8 @@ export class RecipeDetailComponent {
           return mergedDetail ?? null;
         })
       );
-    })
+    }),
+    tap((detail) => this.syncLikeState(detail))
   );
 
   constructor(
@@ -118,11 +122,89 @@ export class RecipeDetailComponent {
   }
 
   toggleLike(): void {
-    this.isRecipeLiked = !this.isRecipeLiked;
+    if (!this.isLibraryDetail || !this.currentRecipeId || this.likePending) {
+      return;
+    }
+    const recipeId = this.currentRecipeId;
+    const shouldLike = !this.isRecipeLiked;
+    this.likePending = true;
+    this.libraryService
+      .toggleRecipeLike(recipeId, shouldLike)
+      .then((nextHearts) => {
+        if (nextHearts === null) {
+          return;
+        }
+        this.isRecipeLiked = shouldLike;
+        this.likeCount = nextHearts;
+        this.updateStoredLikes(recipeId, shouldLike);
+      })
+      .finally(() => {
+        this.likePending = false;
+      });
   }
 
   trackByOrder(_index: number, step: { order: number }): number {
     return step.order;
   }
 
+  private syncLikeState(detail: RecipeDetail | RecipeLibraryDetail | null): void {
+    if (!detail) {
+      this.currentRecipeId = null;
+      this.likeCount = 0;
+      this.isRecipeLiked = false;
+      return;
+    }
+    if (this.isLibraryDetail) {
+      const recipeId = 'docId' in detail ? detail.docId ?? detail.id : detail.id;
+      this.currentRecipeId = recipeId;
+      this.likeCount = detail.hearts ?? 0;
+      this.isRecipeLiked = this.isRecipeLikedByUser(recipeId);
+    } else {
+      this.currentRecipeId = null;
+      this.likeCount = detail.hearts ?? 0;
+      this.isRecipeLiked = false;
+    }
+  }
+
+  private isRecipeLikedByUser(recipeId: string): boolean {
+    return this.loadStoredLikes().has(recipeId);
+  }
+
+  private updateStoredLikes(recipeId: string, shouldLike: boolean): void {
+    const likedIds = this.loadStoredLikes();
+    if (shouldLike) {
+      likedIds.add(recipeId);
+    } else {
+      likedIds.delete(recipeId);
+    }
+    this.persistStoredLikes(likedIds);
+  }
+
+  private loadStoredLikes(): Set<string> {
+    if (typeof window === 'undefined') {
+      return new Set();
+    }
+    try {
+      const raw = window.localStorage.getItem('likedRecipeIds');
+      if (!raw) {
+        return new Set();
+      }
+      const parsed = JSON.parse(raw) as string[];
+      return new Set(Array.isArray(parsed) ? parsed : []);
+    } catch (error) {
+      console.warn('Failed to read liked recipes', error);
+      return new Set();
+    }
+  }
+
+  private persistStoredLikes(likedIds: Set<string>): void {
+    if (typeof window === 'undefined') {
+      return;
+    }
+    try {
+      window.localStorage.setItem('likedRecipeIds', JSON.stringify(Array.from(likedIds)));
+    } catch (error) {
+      console.warn('Failed to persist liked recipes', error);
+    }
+  }
 }

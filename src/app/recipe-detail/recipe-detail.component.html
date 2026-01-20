@@ -20,7 +20,7 @@
                     <img src="assets/img/choose-your-preferences/time.svg" alt="" aria-hidden="true" />
                     <span>Cooking time: {{ detail.cookingTimeMinutes }}min</span>
                   </label>
-                  <h1>Pasta with spinach and cherry tommatoes <!-- placeholder -->{{ detail.title }}</h1>
+                  <h1>{{ detail.title }}</h1>
                 </div>
                 <div class="detail__chefs">
                   <button *ngFor="let chef of detail.helperLabels; index as idx"
@@ -56,13 +56,15 @@
                   <ng-container *ngIf="preferences$ | async as preferences; else libraryTags">
                     <button>{{ preferences.cuisine || '' }}</button>
                     <button>{{ cookTimeLabels[preferences.cookTime] || '' }}</button>
-                    <button class="like__button"><img src="assets/img/recipe-detail/favorite.svg" alt="">66</button>
+                    <button class="like__button">
+                      <img src="assets/img/recipe-detail/favorite.svg" alt="">{{ likeCount }}
+                    </button>
                   </ng-container>
                   <ng-template #libraryTags>
                     <button *ngFor="let tag of detail.tags">{{ tag }}</button>
-                    <button class="like__button"><img src="assets/img/recipe-detail/favorite.svg" alt="">{{
-                      detail.hearts
-                      }}</button>
+                    <button class="like__button">
+                      <img src="assets/img/recipe-detail/favorite.svg" alt="">{{ likeCount }}
+                    </button>
                   </ng-template>
                 </div>
               </div>
@@ -137,7 +139,7 @@
               <h3>Just finished this meal? </h3>
               <p>Give it a heart, so that the others know this is delicious.</p>
             </div>
-            <button type="button" (click)="toggleLike()">
+            <button type="button" (click)="toggleLike()" [disabled]="!isLibraryDetail || likePending">
               <img
                 [src]="isRecipeLiked ? 'assets/img/recipe-detail/filled-heart.svg' : 'assets/img/recipe-detail/heart.svg'"
                 alt="">
