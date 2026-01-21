@@ -49,9 +49,12 @@
         </header>
 
         <ul>
-          <li *ngFor="let option of cookingOptions">
-            <button type="button" [class.is-active]="selectedCooking === option.value"
-              (click)="selectCooking(option.value)">{{ option.label }}</button>
+          <li *ngFor="let option of cookingOptions; index as idx">
+            <input class="pill-input" type="radio" name="cooking-time" [id]="'cooktime-' + idx"
+              [checked]="selectedCooking === option.value" (change)="selectCooking(option.value)">
+            <label class="pill" [class.is-active]="selectedCooking === option.value" [for]="'cooktime-' + idx">
+              {{ option.label }}
+            </label>
             <p>{{ option.description }}</p>
           </li>
         </ul>
@@ -63,10 +66,15 @@
           <h2>Cuisine</h2>
         </header>
 
-        <div class="pill-group">
-          <button type="button" *ngFor="let option of cuisineOptions" [class.is-active]="isCuisineSelected(option)"
-            (click)="selectCuisine(option)">{{ option }}</button>
-        </div>
+        <ul class="pill-group">
+          <li *ngFor="let option of cuisineOptions; index as idx">
+            <input class="pill-input" type="radio" name="cuisine" [id]="'cuisine-' + idx"
+              [checked]="isCuisineSelected(option)" (change)="selectCuisine(option)">
+            <label class="pill" [class.is-active]="isCuisineSelected(option)" [for]="'cuisine-' + idx">
+              {{ option }}
+            </label>
+          </li>
+        </ul>
       </article>
 
       <article>
@@ -75,17 +83,22 @@
           <h2>Diet preferences</h2>
         </header>
 
-        <div class="pill-group">
-          <button type="button" *ngFor="let option of dietOptions"
-            [class.is-active]="isDietSelected(option)" (click)="selectDiet(option)">{{ option }}</button>
-        </div>
+        <ul class="pill-group">
+          <li *ngFor="let option of dietOptions; index as idx">
+            <input class="pill-input" type="radio" name="diet" [id]="'diet-' + idx"
+              [checked]="isDietSelected(option)" (change)="selectDiet(option)">
+            <label class="pill" [class.is-active]="isDietSelected(option)" [for]="'diet-' + idx">
+              {{ option }}
+            </label>
+          </li>
+        </ul>
       </article>
     </section>
   </div>
 
   <div class="submit__container">
     <button type="button" class="preferences__submit" (click)="generateRecipe()"
-      [disabled]="(quota$ | async)?.remainingIp === 0 || (quota$ | async)?.remainingGlobal === 0">
+      [disabled]="!canGenerateRecipe || (quota$ | async)?.remainingIp === 0 || (quota$ | async)?.remainingGlobal === 0">
       Generate recipe
     </button>
   </div>

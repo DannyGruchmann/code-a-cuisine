@@ -167,3 +167,14 @@
     display: flex;
   }
 }
+
+.recipe-card__index_outer {
+  display: flex;
+  gap: 12px;
+}
+
+.recipe_card_meta_inner {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}

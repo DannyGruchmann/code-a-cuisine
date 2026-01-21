@@ -8,7 +8,7 @@ import { HeaderGreenLogoComponent } from '../header-green-logo/header-green-logo
   standalone: true,
   imports: [CommonModule, HeaderGreenLogoComponent],
   templateUrl: './impressum.component.html',
-  styleUrls: ['./impressum.component.scss']
+  styleUrls: ['./impressum.component.scss', './impressum_responsive.component.scss']
 })
 export class ImpressumComponent {
   constructor(private router: Router) {}

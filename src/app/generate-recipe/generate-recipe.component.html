@@ -32,7 +32,7 @@
                     </button>
 
                     <ul class="unit_select__list" role="listbox" aria-label="Units"
-                      [attr.aria-hidden]="!unitDropdownOpen" [class.is_open]="unitDropdownOpen">
+                      [attr.inert]="unitDropdownOpen ? null : ''" [class.is_open]="unitDropdownOpen">
                       <li *ngFor="let unit of units">
                         <button type="button" (click)="selectUnit(unit, $event)">{{ unit }}</button>
                       </li>
@@ -109,7 +109,7 @@
                           </button>
 
                           <ul class="unit_select__list" role="listbox" aria-label="Units"
-                            [attr.aria-hidden]="editingUnitDropdownIndex !== i"
+                            [attr.inert]="editingUnitDropdownIndex === i ? null : ''"
                             [class.is_open]="editingUnitDropdownIndex === i">
                             <li *ngFor="let unit of units">
                               <button type="button" (click)="selectEditingUnit(unit, i, $event)">{{ unit }}</button>

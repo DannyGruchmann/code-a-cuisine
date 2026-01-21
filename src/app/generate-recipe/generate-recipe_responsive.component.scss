@@ -33,11 +33,9 @@
         }
     }
 
-    .unit_select {
-        button {
-            font-size: 20px !important;
-            height: 44px !important;
-        }
+    .serving_group .unit_select__trigger {
+        font-size: 20px !important;
+        height: 44px !important;
     }
 
     .generate__panel {
@@ -78,7 +76,7 @@
 @media (min-width: 1024px) {
 
     .height_176px {
-        height: 112px;
+        height: 154px;
 
         form {
             flex-direction: row;
@@ -128,6 +126,24 @@
     }
 }
 
+@media (min-width: 1440px) {
+    .generate__panel .ingredient_list .icon_button img {
+        width: 30px;
+        height: 30px;
+    }
+
+    .generate__panel .ingredient_list__actions {
+        gap: 12px;
+    }
+}
+
+
+@media (min-width: 1921px) {
+    .height_176px {
+        height: 188px;
+    }
+}
+
 @media (min-width: 2560px) {
     .generate__intro {
         h1 {
@@ -137,6 +153,11 @@
         p {
             font-size: 36px;
         }
+    }
+
+    .generate__panel .ingredient_list .icon_button img {
+        width: 32px;
+        height: 32px;
     }
 
     .form_field {

@@ -76,10 +76,11 @@
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    margin-top: 16px;
+    margin: 16px 0 0;
+    list-style: none;
+    padding: 0;
 
-    button {
-      border: none;
+    .tag {
       background-color: $darker_green;
       border-radius: 999px;
       font-size: 16px;
@@ -87,6 +88,9 @@
       min-width: 64px;
       height: 32px;
       padding: 0 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .like__button {
@@ -98,6 +102,12 @@
       justify-content: center;
       gap: 4px;
       cursor: pointer;
+      border: none;
+      background-color: $darker_green;
+      color: $main_green;
+      border-radius: 999px;
+      min-width: 64px;
+      padding: 0 12px;
     }
   }
 
@@ -172,7 +182,7 @@
 }
 
 .detail__directions_img {
-  margin-block-end: 1em;
+  width: 100%;
 }
 
 .detail__directions ol {
@@ -184,7 +194,6 @@
   gap: 16px;
   max-height: 2000px;
   opacity: 1;
-  overflow: hidden;
   transition: max-height 0.3s ease, opacity 0.3s ease;
 }
 
@@ -293,7 +302,6 @@
 .detail__ingredients_lists {
   max-height: 1000px;
   opacity: 1;
-  overflow: hidden;
   transition: max-height 0.3s ease, opacity 0.3s ease;
 
   ul {
@@ -384,4 +392,10 @@
       width: 20px;
     }
   }
+}
+
+.inner__body {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
 }

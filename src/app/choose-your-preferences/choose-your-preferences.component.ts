@@ -77,7 +77,14 @@ export class ChooseYourPreferencesComponent implements OnInit {
     return this.selectedDiet === option;
   }
 
+  get canGenerateRecipe(): boolean {
+    return Boolean(this.selectedCooking) && Boolean(this.selectedCuisine) && Boolean(this.selectedDiet);
+  }
+
   async generateRecipe(): Promise<void> {
+    if (!this.canGenerateRecipe) {
+      return;
+    }
     this.hasTriedGenerate = true;
     const preferences: PreferenceSelection = {
       portions: this.portions,
@@ -87,13 +94,11 @@ export class ChooseYourPreferencesComponent implements OnInit {
       dietPreferences: this.selectedDiet ? [this.selectedDiet] : []
     };
     this.recipeRequestService.setPreferences(preferences);
-    const startPromise = this.recipeRequestService.beginWorkflowSimulation();
+    const started = await this.recipeRequestService.beginWorkflowSimulation();
+    if (!started) {
+      return;
+    }
     this.router.navigate(['recipe-results']);
-    void startPromise.then((started) => {
-      if (!started) {
-        this.router.navigate(['generate-recipe']);
-      }
-    });
   }
 
   goBack(): void {

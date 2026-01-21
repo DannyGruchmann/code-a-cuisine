@@ -17,10 +17,10 @@
           <div class="left__heading__container">
             <h1>The recipe results</h1>
             <p>We took what you have and let our AI do the thinking. Here are 3 easy recipes you can make right now!</p>
-            <div class="choosen__elements" *ngIf="preferences$ | async as preferences">
-              <button>{{ preferences.cuisine || '' }}</button>
-              <button>{{ cookTimeLabels[preferences.cookTime] || '' }}</button>
-            </div>
+            <ul class="choosen__elements" *ngIf="preferences$ | async as preferences">
+              <li><span class="tag">{{ preferences.cuisine || '' }}</span></li>
+              <li><span class="tag">{{ cookTimeLabels[preferences.cookTime] || '' }}</span></li>
+            </ul>
           </div>
 
 

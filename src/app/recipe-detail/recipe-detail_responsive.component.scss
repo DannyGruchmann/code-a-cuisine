@@ -242,7 +242,11 @@
     }
 
     .detail__tags {
-        button {
+        .tag {
+            font-size: 22px;
+        }
+
+        .like__button {
             font-size: 22px;
         }
     }
