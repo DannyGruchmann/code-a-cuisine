@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { HeaderCreamLogoComponent } from '../header-cream-logo/header-cream-logo.component';
 import { LoadingScreenComponent } from '../loading-screen/loading-screen.component';
 import { RecipeRequestService } from '../services/recipe-request.service';
-import { combineLatest, map } from 'rxjs';
+import { Subject, combineLatest, map, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-recipe-results',
@@ -13,7 +13,7 @@ import { combineLatest, map } from 'rxjs';
   templateUrl: './recipe-results.component.html',
   styleUrls: ['./recipe-results.component.scss', './recipe-results_responsive.component.scss']
 })
-export class RecipeResultsComponent implements OnInit {
+export class RecipeResultsComponent implements OnInit, OnDestroy {
   generating$ = this.recipeRequestService.generating$;
   recipeSummaries$ = this.recipeRequestService.recipeSummaries$;
   recipeResults$ = combineLatest([
@@ -45,6 +45,8 @@ export class RecipeResultsComponent implements OnInit {
     over45: 'Complex'
   };
 
+  private readonly destroy$ = new Subject<void>();
+
   constructor(
     private recipeRequestService: RecipeRequestService,
     private router: Router
@@ -56,6 +58,22 @@ export class RecipeResultsComponent implements OnInit {
       this.router.navigate(['generate-recipe']);
       return;
     }
+
+    this.recipeRequestService.quotaError$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((error) => {
+        if (error) {
+          this.router.navigate(['choose-your-preferences']);
+        }
+      });
+
+    this.recipeRequestService.workflowStatus$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((status) => {
+        if (status === 'error') {
+          this.router.navigate(['choose-your-preferences']);
+        }
+      });
   }
 
   viewRecipe(recipeId: string): void {
@@ -76,5 +94,10 @@ export class RecipeResultsComponent implements OnInit {
 
   trackByIndex(index: number): number {
     return index;
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

@@ -46,6 +46,9 @@ export class ChooseYourPreferencesComponent implements OnInit {
     if (savedPreferences) {
       this.applySavedPreferences(savedPreferences);
     }
+    if (this.recipeRequestService.getQuotaErrorSnapshot()) {
+      this.hasTriedGenerate = true;
+    }
     void this.recipeRequestService.refreshQuota();
   }
 

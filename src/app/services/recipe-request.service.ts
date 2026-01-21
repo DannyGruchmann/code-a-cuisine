@@ -58,6 +58,8 @@ export class RecipeRequestService implements OnDestroy {
   private readonly quotaLoadingSubject = new BehaviorSubject<boolean>(false);
   private readonly webhookUrl = environment.n8nWebhookUrl;
   private readonly quotaUrl = environment.n8nQuotaUrl;
+  private readonly workflowTimeoutMs = 30000;
+  private workflowTimeoutId: number | null = null;
 
   private activeRequestId: string | null = null;
   private activeRequestSubscription: Subscription | null = null;
@@ -81,6 +83,7 @@ export class RecipeRequestService implements OnDestroy {
 
   ngOnDestroy(): void {
     this.detachRequestListener();
+    this.clearWorkflowTimeout();
   }
 
   setIngredients(ingredients: IngredientEntry[]): void {
@@ -117,6 +120,10 @@ export class RecipeRequestService implements OnDestroy {
     return this.workflowStatusSubject.getValue();
   }
 
+  getQuotaErrorSnapshot(): string | null {
+    return this.quotaErrorSubject.getValue();
+  }
+
   async beginWorkflowSimulation(): Promise<boolean> {
     this.generatingSubject.next(true);
     const payload = this.getRequestPayload();
@@ -130,6 +137,7 @@ export class RecipeRequestService implements OnDestroy {
     this.recipeSummariesSubject.next([]);
     this.recipeDetailsSubject.next({});
     this.detachRequestListener();
+    this.startWorkflowTimeout();
     this.quotaErrorSubject.next(null);
 
     try {
@@ -146,7 +154,7 @@ export class RecipeRequestService implements OnDestroy {
 
       const webhookResult = await this.triggerWorkflowWebhook(docRef.id, payload);
       if (!webhookResult.ok) {
-        const errorMessage = webhookResult.message ?? 'Request failed. Please try again later.';
+        const errorMessage = webhookResult.message ?? 'All requests used. Please try again tomorrow.';
         this.quotaErrorSubject.next(errorMessage);
         try {
           await updateDoc(docRef, {
@@ -159,6 +167,7 @@ export class RecipeRequestService implements OnDestroy {
         }
         this.workflowStatusSubject.next('error');
         this.generatingSubject.next(false);
+        this.clearWorkflowTimeout();
         return false;
       }
 
@@ -174,6 +183,7 @@ export class RecipeRequestService implements OnDestroy {
       console.error('Failed to create recipe request', error);
       this.workflowStatusSubject.next('error');
       this.generatingSubject.next(false);
+      this.clearWorkflowTimeout();
       return false;
     }
   }
@@ -188,6 +198,7 @@ export class RecipeRequestService implements OnDestroy {
     this.quotaErrorSubject.next(null);
     this.clearStoredRequestId();
     this.detachRequestListener();
+    this.clearWorkflowTimeout();
   }
 
   getRecipeDetailSnapshot(recipeId: string): RecipeDetail | null {
@@ -209,6 +220,7 @@ export class RecipeRequestService implements OnDestroy {
           this.workflowStatusSubject.next(normalizedStatus);
           if (normalizedStatus === 'success' || normalizedStatus === 'error') {
             this.generatingSubject.next(false);
+            this.clearWorkflowTimeout();
           }
         }
         const { summaries, details } = this.extractResults(data);
@@ -217,12 +229,14 @@ export class RecipeRequestService implements OnDestroy {
           this.recipeSummariesSubject.next(normalizedSummaries);
           if (normalizedSummaries.length > 0) {
             this.generatingSubject.next(false);
+            this.clearWorkflowTimeout();
           }
         }
         if (details) {
           this.recipeDetailsSubject.next(details);
           if (Object.keys(details).length > 0) {
             this.generatingSubject.next(false);
+            this.clearWorkflowTimeout();
           }
         }
         if (data.status === 'error' && data.errorMessage) {
@@ -232,6 +246,9 @@ export class RecipeRequestService implements OnDestroy {
       error: (err) => {
         console.error('Error listening to recipe request', err);
         this.workflowStatusSubject.next('error');
+        this.quotaErrorSubject.next('All requests used. Please try again tomorrow.');
+        this.generatingSubject.next(false);
+        this.clearWorkflowTimeout();
       }
     });
   }
@@ -242,6 +259,28 @@ export class RecipeRequestService implements OnDestroy {
       this.activeRequestSubscription = null;
     }
     this.activeRequestId = null;
+  }
+
+  private startWorkflowTimeout(): void {
+    if (typeof window === 'undefined') {
+      return;
+    }
+    this.clearWorkflowTimeout();
+    this.workflowTimeoutId = window.setTimeout(() => {
+      if (this.workflowStatusSubject.getValue() === 'loading') {
+        this.quotaErrorSubject.next('All requests used. Please try again tomorrow.');
+        this.workflowStatusSubject.next('error');
+        this.generatingSubject.next(false);
+      }
+      this.clearWorkflowTimeout();
+    }, this.workflowTimeoutMs);
+  }
+
+  private clearWorkflowTimeout(): void {
+    if (this.workflowTimeoutId !== null) {
+      window.clearTimeout(this.workflowTimeoutId);
+      this.workflowTimeoutId = null;
+    }
   }
 
   private normalizeWorkflowStatus(status: FirestoreRecipeRequest['status']): WorkflowStatus {
@@ -387,7 +426,7 @@ export class RecipeRequestService implements OnDestroy {
       if (!response.ok) {
         const message =
           (data && typeof data === 'object' && 'message' in data ? String(data.message) : null) ??
-          'Request failed. Please try again later.';
+          'All requests used. Please try again tomorrow.';
         const quota =
           data && typeof data === 'object' && 'quota' in data ? (data.quota as QuotaStatus) : undefined;
         return { ok: false, message, quota };
@@ -397,7 +436,7 @@ export class RecipeRequestService implements OnDestroy {
       return { ok: true, quota };
     } catch (error) {
       console.error('Failed to trigger n8n webhook', error);
-      return { ok: false, message: 'Request failed. Please try again later.' };
+      return { ok: false, message: 'All requests used. Please try again tomorrow.' };
     }
   }
 }
