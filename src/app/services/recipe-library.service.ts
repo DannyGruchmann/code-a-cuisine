@@ -66,21 +66,50 @@ export class RecipeLibraryService {
 
   async toggleRecipeLike(id: string, shouldLike: boolean): Promise<number | null> {
     const recipeRef = doc(this.firestore, 'recipes', id);
+    return this.runLikeTransaction(recipeRef, shouldLike);
+  }
+
+  private async runLikeTransaction(
+    recipeRef: ReturnType<typeof doc>,
+    shouldLike: boolean
+  ): Promise<number | null> {
     try {
-      return await runTransaction(this.firestore, async (transaction) => {
-        const snapshot = await transaction.get(recipeRef);
-        if (!snapshot.exists()) {
-          return null;
-        }
-        const data = snapshot.data() as { hearts?: number };
-        const currentHearts = data.hearts ?? 0;
-        const nextHearts = shouldLike ? currentHearts + 1 : Math.max(0, currentHearts - 1);
-        transaction.update(recipeRef, { hearts: nextHearts });
-        return nextHearts;
-      });
+      return await this.executeLikeTransaction(recipeRef, shouldLike);
     } catch (error) {
-      console.error('Failed to toggle recipe like', error);
+      return this.handleLikeError(error);
+    }
+  }
+
+  private async executeLikeTransaction(
+    recipeRef: ReturnType<typeof doc>,
+    shouldLike: boolean
+  ): Promise<number | null> {
+    return runTransaction(this.firestore, (transaction) =>
+      this.computeLikeTransaction(transaction, recipeRef, shouldLike)
+    );
+  }
+
+  private async computeLikeTransaction(
+    transaction: any,
+    recipeRef: ReturnType<typeof doc>,
+    shouldLike: boolean
+  ): Promise<number | null> {
+    const snapshot = await transaction.get(recipeRef);
+    if (!snapshot.exists()) {
       return null;
     }
+    const currentHearts = (snapshot.data() as { hearts?: number }).hearts ?? 0;
+    const nextHearts = this.getNextHearts(currentHearts, shouldLike);
+    transaction.update(recipeRef, { hearts: nextHearts });
+    return nextHearts;
+  }
+
+  private handleLikeError(error: unknown): null {
+    console.error('Failed to toggle recipe like', error);
+    return null;
+  }
+
+  private getNextHearts(current: number, shouldLike: boolean): number {
+    return shouldLike ? current + 1 : Math.max(0, current - 1);
   }
 }

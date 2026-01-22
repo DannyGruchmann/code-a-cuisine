@@ -1,6 +1,16 @@
 @use '../../styles/variables' as *;
 
 .library {
+  %library-action-button {
+    background-color: $main_green;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
   &__hero {
     display: flex;
     flex-direction: column;
@@ -61,24 +71,12 @@
     margin-top: 8px;
 
     button {
-      background-color: $main_green;
-      color: white;
-      border: none;
-      padding: 12px 20px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
+      @extend %library-action-button;
     }
   }
 
   &__actions-button {
-    background-color: $main_green;
-    color: white;
-    border: none;
-    padding: 12px 20px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
+    @extend %library-action-button;
   }
 }
 

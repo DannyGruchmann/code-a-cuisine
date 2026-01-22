@@ -55,11 +55,22 @@ export class GenerateRecipeComponent implements OnInit {
   }
 
   addIngredient(): void {
-    if (this.ingredientForm.invalid) {
-      this.ingredientForm.markAllAsTouched();
+    if (!this.isIngredientFormValid()) {
       return;
     }
+    this.addIngredientFromForm();
+    this.resetIngredientForm();
+  }
 
+  private isIngredientFormValid(): boolean {
+    if (this.ingredientForm.invalid) {
+      this.ingredientForm.markAllAsTouched();
+      return false;
+    }
+    return true;
+  }
+
+  private addIngredientFromForm(): void {
     this.ingredients.push(
       this.createIngredientGroup({
         name: this.ingredientForm.value.name,
@@ -67,7 +78,9 @@ export class GenerateRecipeComponent implements OnInit {
         unit: this.ingredientForm.value.unit
       })
     );
+  }
 
+  private resetIngredientForm(): void {
     this.ingredientForm.reset({
       name: '',
       amount: 100,

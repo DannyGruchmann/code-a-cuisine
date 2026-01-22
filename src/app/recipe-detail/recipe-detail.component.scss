@@ -1,5 +1,37 @@
 @use '../../styles/variables' as *;
 
+%pill-base {
+  border-radius: 999px;
+  min-width: 64px;
+  height: 32px;
+  padding: 0 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $darker_green;
+  color: $main_green;
+  font-size: 16px;
+}
+
+%detail-toggle-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 16px;
+  font-weight: 500;
+  background-color: unset;
+  border: unset;
+  color: $main_green;
+  cursor: pointer;
+}
+
+%collapsible {
+  max-height: 1000px;
+  opacity: 1;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+
 .detail {
   min-height: 100vh;
   padding: 24px 8px;
@@ -81,33 +113,15 @@
     padding: 0;
 
     .tag {
-      background-color: $darker_green;
-      border-radius: 999px;
-      font-size: 16px;
-      color: $main_green;
-      min-width: 64px;
-      height: 32px;
-      padding: 0 12px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
+      @extend %pill-base;
     }
 
     .like__button {
-      display: flex;
-      align-items: center;
-      height: 32px;
-      font-size: 16px;
-      font-weight: 500;
-      justify-content: center;
+      @extend %pill-base;
       gap: 4px;
+      font-weight: 500;
       cursor: pointer;
       border: none;
-      background-color: $darker_green;
-      color: $main_green;
-      border-radius: 999px;
-      min-width: 64px;
-      padding: 0 12px;
     }
   }
 
@@ -132,16 +146,7 @@
     }
 
     button {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      font-size: 16px;
-      font-weight: 500;
-      background-color: unset;
-      border: unset;
-      color: $main_green;
-      cursor: pointer;
+      @extend %detail-toggle-button;
 
       img {
         width: 14px;
@@ -162,16 +167,7 @@
     }
 
     button {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      font-size: 16px;
-      font-weight: 500;
-      background-color: unset;
-      border: unset;
-      color: $main_green;
-      cursor: pointer;
+      @extend %detail-toggle-button;
 
       img {
         width: 14px;
@@ -192,9 +188,8 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+  @extend %collapsible;
   max-height: 2000px;
-  opacity: 1;
-  transition: max-height 0.3s ease, opacity 0.3s ease;
 }
 
 .detail__directions ol.is-collapsed {
@@ -300,9 +295,7 @@
 }
 
 .detail__ingredients_lists {
-  max-height: 1000px;
-  opacity: 1;
-  transition: max-height 0.3s ease, opacity 0.3s ease;
+  @extend %collapsible;
 
   ul {
     padding-left: 24px;

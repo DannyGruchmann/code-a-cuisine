@@ -89,19 +89,11 @@ export class ChooseYourPreferencesComponent implements OnInit {
       return;
     }
     this.hasTriedGenerate = true;
-    const preferences: PreferenceSelection = {
-      portions: this.portions,
-      helpers: this.cooks,
-      cookTime: this.selectedCooking,
-      cuisine: this.selectedCuisine,
-      dietPreferences: this.selectedDiet ? [this.selectedDiet] : []
-    };
-    this.recipeRequestService.setPreferences(preferences);
-    const started = await this.recipeRequestService.beginWorkflowSimulation();
-    if (!started) {
-      return;
+    const preferences = this.buildPreferences();
+    const started = await this.startWorkflow(preferences);
+    if (started) {
+      this.router.navigate(['recipe-results']);
     }
-    this.router.navigate(['recipe-results']);
   }
 
   goBack(): void {
@@ -114,5 +106,20 @@ export class ChooseYourPreferencesComponent implements OnInit {
     this.selectedCooking = preferences.cookTime;
     this.selectedCuisine = preferences.cuisine;
     this.selectedDiet = preferences.dietPreferences[0] ?? null;
+  }
+
+  private buildPreferences(): PreferenceSelection {
+    return {
+      portions: this.portions,
+      helpers: this.cooks,
+      cookTime: this.selectedCooking,
+      cuisine: this.selectedCuisine,
+      dietPreferences: this.selectedDiet ? [this.selectedDiet] : []
+    };
+  }
+
+  private async startWorkflow(preferences: PreferenceSelection): Promise<boolean> {
+    this.recipeRequestService.setPreferences(preferences);
+    return this.recipeRequestService.beginWorkflowSimulation();
   }
 }

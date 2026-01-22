@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Observable, combineLatest, map, of, switchMap, tap } from 'rxjs';
 import { HeaderGreenLogoComponent } from '../header-green-logo/header-green-logo.component';
-import { RecipeDetail } from '../models/recipe-request.model';
+import { RecipeDetail, RecipeSummary } from '../models/recipe-request.model';
 import { RecipeLibraryDetail, RecipeLibraryService } from '../services/recipe-library.service';
 import { RecipeRequestService } from '../services/recipe-request.service';
 
@@ -47,46 +47,7 @@ export class RecipeDetailComponent {
   };
 
   readonly isLibraryDetail = this.route.snapshot.data['source'] === 'library';
-  detail$: Observable<RecipeDetail | RecipeLibraryDetail | null> = this.route.data.pipe(
-    switchMap((data) => {
-      if (data['source'] === 'library') {
-        return this.route.paramMap.pipe(
-          switchMap((params) => {
-            const recipeId = params.get('id');
-            if (!recipeId) {
-              this.router.navigate(['cookbook']);
-              return of(null);
-            }
-            return this.libraryService.getRecipeById(recipeId);
-          })
-        );
-      }
-
-      return combineLatest([
-        this.route.paramMap,
-        this.recipeRequestService.recipeDetails$,
-        this.recipeRequestService.recipeSummaries$
-      ]).pipe(
-        map(([params, details, summaries]) => {
-          const recipeId = params.get('id');
-          if (!recipeId) {
-            this.router.navigate(['recipe-results']);
-            return null;
-          }
-          const detail = details[recipeId] as RecipeDetail | undefined;
-          const summary = summaries.find((recipe) => recipe.id === recipeId);
-          const mergedDetail = detail
-            ? ({ ...(summary ?? {}), ...detail } as RecipeDetail)
-            : undefined;
-          if (!mergedDetail && this.recipeRequestService.getWorkflowStatusSnapshot() === 'success') {
-            this.router.navigate(['recipe-results']);
-          }
-          return mergedDetail ?? null;
-        })
-      );
-    }),
-    tap((detail) => this.syncLikeState(detail))
-  );
+  detail$: Observable<RecipeDetail | RecipeLibraryDetail | null> = this.createDetailStream();
 
   constructor(
     private route: ActivatedRoute,
@@ -122,25 +83,13 @@ export class RecipeDetailComponent {
   }
 
   toggleLike(): void {
-    if (!this.isLibraryDetail || !this.currentRecipeId || this.likePending) {
+    if (!this.canToggleLike()) {
       return;
     }
-    const recipeId = this.currentRecipeId;
+    const recipeId = this.currentRecipeId as string;
     const shouldLike = !this.isRecipeLiked;
     this.likePending = true;
-    this.libraryService
-      .toggleRecipeLike(recipeId, shouldLike)
-      .then((nextHearts) => {
-        if (nextHearts === null) {
-          return;
-        }
-        this.isRecipeLiked = shouldLike;
-        this.likeCount = nextHearts;
-        this.updateStoredLikes(recipeId, shouldLike);
-      })
-      .finally(() => {
-        this.likePending = false;
-      });
+    this.applyLikeChange(recipeId, shouldLike);
   }
 
   trackByOrder(_index: number, step: { order: number }): number {
@@ -149,21 +98,109 @@ export class RecipeDetailComponent {
 
   private syncLikeState(detail: RecipeDetail | RecipeLibraryDetail | null): void {
     if (!detail) {
-      this.currentRecipeId = null;
-      this.likeCount = 0;
-      this.isRecipeLiked = false;
+      this.resetLikeState();
       return;
     }
+    this.applyDetailLikeState(detail);
+  }
+
+  private createDetailStream(): Observable<RecipeDetail | RecipeLibraryDetail | null> {
+    return this.route.data.pipe(
+      switchMap((data) => this.getDetailSourceStream(data)),
+      tap((detail) => this.syncLikeState(detail))
+    );
+  }
+
+  private getDetailSourceStream(data: Record<string, unknown>) {
+    return data['source'] === 'library' ? this.getLibraryDetailStream() : this.getGeneratedDetailStream();
+  }
+
+  private getLibraryDetailStream(): Observable<RecipeLibraryDetail | null> {
+    return this.route.paramMap.pipe(switchMap((params) => this.fetchLibraryDetail(params)));
+  }
+
+  private fetchLibraryDetail(params: ParamMap) {
+    const recipeId = params.get('id');
+    if (!recipeId) {
+      this.router.navigate(['cookbook']);
+      return of(null);
+    }
+    return this.libraryService.getRecipeById(recipeId);
+  }
+
+  private getGeneratedDetailStream(): Observable<RecipeDetail | null> {
+    return combineLatest([
+      this.route.paramMap,
+      this.recipeRequestService.recipeDetails$,
+      this.recipeRequestService.recipeSummaries$
+    ]).pipe(map(([params, details, summaries]) => this.resolveGeneratedDetail(params, details, summaries)));
+  }
+
+  private resolveGeneratedDetail(params: ParamMap, details: Record<string, RecipeDetail>, summaries: RecipeSummary[]): RecipeDetail | null {
+    const recipeId = params.get('id');
+    if (!recipeId) {
+      this.router.navigate(['recipe-results']);
+      return null;
+    }
+    const detail = details[recipeId] as RecipeDetail | undefined;
+    const summary = summaries.find((recipe) => recipe.id === recipeId);
+    const merged = this.mergeSummaryDetail(summary, detail);
+    return this.handleMissingGeneratedDetail(merged);
+  }
+
+  private mergeSummaryDetail(
+    summary: RecipeSummary | undefined,
+    detail: RecipeDetail | undefined
+  ): RecipeDetail | undefined {
+    return detail ? ({ ...(summary ?? {}), ...detail } as RecipeDetail) : undefined;
+  }
+
+  private handleMissingGeneratedDetail(merged: RecipeDetail | undefined): RecipeDetail | null {
+    if (!merged && this.recipeRequestService.getWorkflowStatusSnapshot() === 'success') {
+      this.router.navigate(['recipe-results']);
+    }
+    return merged ?? null;
+  }
+
+  private canToggleLike(): boolean {
+    return Boolean(this.isLibraryDetail && this.currentRecipeId && !this.likePending);
+  }
+
+  private applyLikeChange(recipeId: string, shouldLike: boolean): void {
+    this.libraryService
+      .toggleRecipeLike(recipeId, shouldLike)
+      .then((nextHearts) => this.handleLikeResult(nextHearts, recipeId, shouldLike))
+      .finally(() => {
+        this.likePending = false;
+      });
+  }
+
+  private handleLikeResult(nextHearts: number | null, recipeId: string, shouldLike: boolean): void {
+    if (nextHearts === null) {
+      return;
+    }
+    this.isRecipeLiked = shouldLike;
+    this.likeCount = nextHearts;
+    this.updateStoredLikes(recipeId, shouldLike);
+  }
+
+  private resetLikeState(): void {
+    this.currentRecipeId = null;
+    this.likeCount = 0;
+    this.isRecipeLiked = false;
+  }
+
+  private applyDetailLikeState(detail: RecipeDetail | RecipeLibraryDetail): void {
     if (this.isLibraryDetail) {
       const recipeId = 'docId' in detail ? detail.docId ?? detail.id : detail.id;
       this.currentRecipeId = recipeId;
       this.likeCount = detail.hearts ?? 0;
       this.isRecipeLiked = this.isRecipeLikedByUser(recipeId);
-    } else {
-      this.currentRecipeId = null;
-      this.likeCount = detail.hearts ?? 0;
-      this.isRecipeLiked = false;
+      return;
     }
+    this.currentRecipeId = null;
+    this.likeCount = detail.hearts ?? 0;
+    this.isRecipeLiked = false;
   }
 
   private isRecipeLikedByUser(recipeId: string): boolean {
