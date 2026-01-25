@@ -8,6 +8,7 @@ export interface FirestoreRecipeResults {
 export interface FirestoreRecipeRequest {
   status?: WorkflowStatus | 'pending' | 'processing' | 'completed' | 'done';
   results?: FirestoreRecipeResults | RecipeSummary[];
+  resultsRaw?: string | { stringValue?: string };
   summaries?: RecipeSummary[] | Record<string, RecipeSummary>;
   details?: Record<string, RecipeDetail>;
   recipes?: RecipeSummary[] | Record<string, RecipeSummary>;
@@ -53,6 +54,10 @@ export function extractResults(data: FirestoreRecipeRequest): {
   summaries?: FirestoreRecipeResults['summaries'];
   details?: FirestoreRecipeResults['details'];
 } {
+  const raw = extractRawResults(data.resultsRaw);
+  if (raw) {
+    return raw;
+  }
   const results = data.results;
   if (Array.isArray(results)) {
     return { summaries: results };
@@ -62,6 +67,32 @@ export function extractResults(data: FirestoreRecipeRequest): {
     summaries: pickSummaries(results, resultsAny, data),
     details: pickDetails(results, data)
   };
+}
+
+function extractRawResults(
+  resultsRaw: FirestoreRecipeRequest['resultsRaw']
+): { summaries?: FirestoreRecipeResults['summaries']; details?: FirestoreRecipeResults['details'] } | null {
+  const raw =
+    typeof resultsRaw === 'string'
+      ? resultsRaw
+      : resultsRaw && typeof resultsRaw === 'object'
+        ? resultsRaw.stringValue
+        : undefined;
+  if (!raw) {
+    return null;
+  }
+  try {
+    const parsed = JSON.parse(raw) as {
+      summaries?: FirestoreRecipeResults['summaries'];
+      details?: FirestoreRecipeResults['details'];
+    };
+    if (parsed && (parsed.summaries || parsed.details)) {
+      return { summaries: parsed.summaries, details: parsed.details };
+    }
+  } catch {
+    return null;
+  }
+  return null;
 }
 
 function extractSummaryList(
