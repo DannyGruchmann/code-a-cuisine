@@ -6,11 +6,12 @@ import { RecipeRequestService } from '../services/recipe-request.service';
 import { RouterModule } from '@angular/router';
 import { RecipeLibraryEntry, RecipeLibraryService } from '../services/recipe-library.service';
 import { Observable } from 'rxjs';
+import { FooterComponent } from '../footer/footer.component';
 
 @Component({
   selector: 'app-cookbook',
   standalone: true,
-  imports: [CommonModule, HeaderGreenLogoComponent, RouterModule],
+  imports: [CommonModule, HeaderGreenLogoComponent, RouterModule, FooterComponent],
   templateUrl: './cookbook.component.html',
   styleUrls: ['./cookbook.component.scss', './cookbook_responsive.component.scss']
 })

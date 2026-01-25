@@ -17,7 +17,6 @@
   display: flex;
   gap: 12px;
   overflow-x: auto;
-  overflow-y: hidden;
 
   article {
     display: flex;
@@ -145,17 +144,5 @@
     font-size: 18px;
     font-weight: 500;
     cursor: pointer;
-  }
-}
-
-.impressum_container {
-  display: flex;
-  justify-content: center;
-
-  a {
-    text-decoration: unset;
-    color: $main_green;
-    font-size: 18px;
-    font-weight: 500;
   }
 }

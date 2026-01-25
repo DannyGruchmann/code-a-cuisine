@@ -6,11 +6,12 @@ import { HeaderGreenLogoComponent } from '../header-green-logo/header-green-logo
 import { IngredientEntry } from '../models/recipe-request.model';
 import { RecipeRequestService } from '../services/recipe-request.service';
 import { Location } from '@angular/common';
+import { FooterComponent } from '../footer/footer.component';
 
 @Component({
   selector: 'app-generate-recipe',
   standalone: true,
-  imports: [CommonModule, HeaderGreenLogoComponent, ReactiveFormsModule],
+  imports: [CommonModule, HeaderGreenLogoComponent, ReactiveFormsModule, FooterComponent],
   templateUrl: './generate-recipe.component.html',
   styleUrls: ['./generate-recipe.component.scss', './generate-recipe_responsive.component.scss']
 })

@@ -1,0 +1,13 @@
+@use '../../styles/variables' as *;
+
+.app-footer {
+  display: flex;
+  justify-content: center;
+
+  a {
+    text-decoration: unset;
+    color: $main_green;
+    font-size: 18px;
+    font-weight: 500;
+  }
+}

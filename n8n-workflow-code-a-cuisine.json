@@ -89,19 +89,6 @@
     },
     {
       "parameters": {
-        "errorMessage": "miss some data"
-      },
-      "type": "n8n-nodes-base.stopAndError",
-      "typeVersion": 1,
-      "position": [
-        -1168,
-        240
-      ],
-      "id": "543462e4-d764-4b31-b21a-0d8879b4a738",
-      "name": "Stop and Error"
-    },
-    {
-      "parameters": {
         "modelId": {
           "__rl": true,
           "value": "models/gemini-flash-latest",
@@ -180,19 +167,6 @@
       ],
       "id": "4f7cfe34-46ac-4df8-945c-384852023620",
       "name": "If1"
-    },
-    {
-      "parameters": {
-        "errorMessage": "not enoth recipes"
-      },
-      "type": "n8n-nodes-base.stopAndError",
-      "typeVersion": 1,
-      "position": [
-        1920,
-        -320
-      ],
-      "id": "0c2557c8-2c6c-4fa1-875a-bf1ec5882a9f",
-      "name": "Stop and Error1"
     },
     {
       "parameters": {
@@ -506,6 +480,36 @@
           "name": "Google Firebase Cloud Firestore account"
         }
       }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"message\": \"Something went wrong. please try again\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        -1168,
+        240
+      ],
+      "id": "e7de3d22-0ee8-4a77-8a9c-8c179ff406f1",
+      "name": "Respond to Webhook - Missing Data"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"message\": \"Something went wrong. please try again later\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1920,
+        -320
+      ],
+      "id": "7b2b0f2f-9c1d-46cd-8b4f-0e1f3d5d50e3",
+      "name": "Respond to Webhook - Not Enough Recipes"
     }
   ],
   "pinData": {},
@@ -532,7 +536,7 @@
         ],
         [
           {
-            "node": "Stop and Error",
+            "node": "Respond to Webhook - Missing Data",
             "type": "main",
             "index": 0
           }
@@ -561,7 +565,7 @@
         ],
         [
           {
-            "node": "Stop and Error1",
+            "node": "Respond to Webhook - Not Enough Recipes",
             "type": "main",
             "index": 0
           }

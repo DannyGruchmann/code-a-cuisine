@@ -5,11 +5,12 @@ import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { CookTimePreference, PreferenceSelection } from '../models/recipe-request.model';
 import { RecipeRequestService } from '../services/recipe-request.service';
+import { FooterComponent } from '../footer/footer.component';
 
 @Component({
   selector: 'app-choose-your-preferences',
   standalone: true,
-  imports: [CommonModule, HeaderGreenLogoComponent],
+  imports: [CommonModule, HeaderGreenLogoComponent, FooterComponent],
   templateUrl: './choose-your-preferences.component.html',
   styleUrls: ['./choose-your-preferences.component.scss', './choose-your-preferences_responsive.component.scss']
 })
