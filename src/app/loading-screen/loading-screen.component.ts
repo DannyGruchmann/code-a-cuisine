@@ -8,7 +8,7 @@ import { HeaderCreamLogoComponent } from '../header-cream-logo/header-cream-logo
   imports: [HeaderCreamLogoComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './loading-screen.component.html',
-  styleUrls: ['./loading-screen.component.scss']
+  styleUrls: ['./loading-screen.component.scss', './loading-screen_responsive.component.scss']
 })
 export class LoadingScreenComponent implements OnInit, OnDestroy {
   private previousBodyOverflow = '';

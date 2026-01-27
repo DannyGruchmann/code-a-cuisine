@@ -7,6 +7,12 @@
     }
 }
 
+@media (min-width: 1440px) {
+    :host {
+        width: 1440px;
+    }
+}
+
 @media (min-width: 2560px) {
     .landing__header {
         img {

@@ -144,6 +144,9 @@ export class RecipeDetailComponent {
     }
     const detail = details[recipeId] as RecipeDetail | undefined;
     const summary = summaries.find((recipe) => recipe.id === recipeId);
+    if (!detail && summary) {
+      return this.buildFallbackDetail(summary);
+    }
     const merged = this.mergeSummaryDetail(summary, detail);
     return this.handleMissingGeneratedDetail(merged);
   }
@@ -160,6 +163,29 @@ export class RecipeDetailComponent {
       this.router.navigate(['recipe-results']);
     }
     return merged ?? null;
+  }
+
+  private buildFallbackDetail(summary: RecipeSummary): RecipeDetail {
+    return {
+      id: summary.id,
+      order: summary.order,
+      title: summary.title,
+      cookingTimeMinutes: summary.cookingTimeMinutes,
+      cookingTimeLabel: summary.cookingTimeLabel ?? '',
+      tags: summary.tags ?? [],
+      description: '',
+      helperLabels: [],
+      nutritionalInformation: {
+        energyKcal: 0,
+        proteinGrams: 0,
+        fatGrams: 0,
+        carbsGrams: 0
+      },
+      primaryIngredients: [],
+      extraIngredients: [],
+      directions: [],
+      hearts: 0
+    };
   }
 
   private canToggleLike(): boolean {

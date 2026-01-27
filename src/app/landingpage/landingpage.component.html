@@ -1,24 +1,37 @@
-<section class="landing">
-    <section class="landing__content">
-        <app-header-cream-logo></app-header-cream-logo>
-        <div class="landing__text">
-            <p>AI-Powered recipe generator</p>
-            <h1>Code à Cuisine</h1>
-        </div>
-        <button type="button" routerLink="/generate-recipe">Get started</button>
-        <figure class="landing__hero" aria-hidden="true">
-            <picture>
-                <source media="(min-width: 600px)" srcset="assets/img/landingpage/landing-dishes-complete.svg">
-                <img src="assets/img/landingpage/landing-meals.svg" alt="">
-            </picture>
-        </figure>
+<section class="landing__inner">
+    <section class="landing">
+        <section class="landing__content">
+            <nav class="landing__header" aria-label="Code à Cuisine">
+                <a routerLink="/" aria-label="Go to landing page">
+                    <img src="assets/img/header/cream-logo.svg" alt="Code à Cuisine logo">
+                </a>
+            </nav>
+            <div class="landing__text">
+                <p>AI-Powered recipe generator</p>
+                <h1>Code à Cuisine</h1>
+            </div>
+            <button type="button" routerLink="/generate-recipe">Get started</button>
+            <figure class="landing__hero" aria-hidden="true">
+                <picture>
+                    <source media="(min-width: 600px)" srcset="assets/img/landingpage/landing-dishes-complete.svg">
+                    <img src="assets/img/landingpage/landing-meals.svg" alt="">
+                </picture>
+            </figure>
+        </section>
+
+        <footer class="landing__footer">
+            <h2>Hungry for inspiration?</h2>
+            <a routerLink="/cookbook">
+                <span>Go to cookbook</span>
+                <img src="assets/img/landingpage/arrow.svg" alt="" aria-hidden="true">
+            </a>
+        </footer>
     </section>
 
-    <footer class="landing__footer">
-        <h2>Hungry for inspiration?</h2>
-        <a routerLink="/cookbook">
-            <span>Go to cookbook</span>
-            <img src="assets/img/landingpage/arrow.svg" alt="" aria-hidden="true">
-        </a>
-    </footer>
+    <figure class="landing__hero__bigger1440" aria-hidden="true">
+        <picture>
+            <source media="(min-width: 600px)" srcset="assets/img/landingpage/landing-dishes-complete.svg">
+            <img src="assets/img/landingpage/landing-meals.svg" alt="">
+        </picture>
+    </figure>
 </section>

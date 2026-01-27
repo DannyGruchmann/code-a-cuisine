@@ -135,6 +135,13 @@
     .generate__panel .ingredient_list__actions {
         gap: 12px;
     }
+
+    .generate {
+        header {
+            display: flex;
+            justify-content: center;
+        }
+    }
 }
 
 

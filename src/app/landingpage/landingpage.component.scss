@@ -16,6 +16,12 @@
   padding: 12px 16px 0 16px;
 }
 
+.landing__inner {
+  display: flex;
+  width: 1440px;
+  justify-content: center;
+}
+
 .landing__content {
   display: flex;
   flex-direction: column;
@@ -105,4 +111,15 @@
       background-color: rgba($very_light_cream, 0.2);
     }
   }
+}
+
+.landing__hero__bigger1440 {
+  display: none;
+}
+
+.landing__header {
+    img {
+        width: 95px;
+        height: 32px;
+    }
 }

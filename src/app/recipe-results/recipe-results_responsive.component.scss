@@ -125,80 +125,11 @@
     .results__content {
         max-width: 1440px;
     }
-}
 
-@media (min-width: 1921px) {
-    .results .header__article .left__heading__container {
-
-        h1 {
-            font-size: 68px;
-            width: max-content;
+    .results {
+        &__brand {
+            display: flex;
+            justify-content: center;
         }
-
-        p {
-            font-size: 32px;
-            width: 810px;
-        }
-    }
-
-    .results__content {
-        max-width: 1920px;
-        width: 100%;
-    }
-
-    .results .header__article {
-        img {
-            width: 944px;
-            height: 362px;
-        }
-    }
-
-    .summary-card__header {
-        img {
-            width: 48px;
-            height: 38px;
-        }
-    }
-
-    .summery-card__section {
-        justify-content: space-between;
-
-        span {
-            font-size: 28px;
-        }
-
-        article {
-            width: 471px;
-            height: 382px;
-        }
-    }
-
-    .summary-card__body {
-        h2 {
-            font-size: 38px;
-        }
-    }
-
-    .summary-card__meta {
-        img {
-            width: 28px;
-            height: 28px;
-        }
-    }
-
-    .results__actions {
-        button {
-            font-size: 24px;
-        }
-    }
-
-    .summary-card .summary-card__action {
-        width: 136px;
-        height: 70px;
-        font-size: 28px;
-    }
-
-    .results__content {
-        gap: 124px;
     }
 }

@@ -72,6 +72,14 @@
 }
 
 @media (min-width: 1440px) {
+    .preferences {
+        align-items: center;
+    }
+
+    .preferences__brand {
+        width: 1440px;
+    }
+
     .preferences__panel {
         h1 {
             font-size: 36px;

@@ -47,6 +47,9 @@ export class RecipeResultsComponent implements OnInit, OnDestroy {
   }
 
   viewRecipe(recipeId: string): void {
+    if (!recipeId) {
+      return;
+    }
     this.router.navigate(['recipe-results', recipeId]);
   }
 
@@ -80,7 +83,13 @@ export class RecipeResultsComponent implements OnInit, OnDestroy {
     details: Record<string, RecipeDetail>
   ): RecipeSummary[] {
     if (summaries.length > 0) {
-      return summaries;
+      return summaries.map((summary, index) => ({
+        ...summary,
+        id: summary.id ?? `recipe-${index + 1}`,
+        order: summary.order ?? index + 1,
+        cookingTimeLabel: summary.cookingTimeLabel ?? '',
+        tags: summary.tags ?? []
+      }));
     }
     return this.buildResultsFromDetails(details);
   }

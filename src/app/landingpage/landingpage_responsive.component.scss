@@ -9,6 +9,13 @@
 
 @media (min-width: 481px) {
 
+    .landing__header {
+        img {
+            width: 132px;
+            height: auto;
+        }
+    }
+
     .landing {
         padding: 24px 16px 0 20px;
     }
@@ -129,8 +136,20 @@
 }
 
 @media (min-width: 1440px) {
+    :host {
+        justify-content: center;
+    }
+
     .landing__hero {
-        right: unset;
-        left: 900px;
+        display: none;
+    }
+
+    .landing__hero__bigger1440 {
+        display: block;
+        margin: 0;
+
+        img {
+            height: 100vh;
+        }
     }
 }
