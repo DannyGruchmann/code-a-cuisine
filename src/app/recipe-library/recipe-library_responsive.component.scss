@@ -107,14 +107,12 @@
     .recipe-card__index_outer {
         gap: 12px;
     }
-}
 
-@media (min-width: 1921px) {
-    .library__hero {
-        width: 1440px;
-    }
+    .preferences__brand {
+        align-items: center;
 
-    .library__list {
-        max-width: 1200px;
+        div {
+            width: 1440px;
+        }
     }
 }

@@ -96,7 +96,7 @@
     }
 
     .cookbook_header_container {
-        width: 1440px;
+        max-width: 1440px;
         padding: 24px 24px;
     }
 
@@ -124,92 +124,12 @@
             font-size: 20px;
         }
     }
-}
 
-@media (min-width: 1921px) {
-    .cookbook_header_container {
-        width: 1896px;
-    }
+    .preferences__brand {
+        align-items: center;
 
-    .country_cuisine {
-        min-width: 1920px;
-    }
-
-    article a img {
-        width: 589px !important;
-    }
-
-    .country_cuisine {
-        h2 {
-            font-size: 40px;
-        }
-
-        img {
-            height: 40px;
-            width: 40px;
-        }
-    }
-
-    .header_upper_container {
-        h1 {
-            font-size: 80px;
-        }
-
-        p {
-            font-size: 34px;
-            width: 680px;
-        }
-    }
-
-    .liked_heading {
-        h2 {
-            font-size: 36px;
-        }
-
-        img {
-            width: 34px;
-            height: 34px;
-        }
-    }
-
-    .liked_article {
-        article {
-            width: 395px;
-            height: 212px;
-            gap: 16px;
-            padding: 16px 24px;
-
-            img {
-                width: 24px;
-                height: 24px;
-            }
-
-            span {
-                font-size: 22px;
-            }
-
-            p {
-                font-size: 32px;
-            }
-
-            button {
-                font-size: 24px;
-                width: 100px;
-                height: 36px;
-                justify-content: center;
-            }
-        }
-    }
-
-    .results__actions {
-        button {
-            font-size: 32px;
-        }
-    }
-
-    .impressum_container {
-        a {
-            font-size: 26px;
+        div {
+            width: 1440px;
         }
     }
 }

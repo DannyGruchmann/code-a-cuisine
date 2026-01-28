@@ -145,10 +145,10 @@ export class RecipeDetailComponent {
     const detail = details[recipeId] as RecipeDetail | undefined;
     const summary = summaries.find((recipe) => recipe.id === recipeId);
     if (!detail && summary) {
-      return this.buildFallbackDetail(summary);
+      return this.hydrateGeneratedDetail(this.buildFallbackDetail(summary));
     }
     const merged = this.mergeSummaryDetail(summary, detail);
-    return this.handleMissingGeneratedDetail(merged);
+    return this.handleMissingGeneratedDetail(this.hydrateGeneratedDetail(merged));
   }
 
   private mergeSummaryDetail(
@@ -158,7 +158,7 @@ export class RecipeDetailComponent {
     return detail ? ({ ...(summary ?? {}), ...detail } as RecipeDetail) : undefined;
   }
 
-  private handleMissingGeneratedDetail(merged: RecipeDetail | undefined): RecipeDetail | null {
+  private handleMissingGeneratedDetail(merged: RecipeDetail | null): RecipeDetail | null {
     if (!merged && this.recipeRequestService.getWorkflowStatusSnapshot() === 'success') {
       this.router.navigate(['recipe-results']);
     }
@@ -185,6 +185,29 @@ export class RecipeDetailComponent {
       extraIngredients: [],
       directions: [],
       hearts: 0
+    };
+  }
+
+  private hydrateGeneratedDetail(detail: RecipeDetail | null | undefined): RecipeDetail | null {
+    if (!detail || this.isLibraryDetail) {
+      return detail ?? null;
+    }
+    const ingredients = this.recipeRequestService.getIngredientsSnapshot();
+    const primary = detail.primaryIngredients ?? [];
+    const extra = detail.extraIngredients ?? [];
+    if (primary.length > 0 || ingredients.length === 0) {
+      return { ...detail, primaryIngredients: primary, extraIngredients: extra };
+    }
+    const fallbackPrimary = ingredients.map((item) => ({
+      name: item.name,
+      amount: item.amount,
+      unit: item.unit,
+      source: 'user' as const
+    }));
+    return {
+      ...detail,
+      primaryIngredients: fallbackPrimary,
+      extraIngredients: extra
     };
   }
 

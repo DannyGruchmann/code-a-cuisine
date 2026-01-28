@@ -3,283 +3,20 @@
   "nodes": [
     {
       "parameters": {
-        "url": "=https://firestore.googleapis.com/v1/projects/random-recipe-creation/databases/(default)/documents/quotaIpDaily/{{$json.ipDocId}}",
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "googleFirebaseCloudFirestoreOAuth2Api",
+        "httpMethod": "POST",
+        "path": "3c9eac64-47c3-4c75-b5d3-76c69dfa93fd",
+        "responseMode": "responseNode",
         "options": {}
       },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.3,
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
       "position": [
-        -3472,
-        512
+        -3696,
+        624
       ],
-      "id": "0a52772d-fb67-4673-a826-ca50137ce376",
-      "name": "Get IP Quota",
-      "credentials": {
-        "googleFirebaseCloudFirestoreOAuth2Api": {
-          "id": "rvFrJf8PxSZd1NYl",
-          "name": "Google Firebase Cloud Firestore account"
-        }
-      },
-      "onError": "continueRegularOutput"
-    },
-    {
-      "parameters": {
-        "url": "=https://firestore.googleapis.com/v1/projects/random-recipe-creation/databases/(default)/documents/quotaGlobalDaily/{{$json.globalDocId}}",
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "googleFirebaseCloudFirestoreOAuth2Api",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.3,
-      "position": [
-        -3264,
-        512
-      ],
-      "id": "fb735351-8815-46b6-a140-566efdb1b1cd",
-      "name": "Get Global Quota",
-      "credentials": {
-        "googleFirebaseCloudFirestoreOAuth2Api": {
-          "id": "rvFrJf8PxSZd1NYl",
-          "name": "Google Firebase Cloud Firestore account"
-        }
-      },
-      "onError": "continueRegularOutput"
-    },
-    {
-      "parameters": {
-        "jsCode": "const ipDoc = $node[\"Get IP Quota\"].json;\nconst globalDoc = $node[\"Get Global Quota\"].json;\n\nconst ipCount = Number(ipDoc?.fields?.count?.integerValue || 0);\nconst globalCount = Number(globalDoc?.fields?.count?.integerValue || 0);\n\nconst remainingIp = Math.max(0, 15 - ipCount);\nconst remainingGlobal = Math.max(0, 12 - globalCount);\n\nconst base = $node[\"get trigger from firestore\"].json || {};\n\nreturn [{\n  json: {\n    ...base,\n    ipCount,\n    globalCount,\n    quota: {\n      remainingIp,\n      remainingGlobal,\n      dateKey: $node[\"Extracts client IP\"].json.dateKey,\n      timeZone: \"Europe/Berlin\"\n    }\n  }\n}];\n"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        -3056,
-        512
-      ],
-      "id": "2d635cc9-4884-4e2f-aad3-a3deb7f8b3fb",
-      "name": "Compute Quota"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "6b702e9c-33dd-4460-9173-e4a6eb3561bd",
-              "leftValue": "={{ $json.quota.remainingIp }}",
-              "rightValue": 0,
-              "operator": {
-                "type": "number",
-                "operation": "gt"
-              }
-            },
-            {
-              "id": "8a2c2efd-cd49-4720-bbb9-bdf140ea3871",
-              "leftValue": "={{ $json.quota.remainingGlobal }}",
-              "rightValue": 0,
-              "operator": {
-                "type": "number",
-                "operation": "gt"
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
-        -2848,
-        512
-      ],
-      "id": "63544956-bdb3-442b-a380-5564583acbf0",
-      "name": "If Quota"
-    },
-    {
-      "parameters": {
-        "method": "PATCH",
-        "url": "=https://firestore.googleapis.com/v1/projects/random-recipe-creation/databases/(default)/documents/quotaIpDaily/{{$node[\"Extracts client IP\"].json.ipDocId}}",
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "googleFirebaseCloudFirestoreOAuth2Api",
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({\n  fields: {\n    count: { integerValue: String($node[\"Compute Quota\"].json.ipCount + 1) },\n    dateKey: { stringValue: $node[\"Compute Quota\"].json.quota.dateKey },\n    updatedAt: { timestampValue: $now.toISO() }\n  }\n}) }}\n",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.3,
-      "position": [
-        -2608,
-        416
-      ],
-      "id": "72d505a7-1ee1-44de-8ef7-a1deb7522382",
-      "name": "Update IP Quota",
-      "credentials": {
-        "googleFirebaseCloudFirestoreOAuth2Api": {
-          "id": "rvFrJf8PxSZd1NYl",
-          "name": "Google Firebase Cloud Firestore account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "method": "PATCH",
-        "url": "=https://firestore.googleapis.com/v1/projects/random-recipe-creation/databases/(default)/documents/quotaGlobalDaily/{{$node[\"Extracts client IP\"].json.dateKey}}",
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "googleFirebaseCloudFirestoreOAuth2Api",
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({\n  fields: {\n    count: { integerValue: String($node[\"Compute Quota\"].json.globalCount + 1) },\n    dateKey: { stringValue: $node[\"Compute Quota\"].json.quota.dateKey },\n    updatedAt: { timestampValue: $now.toISO() }\n  }\n}) }}\n",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.3,
-      "position": [
-        -2384,
-        416
-      ],
-      "id": "36335fdf-3afd-4a45-8ce1-b66ff9eeb7bc",
-      "name": "Update Global Quota",
-      "credentials": {
-        "googleFirebaseCloudFirestoreOAuth2Api": {
-          "id": "rvFrJf8PxSZd1NYl",
-          "name": "Google Firebase Cloud Firestore account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "jsCode": "const input = $input.first().json || {};\nconst data = input.output || input;\n\nif (!data || !Array.isArray(data.summaries) || !data.details) {\n  return [{ json: { error: 'Missing AI output', raw: input } }];\n}\n\nconst cuisine = ($node[\"get trigger from firestore\"].json.body.payload.preferences.cuisine || \"\").toString();\nconst diet = ($node[\"get trigger from firestore\"].json.body.payload.preferences.dietPreferences || [])[0] || \"No preferences\";\nconst cookTime = $node[\"get trigger from firestore\"].json.body.payload.preferences.cookTime;\n\nconst cookTimeTagMap = { under20: \"Quick\", \"25to40\": \"Medium\", over45: \"Complex\" };\nconst cookTimeTag = cookTimeTagMap[cookTime] || \"Medium\";\n\nconst createdAt = new Date().toISOString();\n\nconst libraryRecipes = data.summaries.map((summary) => {\n  const detail = data.details[summary.id] || {};\n  const hearts = Number(detail.hearts || 0);\n\n  const recipe = {\n    title: summary.title,\n    cookingTimeMinutes: summary.cookingTimeMinutes,\n    cookingTimeLabel: summary.cookingTimeLabel,\n    tags: summary.tags || [],\n    cuisine,\n    diet,\n    cookTimeTag,\n    hearts,\n    thumbnail: \"\",\n    createdAt,\n    description: detail.description || \"\",\n    helperLabels: detail.helperLabels || [],\n    nutritionalInformation: detail.nutritionalInformation || {\n      energyKcal: 0,\n      proteinGrams: 0,\n      fatGrams: 0,\n      carbsGrams: 0\n    },\n    primaryIngredients: detail.primaryIngredients || [],\n    extraIngredients: detail.extraIngredients || [],\n    directions: detail.directions || []\n  };\n\n  const firestoreBody = {\n    fields: {\n      title: { stringValue: recipe.title },\n      cookingTimeMinutes: { integerValue: String(recipe.cookingTimeMinutes) },\n      cookingTimeLabel: { stringValue: recipe.cookingTimeLabel },\n      tags: { arrayValue: { values: recipe.tags.map(tag => ({ stringValue: tag })) } },\n      cuisine: { stringValue: recipe.cuisine },\n      diet: { stringValue: recipe.diet },\n      cookTimeTag: { stringValue: recipe.cookTimeTag },\n      thumbnail: { stringValue: recipe.thumbnail },\n      createdAt: { timestampValue: recipe.createdAt },\n      description: { stringValue: recipe.description },\n      helperLabels: { arrayValue: { values: recipe.helperLabels.map(label => ({ stringValue: label })) } },\n      nutritionalInformation: {\n        mapValue: { fields: {\n          energyKcal: { integerValue: recipe.nutritionalInformation.energyKcal },\n          proteinGrams: { integerValue: recipe.nutritionalInformation.proteinGrams },\n          fatGrams: { integerValue: recipe.nutritionalInformation.fatGrams },\n          carbsGrams: { integerValue: recipe.nutritionalInformation.carbsGrams }\n        }}\n      },\n      primaryIngredients: {\n        arrayValue: { values: recipe.primaryIngredients.map(ing => ({\n          mapValue: { fields: {\n            name: { stringValue: ing.name },\n            amount: { doubleValue: ing.amount },\n            unit: { stringValue: ing.unit },\n            source: { stringValue: ing.source }\n          }}\n        })) }\n      },\n      extraIngredients: {\n        arrayValue: { values: recipe.extraIngredients.map(ing => ({\n          mapValue: { fields: {\n            name: { stringValue: ing.name },\n            amount: { doubleValue: ing.amount },\n            unit: { stringValue: ing.unit },\n            source: { stringValue: ing.source }\n          }}\n        })) }\n      },\n      directions: {\n        arrayValue: { values: recipe.directions.map(step => ({\n          mapValue: { fields: {\n            order: { integerValue: step.order },\n            title: { stringValue: step.title },\n            instruction: { stringValue: step.instruction },\n            assignedChefIndex: { integerValue: step.assignedChefIndex }\n          }}\n        })) }\n      },\n      ...(hearts > 0 ? { hearts: { integerValue: String(hearts) } } : {})\n    }\n  };\n\n  return { json: { firestoreBody } };\n});\n\nreturn libraryRecipes;\n"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        -1552,
-        928
-      ],
-      "id": "20f06447-9103-4811-9652-de90e99527c7",
-      "name": "Library items"
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "=https://firestore.googleapis.com/v1/projects/random-recipe-creation/databases/(default)/documents/recipes",
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "googleFirebaseCloudFirestoreOAuth2Api",
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={{ $json.firestoreBody }}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.3,
-      "position": [
-        -1264,
-        928
-      ],
-      "id": "ec9afdab-327c-407b-bf1d-aeb3549978a8",
-      "name": "Create Recipe Docs",
-      "credentials": {
-        "googleFirebaseCloudFirestoreOAuth2Api": {
-          "id": "rvFrJf8PxSZd1NYl",
-          "name": "Google Firebase Cloud Firestore account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "cbb6c857-b032-420c-b3e7-e0a5a98bdf29",
-              "leftValue": "={{ $json.output.summaries }}",
-              "rightValue": 3,
-              "operator": {
-                "type": "array",
-                "operation": "lengthEquals",
-                "rightType": "number"
-              }
-            },
-            {
-              "id": "1e23e569-6ca8-472b-b24f-79dfb4390433",
-              "leftValue": "={{ $json.output.details }}",
-              "rightValue": "3",
-              "operator": {
-                "type": "object",
-                "operation": "exists",
-                "singleValue": true
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
-        -1552,
-        448
-      ],
-      "id": "5f90aef3-16ca-4801-8013-f2259bd429a2",
-      "name": "if enough recipes"
-    },
-    {
-      "parameters": {
-        "method": "PATCH",
-        "url": "=https://firestore.googleapis.com/v1/projects/random-recipe-creation/databases/(default)/documents/recipeRequests/{{ $('get trigger from firestore').item.json.body.requestId }}",
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "googleFirebaseCloudFirestoreOAuth2Api",
-        "sendBody": true,
-        "bodyParameters": {
-          "parameters": [
-            {
-              "name": "=fields.status.stringValue",
-              "value": "success"
-            },
-            {
-              "name": "=fields.updatedAt.timestampValue",
-              "value": "={{$now.toISO()}}"
-            },
-            {
-              "name": "fields.resultsRaw.stringValue",
-              "value": "={{ JSON.stringify($json.output) }}"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.3,
-      "position": [
-        -1088,
-        368
-      ],
-      "id": "1b50d187-60fa-4673-bf78-169dc854ced2",
-      "name": "patch recipe on firestore",
-      "credentials": {
-        "googleFirebaseRealtimeDatabaseOAuth2Api": {
-          "id": "IdE55bAOVKBzZ5lG",
-          "name": "Google Firebase Realtime Database account"
-        },
-        "googleFirebaseCloudFirestoreOAuth2Api": {
-          "id": "rvFrJf8PxSZd1NYl",
-          "name": "Google Firebase Cloud Firestore account"
-        }
-      }
+      "id": "c6021217-4459-40ea-8842-891531f7dae0",
+      "name": "Webhook",
+      "webhookId": "3c9eac64-47c3-4c75-b5d3-76c69dfa93fd"
     },
     {
       "parameters": {
@@ -329,62 +66,42 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -4032,
-        688
+        -3408,
+        624
       ],
-      "id": "21e27b67-053d-4dc1-b229-d9d1a970d5db",
-      "name": "if all items exist"
+      "id": "91b57daf-3676-452a-899f-64d9ac253233",
+      "name": "If"
     },
     {
       "parameters": {
-        "httpMethod": "POST",
-        "path": "3c9eac64-47c3-4c75-b5d3-76c69dfa93fd",
-        "responseMode": "responseNode",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-flash-latest",
+          "mode": "list",
+          "cachedResultName": "models/gemini-flash-latest"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=SYSTEM:\nYou are a strict JSON generator for an n8n workflow.\nReturn ONLY valid JSON as plain UTF-8 text (no markdown, no code fences, no extra text).\n\nUSER:\nGenerate EXACTLY 3 different recipe suggestions.\n\nAUTHORITATIVE INPUT:\nrequestId: {{ $('Webhook').item.json.body.requestId }}\n\nPORTIONS_SELECTED: {{ $('Webhook').item.json.body.payload.preferences.portions }}\nCOOK_TIME_SELECTED: \"{{ $('Webhook').item.json.body.payload.preferences.cookTime }}\"\nCUISINE_SELECTED: \"{{ $('Webhook').item.json.body.payload.preferences.cuisine }}\"\nDIET_SELECTED: \"{{ $('Webhook').item.json.body.payload.preferences.dietPreferences }}\"\nHELPERS_SELECTED: {{ $('Webhook').item.json.body.payload.preferences.helpers }}\n\nUSER_INGREDIENTS_JSON:\n{{ JSON.stringify($('Webhook').item.json.body.payload.ingredients) }}\n\nHARD RULES (NO EXCEPTIONS):\n\n0) INPUT INTEGRITY\n- If USER_INGREDIENTS_JSON is missing/empty OR PORTIONS_SELECTED is missing/invalid OR HELPERS_SELECTED is missing/invalid -> return {}.\n\n1) PRIMARY INGREDIENTS (MUST USE USER INGREDIENTS, ADJUST AMOUNTS FOR PORTIONS)\nFor EACH recipe:\n- primaryIngredients MUST NOT be empty.\n- primaryIngredients may contain ONLY ingredients that appear in USER_INGREDIENTS_JSON.\n- Use AT LEAST 70% of the items from USER_INGREDIENTS_JSON by COUNT.\n- IMPORTANT: USER_INGREDIENTS_JSON amounts are the user's AVAILABLE amounts (maximum available), NOT the required recipe amounts.\n  Therefore:\n  - In primaryIngredients, set amount to the RECIPE amount needed for PORTIONS_SELECTED portions.\n  - The recipe amount MUST be <= the available amount provided by the user for that ingredient.\n  - Do NOT “use everything” automatically. Only use realistic amounts for PORTIONS_SELECTED portions.\n- Keep unit exactly as provided for that ingredient (do not change units).\n- Set source=\"user\".\n- It is forbidden to put invented ingredients (olive oil, salt, pepper, etc.) into primaryIngredients unless they exist in USER_INGREDIENTS_JSON.\n\n2) EXTRA INGREDIENTS\n- Any ingredient not in USER_INGREDIENTS_JSON MUST go to extraIngredients (never to primaryIngredients).\n- extraIngredients are optional.\n- extraIngredients count MUST be <= 3.\n- Every extra ingredient MUST have source=\"extra\".\n\n3) COOK TIME (MUST MATCH COOK_TIME_SELECTED EXACTLY)\nCOOK_TIME_SELECTED is one of: \"under20\", \"25to40\", \"over45\" (case-insensitive)\n- under20: cookingTimeMinutes <= 20 AND cookingTimeLabel = \"Under 20 minutes\"\n- 25to40: 25 <= cookingTimeMinutes <= 40 AND cookingTimeLabel = \"25-40 minutes\"\n- over45: cookingTimeMinutes >= 45 AND cookingTimeLabel = \"Over 45 minutes\"\nAll 3 recipes must follow the same selected category.\n\n4) CUISINE (MUST MATCH CUISINE_SELECTED EXACTLY)\nCUISINE_SELECTED is one of: \"german\",\"italian\",\"indian\",\"japanese\",\"gourmet\",\"fusion\" (case-insensitive)\nEach recipe MUST:\n- include cuisine tag: German/Italian/Indian/Japanese/Gourmet/Fusion\n- mention the cuisine in title OR description.\n\n5) DIET (MUST MATCH DIET_SELECTED EXACTLY)\nDIET_SELECTED is one of: \"vegetarian\",\"vegan\",\"keto\",\"no preferences\" (case-insensitive)\nEach recipe MUST:\n- include diet tag: Vegetarian/Vegan/Keto/No preferences\n- respect the chosen diet.\n\n6) DIFFERENT RECIPES\nThe 3 recipes must be clearly different in preparation method or flavor direction.\nNo duplicate titles.\n\n7) HELPERS\n- helperLabels MUST contain exactly HELPERS_SELECTED entries.\n- If HELPERS_SELECTED == 1, helperLabels MUST be [\"Chef 1\"].\n- assignedChefIndex MUST be an integer between 0 and HELPERS_SELECTED - 1.\n\n8) OUTPUT \nPlease adapt the output to English even if the input is in German, e.g. Hackfleisch -> minced meat\n\n9) OUTPUT SCHEMA ONLY (NO OTHER KEYS)\nReturn exactly this JSON structure:\n\n{\n  \"summaries\": [\n    { \"id\": \"recipe-1\", \"order\": 1, \"title\": \"...\", \"cookingTimeMinutes\": 0, \"cookingTimeLabel\": \"...\", \"tags\": [\"...\"] },\n    { \"id\": \"recipe-2\", \"order\": 2, \"title\": \"...\", \"cookingTimeMinutes\": 0, \"cookingTimeLabel\": \"...\", \"tags\": [\"...\"] },\n    { \"id\": \"recipe-3\", \"order\": 3, \"title\": \"...\", \"cookingTimeMinutes\": 0, \"cookingTimeLabel\": \"...\", \"tags\": [\"...\"] }\n  ],\n  \"details\": {\n    \"recipe-1\": {\n      \"description\": \"...\",\n      \"helperLabels\": [\"Chef 1\"],\n      \"nutritionalInformation\": { \"energyKcal\": 0, \"proteinGrams\": 0, \"fatGrams\": 0, \"carbsGrams\": 0 },\n      \"primaryIngredients\": [{ \"name\": \"...\", \"amount\": 0, \"unit\": \"...\", \"source\": \"user\" }],\n      \"extraIngredients\": [{ \"name\": \"...\", \"amount\": 0, \"unit\": \"...\", \"source\": \"extra\" }],\n      \"directions\": [{ \"order\": 1, \"title\": \"...\", \"instruction\": \"...\", \"assignedChefIndex\": 0 }],\n      \"hearts\": 4\n    },\n    \"recipe-2\": { ... },\n    \"recipe-3\": { ... }\n  }\n}\n\n- The headline of the meal should always be short. Only the essentials.\n- The directions/preparation should be very detailed. \n\nFINAL INTERNAL CHECK (DO NOT OUTPUT):\n- primaryIngredients contains ONLY items from USER_INGREDIENTS_JSON.\n- primaryIngredients uses >= 70% of the user ingredients by COUNT.\n- each primary amount <= the available amount from USER_INGREDIENTS_JSON for that ingredient.\n- extraIngredients <= 3 and all have source=\"extra\".\n- cookTime category matches COOK_TIME_SELECTED for all 3.\n- cuisine/diet tags match CUISINE_SELECTED and DIET_SELECTED.\nIf any check fails -> return {}.\n"
+            }
+          ]
+        },
+        "simplify": false,
         "options": {}
       },
-      "type": "n8n-nodes-base.webhook",
-      "typeVersion": 2.1,
-      "position": [
-        -4320,
-        688
-      ],
-      "id": "b147aa18-9d65-48cd-9f33-db87780cb32a",
-      "name": "get trigger from firestore",
-      "webhookId": "3c9eac64-47c3-4c75-b5d3-76c69dfa93fd"
-    },
-    {
-      "parameters": {
-        "promptType": "define",
-        "text": "Return ONLY valid JSON that matches the connected output parser schema. No markdown, no extra text.\n\nInput:\nrequestId: {{ $('get trigger from firestore').item.json.body.requestId }}\nPORTIONS_SELECTED: {{ $('get trigger from firestore').item.json.body.payload.preferences.portions }}\nCOOK_TIME_SELECTED: \"{{ $('get trigger from firestore').item.json.body.payload.preferences.cookTime }}\"\nCUISINE_SELECTED: \"{{ $('get trigger from firestore').item.json.body.payload.preferences.cuisine }}\"\nDIET_SELECTED: \"{{ ($('get trigger from firestore').item.json.body.payload.preferences.dietPreferences || [])[0] }}\"\nHELPERS_SELECTED: {{ $('get trigger from firestore').item.json.body.payload.preferences.helpers }}\nUSER_INGREDIENTS_JSON: {{ JSON.stringify($('get trigger from firestore').item.json.body.payload.ingredients) }}\n\nRules (summary):\n- Exactly 3 recipes; unique titles.\n- Output language English.\n- primaryIngredients: only from USER_INGREDIENTS_JSON; use >= 70% of items by count; amount <= available; source=\"user\".\n- extraIngredients: optional; max 3; source=\"extra\".\n- Cook time labels must match COOK_TIME_SELECTED.\n- Include cuisine + diet in tags; respect diet.\n- helperLabels length == HELPERS_SELECTED; assignedChefIndex between 0 and HELPERS_SELECTED-1.\n",
-        "hasOutputParser": true,
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.agent",
-      "typeVersion": 3,
-      "position": [
-        -2256,
-        704
-      ],
-      "id": "baa8aaca-0f85-491b-88b9-31126d8325b2",
-      "name": "AI Agent",
-      "onError": "continueRegularOutput"
-    },
-    {
-      "parameters": {
-        "modelName": "models/gemini-flash-latest",
-        "options": {
-          "temperature": 0,
-          "responseMimeType": "application/json"
-        }
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
       "typeVersion": 1,
       "position": [
-        -2272,
-        960
+        -1136,
+        352
       ],
-      "id": "19faee76-bd8e-49d6-bd75-3eba604a4208",
-      "name": "Google Gemini Chat Model",
+      "id": "8f89ef70-a6ad-4b0e-8db9-bdd6a8a518c8",
+      "name": "Message a model",
+      "alwaysOutputData": false,
+      "executeOnce": false,
+      "retryOnFail": false,
+      "notesInFlow": false,
       "credentials": {
         "googlePalmApi": {
           "id": "az7boQx0ThQCOydg",
@@ -394,17 +111,208 @@
     },
     {
       "parameters": {
-        "schemaType": "manual",
-        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"summaries\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"id\": {\n            \"type\": \"string\"\n          },\n          \"order\": {\n            \"type\": \"number\"\n          },\n          \"title\": {\n            \"type\": \"string\"\n          },\n          \"cookingTimeMinutes\": {\n            \"type\": \"number\"\n          },\n          \"cookingTimeLabel\": {\n            \"type\": \"string\"\n          },\n          \"tags\": {\n            \"type\": \"array\",\n            \"items\": {\n              \"type\": \"string\"\n            }\n          }\n        },\n        \"additionalProperties\": true\n      }\n    },\n    \"details\": {\n      \"type\": \"object\",\n      \"additionalProperties\": true\n    }\n  },\n  \"additionalProperties\": true\n}"
+        "url": "=https://firestore.googleapis.com/v1/projects/random-recipe-creation/databases/(default)/documents/quotaIpDaily/{{$json.ipDocId}}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleFirebaseCloudFirestoreOAuth2Api",
+        "options": {}
       },
-      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
-      "typeVersion": 1.3,
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
       "position": [
-        -2096,
-        960
+        -2832,
+        448
       ],
-      "id": "e0b74d3a-b9f1-4933-8edf-124a2a431119",
-      "name": "Structured Output Parser"
+      "id": "832fbb5a-d07c-4028-8f3e-f4bf942468f0",
+      "name": "Get IP Quota",
+      "credentials": {
+        "googleFirebaseCloudFirestoreOAuth2Api": {
+          "id": "rvFrJf8PxSZd1NYl",
+          "name": "Google Firebase Cloud Firestore account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "url": "=https://firestore.googleapis.com/v1/projects/random-recipe-creation/databases/(default)/documents/quotaGlobalDaily/{{$json.globalDocId}}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleFirebaseCloudFirestoreOAuth2Api",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -2624,
+        448
+      ],
+      "id": "cab0e76b-227e-4ea7-ac51-e3ec689c936f",
+      "name": "Get Global Quota",
+      "credentials": {
+        "googleFirebaseCloudFirestoreOAuth2Api": {
+          "id": "rvFrJf8PxSZd1NYl",
+          "name": "Google Firebase Cloud Firestore account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map((item) => {\n  let raw = item.json.candidates?.[0]?.content?.parts?.[0]?.text ?? \"\";\n  if (!raw) {\n    throw new Error(\"Keine Gemini-Antwort gefunden\");\n  }\n\n  raw = raw\n    .replace(/```json/gi, \"\")\n    .replace(/```/g, \"\")\n    .trim();\n  const parsed = JSON.parse(raw);\n\n  const summariesFirestore = parsed.summaries.map((summary) => ({\n    mapValue: {\n      fields: {\n        id: { stringValue: summary.id },\n        order: { integerValue: summary.order },\n        title: { stringValue: summary.title },\n        cookingTimeMinutes: { integerValue: summary.cookingTimeMinutes },\n        cookingTimeLabel: { stringValue: summary.cookingTimeLabel },\n        tags: {\n          arrayValue: {\n            values: (summary.tags || []).map((tag) => ({ stringValue: tag })),\n          },\n        },\n      },\n    },\n  }));\n\n  const detailsFirestore = Object.fromEntries(\n    Object.entries(parsed.details).map(([key, detail]) => {\n      const fields = {\n        description: { stringValue: detail.description },\n        helperLabels: {\n          arrayValue: {\n            values: (detail.helperLabels || []).map((label) => ({\n              stringValue: label,\n            })),\n          },\n        },\n        nutritionalInformation: {\n          mapValue: {\n            fields: {\n              energyKcal: {\n                integerValue: detail.nutritionalInformation.energyKcal,\n              },\n              proteinGrams: {\n                integerValue: detail.nutritionalInformation.proteinGrams,\n              },\n              fatGrams: {\n                integerValue: detail.nutritionalInformation.fatGrams,\n              },\n              carbsGrams: {\n                integerValue: detail.nutritionalInformation.carbsGrams,\n              },\n            },\n          },\n        },\n        primaryIngredients: {\n          arrayValue: {\n            values: (detail.primaryIngredients || []).map((ing) => ({\n              mapValue: {\n                fields: {\n                  name: { stringValue: ing.name },\n                  amount: { doubleValue: ing.amount },\n                  unit: { stringValue: ing.unit },\n                  source: { stringValue: ing.source },\n                },\n              },\n            })),\n          },\n        },\n        hearts: { integerValue: detail.hearts },\n      };\n\n      if ((detail.extraIngredients || []).length) {\n        fields.extraIngredients = {\n          arrayValue: {\n            values: detail.extraIngredients.map((ing) => ({\n              mapValue: {\n                fields: {\n                  name: { stringValue: ing.name },\n                  amount: { doubleValue: ing.amount },\n                  unit: { stringValue: ing.unit },\n                  source: { stringValue: ing.source },\n                },\n              },\n            })),\n          },\n        };\n      }\n\n      if ((detail.directions || []).length) {\n        fields.directions = {\n          arrayValue: {\n            values: detail.directions.map((step) => ({\n              mapValue: {\n                fields: {\n                  order: { integerValue: step.order },\n                  title: { stringValue: step.title },\n                  instruction: { stringValue: step.instruction },\n                  assignedChefIndex: { integerValue: step.assignedChefIndex },\n                },\n              },\n            })),\n          },\n        };\n      }\n\n      return [\n        key,\n        {\n          mapValue: { fields },\n        },\n      ];\n    }),\n  );\n\n  return {\n    json: {\n      summariesFirestore,\n      detailsFirestore,\n      requestId: item.json.requestId,\n    },\n  };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -752,
+        352
+      ],
+      "id": "ab04c7be-d8bc-4eda-9956-2d252dd18ee7",
+      "name": "make output as Json"
+    },
+    {
+      "parameters": {
+        "jsCode": "const ipDoc = $node[\"Get IP Quota\"].json;\nconst globalDoc = $node[\"Get Global Quota\"].json;\n\nconst ipCount = Number(ipDoc?.fields?.count?.integerValue || 0);\nconst globalCount = Number(globalDoc?.fields?.count?.integerValue || 0);\n\nconst remainingIp = Math.max(0, 3 - ipCount);\nconst remainingGlobal = Math.max(0, 12 - globalCount);\n\nreturn [{\n  json: {\n    ipCount,\n    globalCount,\n    quota: {\n      remainingIp,\n      remainingGlobal,\n      dateKey: $node[\"Extract client IP\"].json.dateKey,\n      timeZone: \"Europe/Berlin\"\n    }\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2416,
+        448
+      ],
+      "id": "0c5669bd-8a78-4692-8a77-1c6d6a453fa3",
+      "name": "Compute Quota"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "6b702e9c-33dd-4460-9173-e4a6eb3561bd",
+              "leftValue": "={{ $json.quota.remainingIp }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            },
+            {
+              "id": "8a2c2efd-cd49-4720-bbb9-bdf140ea3871",
+              "leftValue": "={{ $json.quota.remainingGlobal }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -2208,
+        448
+      ],
+      "id": "51a1c7de-c734-4ce4-921d-45824b3d9162",
+      "name": "If Quota"
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://firestore.googleapis.com/v1/projects/random-recipe-creation/databases/(default)/documents/quotaIpDaily/{{$node[\"Extract client IP\"].json.ipDocId}}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleFirebaseCloudFirestoreOAuth2Api",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  fields: {\n    count: { integerValue: String($node[\"Compute Quota\"].json.ipCount + 1) },\n    dateKey: { stringValue: $node[\"Compute Quota\"].json.quota.dateKey },\n    updatedAt: { timestampValue: $now.toISO() }\n  }\n}) }}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -2000,
+        352
+      ],
+      "id": "a0d58d55-366b-4b96-9a6c-eb305fcd421a",
+      "name": "Update IP Quota",
+      "credentials": {
+        "googleFirebaseCloudFirestoreOAuth2Api": {
+          "id": "rvFrJf8PxSZd1NYl",
+          "name": "Google Firebase Cloud Firestore account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://firestore.googleapis.com/v1/projects/random-recipe-creation/databases/(default)/documents/quotaGlobalDaily/{{$node[\"Extract client IP\"].json.dateKey}}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleFirebaseCloudFirestoreOAuth2Api",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  fields: {\n    count: { integerValue: String($node[\"Compute Quota\"].json.globalCount + 1) },\n    dateKey: { stringValue: $node[\"Compute Quota\"].json.quota.dateKey },\n    updatedAt: { timestampValue: $now.toISO() }\n  }\n}) }}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -1760,
+        352
+      ],
+      "id": "b1e896b3-a9a8-4f9e-aa69-a93301fed15a",
+      "name": "Update Global Quota",
+      "credentials": {
+        "googleFirebaseCloudFirestoreOAuth2Api": {
+          "id": "rvFrJf8PxSZd1NYl",
+          "name": "Google Firebase Cloud Firestore account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const parsed = $node[\"Message a model\"].json.candidates?.[0]?.content?.parts?.[0]?.text ?? \"\";\nconst clean = parsed.replace(/```json/gi, \"\").replace(/```/g, \"\").trim();\nconst data = JSON.parse(clean);\n\nconst cuisine = ($node[\"Webhook\"].json.body.payload.preferences.cuisine || \"\").toString();\nconst diet = ($node[\"Webhook\"].json.body.payload.preferences.dietPreferences || [])[0] || \"No preferences\";\nconst cookTime = $node[\"Webhook\"].json.body.payload.preferences.cookTime;\n\nconst cookTimeTagMap = { under20: \"Quick\", \"25to40\": \"Medium\", over45: \"Complex\" };\nconst cookTimeTag = cookTimeTagMap[cookTime] || \"Medium\";\n\nconst createdAt = new Date().toISOString();\n\nconst libraryRecipes = data.summaries.map((summary) => {\n  const detail = data.details[summary.id] || {};\n  const hearts = Number(detail.hearts || 0);\n\n  const recipe = {\n    title: summary.title,\n    cookingTimeMinutes: summary.cookingTimeMinutes,\n    cookingTimeLabel: summary.cookingTimeLabel,\n    tags: summary.tags || [],\n    cuisine,\n    diet,\n    cookTimeTag,\n    hearts,\n    thumbnail: \"\",\n    createdAt,\n    description: detail.description || \"\",\n    helperLabels: detail.helperLabels || [],\n    nutritionalInformation: detail.nutritionalInformation || {\n      energyKcal: 0,\n      proteinGrams: 0,\n      fatGrams: 0,\n      carbsGrams: 0\n    },\n    primaryIngredients: detail.primaryIngredients || [],\n    extraIngredients: detail.extraIngredients || [],\n    directions: detail.directions || []\n  };\n\n  const firestoreBody = {\n    fields: {\n      title: { stringValue: recipe.title },\n      cookingTimeMinutes: { integerValue: String(recipe.cookingTimeMinutes) },\n      cookingTimeLabel: { stringValue: recipe.cookingTimeLabel },\n      tags: { arrayValue: { values: recipe.tags.map(tag => ({ stringValue: tag })) } },\n      cuisine: { stringValue: recipe.cuisine },\n      diet: { stringValue: recipe.diet },\n      cookTimeTag: { stringValue: recipe.cookTimeTag },\n      thumbnail: { stringValue: recipe.thumbnail },\n      createdAt: { timestampValue: recipe.createdAt },\n      description: { stringValue: recipe.description },\n      helperLabels: { arrayValue: { values: recipe.helperLabels.map(label => ({ stringValue: label })) } },\n      nutritionalInformation: {\n        mapValue: { fields: {\n          energyKcal: { integerValue: recipe.nutritionalInformation.energyKcal },\n          proteinGrams: { integerValue: recipe.nutritionalInformation.proteinGrams },\n          fatGrams: { integerValue: recipe.nutritionalInformation.fatGrams },\n          carbsGrams: { integerValue: recipe.nutritionalInformation.carbsGrams }\n        }}\n      },\n      primaryIngredients: {\n        arrayValue: { values: recipe.primaryIngredients.map(ing => ({\n          mapValue: { fields: {\n            name: { stringValue: ing.name },\n            amount: { doubleValue: ing.amount },\n            unit: { stringValue: ing.unit },\n            source: { stringValue: ing.source }\n          }}\n        })) }\n      },\n      extraIngredients: {\n        arrayValue: { values: recipe.extraIngredients.map(ing => ({\n          mapValue: { fields: {\n            name: { stringValue: ing.name },\n            amount: { doubleValue: ing.amount },\n            unit: { stringValue: ing.unit },\n            source: { stringValue: ing.source }\n          }}\n        })) }\n      },\n      directions: {\n        arrayValue: { values: recipe.directions.map(step => ({\n          mapValue: { fields: {\n            order: { integerValue: step.order },\n            title: { stringValue: step.title },\n            instruction: { stringValue: step.instruction },\n            assignedChefIndex: { integerValue: step.assignedChefIndex }\n          }}\n        })) }\n      },\n      ...(hearts > 0 ? { hearts: { integerValue: String(hearts) } } : {})\n    }\n  };\n\n  return { json: { firestoreBody } };\n});\n\nreturn libraryRecipes;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -448,
+        576
+      ],
+      "id": "18b4470e-cb15-4f6a-bbd4-eccf307d1b17",
+      "name": "Library items"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://firestore.googleapis.com/v1/projects/random-recipe-creation/databases/(default)/documents/recipes",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleFirebaseCloudFirestoreOAuth2Api",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.firestoreBody }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -176,
+        576
+      ],
+      "id": "402ec3e9-d1b6-49ab-a77d-a76ff2462cd0",
+      "name": "Create Recipe Docs",
+      "credentials": {
+        "googleFirebaseCloudFirestoreOAuth2Api": {
+          "id": "rvFrJf8PxSZd1NYl",
+          "name": "Google Firebase Cloud Firestore account"
+        }
+      }
     },
     {
       "parameters": {
@@ -415,10 +323,10 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
       "position": [
-        -1232,
-        576
+        -16,
+        240
       ],
-      "id": "6528b48f-9284-4bda-9767-a21daec48ec6",
+      "id": "ea70fb14-dba6-496b-b0e0-fdabbd094903",
       "name": "Error - Not Enough Recipes"
     },
     {
@@ -430,11 +338,24 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
       "position": [
-        -3776,
-        848
+        -3088,
+        784
       ],
-      "id": "314b762a-0ab5-4c85-ae4d-bdb10890c89d",
+      "id": "f7ac9be4-207b-4601-b2b0-1622924bb238",
       "name": "Error - Missing Data"
+    },
+    {
+      "parameters": {
+        "jsCode": "const headers = $json.headers || {};\nconst forwarded = headers['x-forwarded-for'] || headers['X-Forwarded-For'] || '';\nconst ip = (Array.isArray(forwarded) ? forwarded[0] : forwarded)\n  .split(',')[0].trim() || headers['x-real-ip'] || headers['X-Real-IP'] || '';\n\nfunction simpleHash(input) {\n  let hash = 0;\n  for (let i = 0; i < input.length; i += 1) {\n    hash = (hash * 31 + input.charCodeAt(i)) | 0;\n  }\n  return Math.abs(hash).toString(36);\n}\n\nconst ipHash = simpleHash(ip || 'unknown');\n\nconst dateKey = new Intl.DateTimeFormat('en-CA', {\n  timeZone: 'Europe/Berlin',\n  year: 'numeric',\n  month: '2-digit',\n  day: '2-digit',\n}).format(new Date());\n\nreturn [{\n  json: {\n    ip,\n    ipHash,\n    dateKey,\n    ipDocId: `${dateKey}_${ipHash}`,\n    globalDocId: dateKey,\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3040,
+        448
+      ],
+      "id": "8661cdd3-6c88-4a2e-8592-15b679f93457",
+      "name": "Extract client IP"
     },
     {
       "parameters": {
@@ -447,16 +368,16 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
       "position": [
-        -2640,
-        784
+        -2000,
+        720
       ],
-      "id": "0d1d6a5c-f1c1-4299-89ed-ba2f16cc5ef9",
+      "id": "13717f38-ba67-41e5-9055-8c77b61379d9",
       "name": "Error - limit reached"
     },
     {
       "parameters": {
         "method": "PATCH",
-        "url": "=https://firestore.googleapis.com/v1/projects/random-recipe-creation/databases/(default)/documents/recipeRequests/{{ $('get trigger from firestore').item.json.body.requestId }}",
+        "url": "=https://firestore.googleapis.com/v1/projects/random-recipe-creation/databases/(default)/documents/recipeRequests/{{ $('Webhook').item.json.body.requestId }}",
         "authentication": "predefinedCredentialType",
         "nodeCredentialType": "googleFirebaseCloudFirestoreOAuth2Api",
         "sendBody": true,
@@ -467,10 +388,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        -2096,
-        416
+        -1472,
+        352
       ],
-      "id": "6322aa30-5937-4048-8289-482f36572b0e",
+      "id": "b7b49ea0-b3a3-4ccd-b2b4-2705661b5b60",
       "name": "Patch API status",
       "credentials": {
         "googleFirebaseRealtimeDatabaseOAuth2Api": {
@@ -485,16 +406,95 @@
     },
     {
       "parameters": {
-        "jsCode": "const headers = $json.headers || {};\nconst forwarded = headers['x-forwarded-for'] || headers['X-Forwarded-For'] || '';\nconst ip = (Array.isArray(forwarded) ? forwarded[0] : forwarded)\n  .split(',')[0].trim() || headers['x-real-ip'] || headers['X-Real-IP'] || '';\n\nfunction simpleHash(input) {\n  let hash = 0;\n  for (let i = 0; i < input.length; i += 1) {\n    hash = (hash * 31 + input.charCodeAt(i)) | 0;\n  }\n  return Math.abs(hash).toString(36);\n}\n\nconst ipHash = simpleHash(ip || 'unknown');\n\nconst dateKey = new Intl.DateTimeFormat('en-CA', {\n  timeZone: 'Europe/Berlin',\n  year: 'numeric',\n  month: '2-digit',\n  day: '2-digit',\n}).format(new Date());\n\nreturn [{\n  json: {\n    ...$json,\n    ip,\n    ipHash,\n    dateKey,\n    ipDocId: `${dateKey}_${ipHash}`,\n    globalDocId: dateKey,\n  }\n}];\n"
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "cbb6c857-b032-420c-b3e7-e0a5a98bdf29",
+              "leftValue": "={{ $json.summariesFirestore }}",
+              "rightValue": 3,
+              "operator": {
+                "type": "array",
+                "operation": "lengthEquals",
+                "rightType": "number"
+              }
+            },
+            {
+              "id": "1e23e569-6ca8-472b-b24f-79dfb4390433",
+              "leftValue": "={{ $json.detailsFirestore }}",
+              "rightValue": "3",
+              "operator": {
+                "type": "object",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
       },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
       "position": [
-        -3680,
-        512
+        -416,
+        96
       ],
-      "id": "88017835-f450-40e8-94d1-e2b0735b4858",
-      "name": "Extracts client IP"
+      "id": "6d960378-a3fc-45e3-af48-582db07a9f50",
+      "name": "If enogh recipes"
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://firestore.googleapis.com/v1/projects/random-recipe-creation/databases/(default)/documents/recipeRequests/{{ $('Webhook').item.json.body.requestId }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleFirebaseCloudFirestoreOAuth2Api",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "=fields.status.stringValue",
+              "value": "success"
+            },
+            {
+              "name": "=fields.updatedAt.timestampValue",
+              "value": "={{$now.toISO()}}"
+            },
+            {
+              "name": "fields.results.mapValue.fields.summaries.arrayValue.values",
+              "value": "={{$json.summariesFirestore}}"
+            },
+            {
+              "name": "fields.results.mapValue.fields.details.mapValue.fields",
+              "value": "={{$json.detailsFirestore}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -32,
+        16
+      ],
+      "id": "ff70f75b-6292-40e2-9d9e-5d6aed255265",
+      "name": "Patch recipes on firestore",
+      "credentials": {
+        "googleFirebaseRealtimeDatabaseOAuth2Api": {
+          "id": "IdE55bAOVKBzZ5lG",
+          "name": "Google Firebase Realtime Database account"
+        },
+        "googleFirebaseCloudFirestoreOAuth2Api": {
+          "id": "rvFrJf8PxSZd1NYl",
+          "name": "Google Firebase Cloud Firestore account"
+        }
+      }
     },
     {
       "parameters": {
@@ -505,91 +505,55 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
       "position": [
-        -704,
-        368
+        384,
+        16
       ],
-      "id": "c98047ef-74d4-4295-8218-cd9b9f3d2634",
-      "name": "Return Processing Status"
+      "id": "5108b1e7-4e57-4ddc-bfd8-520551b01f89",
+      "name": "Return processing status"
     }
   ],
-  "pinData": {
-    "get trigger from firestore": [
-      {
-        "json": {
-          "headers": {
-            "host": "n8n.srv1139834.hstgr.cloud",
-            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
-            "content-length": "405",
-            "accept": "*/*",
-            "accept-encoding": "gzip, deflate, br, zstd",
-            "accept-language": "de-DE,de;q=0.9,en-US;q=0.8,en;q=0.7",
-            "content-type": "application/json",
-            "origin": "http://localhost:4200",
-            "priority": "u=1, i",
-            "referer": "http://localhost:4200/",
-            "sec-ch-ua": "\"Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\"",
-            "sec-ch-ua-mobile": "?0",
-            "sec-ch-ua-platform": "\"macOS\"",
-            "sec-fetch-dest": "empty",
-            "sec-fetch-mode": "cors",
-            "sec-fetch-site": "cross-site",
-            "x-forwarded-for": "223.205.79.55",
-            "x-forwarded-host": "n8n.srv1139834.hstgr.cloud",
-            "x-forwarded-port": "443",
-            "x-forwarded-proto": "https",
-            "x-forwarded-server": "83f092dc9bdb",
-            "x-real-ip": "223.205.79.55"
-          },
-          "params": {},
-          "query": {},
-          "body": {
-            "requestId": "L7ZGezFy2AgU4Kob6Tkz",
-            "payload": {
-              "ingredients": [
-                {
-                  "name": "Tomaten",
-                  "amount": 100,
-                  "unit": "gram"
-                },
-                {
-                  "name": "Minze",
-                  "amount": 100,
-                  "unit": "gram"
-                },
-                {
-                  "name": "Basil",
-                  "amount": 100,
-                  "unit": "gram"
-                },
-                {
-                  "name": "Reis",
-                  "amount": 100,
-                  "unit": "gram"
-                },
-                {
-                  "name": "Chicken",
-                  "amount": 100,
-                  "unit": "gram"
-                }
-              ],
-              "preferences": {
-                "portions": 2,
-                "helpers": 1,
-                "cookTime": "under20",
-                "cuisine": "Fusion",
-                "dietPreferences": [
-                  "No preferences"
-                ]
-              }
-            }
-          },
-          "webhookUrl": "https://n8n.srv1139834.hstgr.cloud/webhook/3c9eac64-47c3-4c75-b5d3-76c69dfa93fd",
-          "executionMode": "production"
-        }
-      }
-    ]
-  },
+  "pinData": {},
   "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Extract client IP",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Error - Missing Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "make output as Json",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
     "Get IP Quota": {
       "main": [
         [
@@ -612,6 +576,22 @@
         ]
       ]
     },
+    "make output as Json": {
+      "main": [
+        [
+          {
+            "node": "If enogh recipes",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Library items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
     "Compute Quota": {
       "main": [
         [
@@ -628,11 +608,6 @@
         [
           {
             "node": "Update IP Quota",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "AI Agent",
             "type": "main",
             "index": 0
           }
@@ -679,11 +654,33 @@
         ]
       ]
     },
-    "if enough recipes": {
+    "Extract client IP": {
       "main": [
         [
           {
-            "node": "patch recipe on firestore",
+            "node": "Get IP Quota",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Patch API status": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If enogh recipes": {
+      "main": [
+        [
+          {
+            "node": "Patch recipes on firestore",
             "type": "main",
             "index": 0
           }
@@ -697,90 +694,12 @@
         ]
       ]
     },
-    "patch recipe on firestore": {
+    "Patch recipes on firestore": {
       "main": [
         [
           {
-            "node": "Return Processing Status",
+            "node": "Return processing status",
             "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "if all items exist": {
-      "main": [
-        [
-          {
-            "node": "Extracts client IP",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Error - Missing Data",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "get trigger from firestore": {
-      "main": [
-        [
-          {
-            "node": "if all items exist",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Google Gemini Chat Model": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "AI Agent": {
-      "main": [
-        [
-          {
-            "node": "Library items",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "if enough recipes",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Extracts client IP": {
-      "main": [
-        [
-          {
-            "node": "Get IP Quota",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Structured Output Parser": {
-      "ai_outputParser": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "ai_outputParser",
             "index": 0
           }
         ]
@@ -791,7 +710,7 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "a3a6f549-8223-4402-8a7b-48b9baa74b4c",
+  "versionId": "ca0fbf37-40d3-422e-8a58-bc0842e479b3",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "0b8a1778822a25b07f30c7dfa64e49cabf511bb34ce2b5fe530ab77113c1a274"

@@ -22,7 +22,7 @@
     display: flex;
     background-color: $background_green_article_cookbook;
     width: 285px;
-    height: 132px;
+    height: max-content;
     gap: 16px;
     padding: 12px 16px;
     border-radius: 20px;

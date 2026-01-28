@@ -5,6 +5,16 @@
         top: 20px;
         margin: 0;
     }
+
+    .landing__text {
+        p {
+            font-size: 24px;
+        }
+
+        h1 {
+            font-size: 62px;
+        }
+    }
 }
 
 @media (min-width: 481px) {
@@ -20,33 +30,11 @@
         padding: 24px 16px 0 20px;
     }
 
-    .landing__text {
-        p {
-            font-size: 32px;
-            width: 294px;
-        }
-
-        h1 {
-            font-size: 78px;
-            width: 264px;
-        }
-    }
-
     .landing__content {
         button {
             font-size: 20px;
             width: 143px;
             height: 60px;
-        }
-    }
-
-    .landing__footer {
-        h2 {
-            font-size: 32px;
-        }
-
-        span {
-            font-size: 24px;
         }
     }
 }
@@ -68,7 +56,7 @@
     }
 }
 
-@media (min-width: 769px) {
+@media (min-width: 768px) {
     .landing__text {
         p {
             width: max-content;
@@ -91,18 +79,6 @@
         a {
             padding: 0;
         }
-    }
-}
-
-@media (min-width: 912px) {
-    .landing__hero {
-        right: -15%;
-    }
-}
-
-@media (min-width: 1024px) {
-    .landing__hero {
-        right: -20%;
     }
 }
 
@@ -145,8 +121,7 @@
     }
 
     .landing__hero__bigger1440 {
-        display: block;
-        margin: 0;
+        position: unset;
 
         img {
             height: 100vh;

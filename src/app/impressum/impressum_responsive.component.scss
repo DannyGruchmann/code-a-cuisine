@@ -19,7 +19,7 @@
     }
 }
 
-@media (min-width: 1920px) {
+@media (min-width: 1440px) {
     .impressum__content {
         h1 {
             font-size: 40px;
@@ -33,20 +33,12 @@
             font-size: 24px;
         }
     }
-}
 
-@media (min-width: 2560px) {
-    .impressum__content {
-        h1 {
-            font-size: 64px;
-        }
+    .preferences__brand {
+        align-items: center;
 
-        .impressum__block h2 {
-            font-size: 48px;
-        }
-
-        p {
-            font-size: 38px;
+        div {
+            width: 1440px;
         }
     }
 }
