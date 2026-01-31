@@ -11,66 +11,12 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
       "position": [
-        -3696,
-        624
+        -4320,
+        64
       ],
-      "id": "c6021217-4459-40ea-8842-891531f7dae0",
+      "id": "c866561c-1de6-4951-8bb3-a7c23e0c07de",
       "name": "Webhook",
       "webhookId": "3c9eac64-47c3-4c75-b5d3-76c69dfa93fd"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "7d7d1b6f-741a-4635-ae0f-a8fb5f2d22d8",
-              "leftValue": "={{ $json.body.requestId }}",
-              "rightValue": "",
-              "operator": {
-                "type": "string",
-                "operation": "notEmpty",
-                "singleValue": true
-              }
-            },
-            {
-              "id": "e7a94f95-991e-461a-83f1-2aaee55254a5",
-              "leftValue": "={{ $json.body.payload.ingredients }}",
-              "rightValue": "",
-              "operator": {
-                "type": "array",
-                "operation": "notEmpty",
-                "singleValue": true
-              }
-            },
-            {
-              "id": "2ec75758-a883-4476-954e-b7850e0537a6",
-              "leftValue": "={{ $json.body.payload.preferences }}",
-              "rightValue": "",
-              "operator": {
-                "type": "object",
-                "operation": "notEmpty",
-                "singleValue": true
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
-        -3408,
-        624
-      ],
-      "id": "91b57daf-3676-452a-899f-64d9ac253233",
-      "name": "If"
     },
     {
       "parameters": {
@@ -93,10 +39,10 @@
       "type": "@n8n/n8n-nodes-langchain.googleGemini",
       "typeVersion": 1,
       "position": [
-        -1136,
-        352
+        -1760,
+        -208
       ],
-      "id": "8f89ef70-a6ad-4b0e-8db9-bdd6a8a518c8",
+      "id": "4e1086b2-8d75-44a2-afd5-3cc235588ae6",
       "name": "Message a model",
       "alwaysOutputData": false,
       "executeOnce": false,
@@ -119,10 +65,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        -2832,
-        448
+        -3456,
+        -112
       ],
-      "id": "832fbb5a-d07c-4028-8f3e-f4bf942468f0",
+      "id": "bc76d98a-7e8f-45db-be00-1322ab3bd7b4",
       "name": "Get IP Quota",
       "credentials": {
         "googleFirebaseCloudFirestoreOAuth2Api": {
@@ -142,10 +88,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        -2624,
-        448
+        -3248,
+        -112
       ],
-      "id": "cab0e76b-227e-4ea7-ac51-e3ec689c936f",
+      "id": "512eb657-7bb2-45db-b0c4-28451b2cb14b",
       "name": "Get Global Quota",
       "credentials": {
         "googleFirebaseCloudFirestoreOAuth2Api": {
@@ -162,10 +108,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -752,
-        352
+        -1392,
+        -208
       ],
-      "id": "ab04c7be-d8bc-4eda-9956-2d252dd18ee7",
+      "id": "89d301bc-a500-4ed5-a638-652d3dc7c800",
       "name": "make output as Json"
     },
     {
@@ -175,10 +121,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -2416,
-        448
+        -3040,
+        -112
       ],
-      "id": "0c5669bd-8a78-4692-8a77-1c6d6a453fa3",
+      "id": "2aab5f6e-b10a-442a-9e31-de3ca6782523",
       "name": "Compute Quota"
     },
     {
@@ -217,10 +163,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -2208,
-        448
+        -2832,
+        -112
       ],
-      "id": "51a1c7de-c734-4ce4-921d-45824b3d9162",
+      "id": "a95a05e8-3157-41fb-b4bb-976fa45f640c",
       "name": "If Quota"
     },
     {
@@ -237,10 +183,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        -2000,
-        352
+        -2624,
+        -208
       ],
-      "id": "a0d58d55-366b-4b96-9a6c-eb305fcd421a",
+      "id": "2bb3cef3-97ba-4e2b-a62d-a552dc8efef1",
       "name": "Update IP Quota",
       "credentials": {
         "googleFirebaseCloudFirestoreOAuth2Api": {
@@ -263,10 +209,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        -1760,
-        352
+        -2384,
+        -208
       ],
-      "id": "b1e896b3-a9a8-4f9e-aa69-a93301fed15a",
+      "id": "5ebaf82d-a89d-40d8-8adc-1332152cf481",
       "name": "Update Global Quota",
       "credentials": {
         "googleFirebaseCloudFirestoreOAuth2Api": {
@@ -282,10 +228,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -448,
-        576
+        -1072,
+        16
       ],
-      "id": "18b4470e-cb15-4f6a-bbd4-eccf307d1b17",
+      "id": "bdac6873-9c4d-4aab-9fb7-2031d19cf5c1",
       "name": "Library items"
     },
     {
@@ -302,10 +248,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        -176,
-        576
+        -800,
+        16
       ],
-      "id": "402ec3e9-d1b6-49ab-a77d-a76ff2462cd0",
+      "id": "f3d6eca6-dd68-4d04-8cac-962e5ef1eb3b",
       "name": "Create Recipe Docs",
       "credentials": {
         "googleFirebaseCloudFirestoreOAuth2Api": {
@@ -323,10 +269,10 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
       "position": [
-        -16,
-        240
+        -640,
+        -320
       ],
-      "id": "ea70fb14-dba6-496b-b0e0-fdabbd094903",
+      "id": "3b6754ee-8676-4ef1-837f-66973c9c087d",
       "name": "Error - Not Enough Recipes"
     },
     {
@@ -338,10 +284,10 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
       "position": [
-        -3088,
-        784
+        -3712,
+        224
       ],
-      "id": "f7ac9be4-207b-4601-b2b0-1622924bb238",
+      "id": "1c22f6b3-41ab-4332-952f-67cfe7f529ae",
       "name": "Error - Missing Data"
     },
     {
@@ -351,16 +297,16 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -3040,
-        448
+        -3664,
+        -112
       ],
-      "id": "8661cdd3-6c88-4a2e-8592-15b679f93457",
+      "id": "ef89c755-2ec6-443e-bfe7-fb2c25456eea",
       "name": "Extract client IP"
     },
     {
       "parameters": {
         "respondWith": "json",
-        "responseBody": "={{ { \"message\": \"Quota erreicht. Bitte morgen erneut versuchen.\", \"quota\": $json.quota } }}\n",
+        "responseBody": "{\n  \"message\": \"Quota erreicht. Bitte morgen erneut versuchen.\",\n  \"quota\": \"{{$json.quota}}\"\n}",
         "options": {
           "responseCode": 429
         }
@@ -368,10 +314,10 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
       "position": [
-        -2000,
-        720
+        -2624,
+        160
       ],
-      "id": "13717f38-ba67-41e5-9055-8c77b61379d9",
+      "id": "51b03c2f-2a3c-4e15-b3d3-4b9e10db06d1",
       "name": "Error - limit reached"
     },
     {
@@ -388,10 +334,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        -1472,
-        352
+        -2096,
+        -208
       ],
-      "id": "b7b49ea0-b3a3-4ccd-b2b4-2705661b5b60",
+      "id": "7cb9bd40-c044-42fe-bc91-bbfb47611f5e",
       "name": "Patch API status",
       "credentials": {
         "googleFirebaseRealtimeDatabaseOAuth2Api": {
@@ -442,10 +388,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -416,
-        96
+        -1040,
+        -464
       ],
-      "id": "6d960378-a3fc-45e3-af48-582db07a9f50",
+      "id": "900c6724-cfd7-4ec6-9f7e-ca2d30459fc9",
       "name": "If enogh recipes"
     },
     {
@@ -480,10 +426,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        -32,
-        16
+        -656,
+        -544
       ],
-      "id": "ff70f75b-6292-40e2-9d9e-5d6aed255265",
+      "id": "83f48758-018b-4379-9756-954b177e1ff7",
       "name": "Patch recipes on firestore",
       "credentials": {
         "googleFirebaseRealtimeDatabaseOAuth2Api": {
@@ -505,38 +451,222 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
       "position": [
-        384,
-        16
+        -240,
+        -544
       ],
-      "id": "5108b1e7-4e57-4ddc-bfd8-520551b01f89",
+      "id": "021fbae0-926a-498c-aa69-46bf5c27c41f",
       "name": "Return processing status"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        -4320,
+        -512
+      ],
+      "id": "5140b90d-fc44-420c-96e7-7634b077214e",
+      "name": "Error Trigger"
+    },
+    {
+      "parameters": {
+        "chatId": "1924960089",
+        "text": "={{ $json.execution.error.message }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -4112,
+        -512
+      ],
+      "id": "f04aae02-2e9b-4c02-8068-9c4204153e24",
+      "name": "Send a text message",
+      "webhookId": "2dbd8f39-0dbb-4164-bfd3-1dd7d041ae44",
+      "credentials": {
+        "telegramApi": {
+          "id": "AbpLuRpZVLVUcklZ",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "errorMessage": "Missing Data"
+      },
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        -3504,
+        224
+      ],
+      "id": "525c78ba-7439-4afb-86ea-af5d7e752ee1",
+      "name": "send error message to chat"
+    },
+    {
+      "parameters": {
+        "errorMessage": "daily limit reached"
+      },
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        -2400,
+        160
+      ],
+      "id": "529c262d-2e5a-4197-a3f6-7f6bb35a0638",
+      "name": "send error message to chat1"
+    },
+    {
+      "parameters": {
+        "errorMessage": "output is not enogh recipes"
+      },
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        -384,
+        -320
+      ],
+      "id": "4a13d768-e2fa-4545-8781-6b902bebf606",
+      "name": "send error message to chat2"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "7d7d1b6f-741a-4635-ae0f-a8fb5f2d22d8",
+              "leftValue": "={{ $json.body.requestId }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "e7a94f95-991e-461a-83f1-2aaee55254a5",
+              "leftValue": "={{ $json.body.payload.ingredients }}",
+              "rightValue": "",
+              "operator": {
+                "type": "array",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "2ec75758-a883-4476-954e-b7850e0537a6",
+              "leftValue": "={{ $json.body.payload.preferences }}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -4032,
+        64
+      ],
+      "id": "8542326e-204d-4c56-9d9c-1bec6f2fb0a3",
+      "name": "If all data avable"
     }
   ],
-  "pinData": {},
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "n8n.srv1139834.hstgr.cloud",
+            "user-agent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Mobile Safari/537.36",
+            "content-length": "413",
+            "accept": "*/*",
+            "accept-encoding": "gzip, deflate, br, zstd",
+            "accept-language": "de-DE,de;q=0.9,en-US;q=0.8,en;q=0.7",
+            "content-type": "application/json",
+            "origin": "http://localhost:4200",
+            "priority": "u=1, i",
+            "referer": "http://localhost:4200/",
+            "sec-ch-ua": "\"Not(A:Brand\";v=\"8\", \"Chromium\";v=\"144\", \"Google Chrome\";v=\"144\"",
+            "sec-ch-ua-mobile": "?1",
+            "sec-ch-ua-platform": "\"Android\"",
+            "sec-fetch-dest": "empty",
+            "sec-fetch-mode": "cors",
+            "sec-fetch-site": "cross-site",
+            "x-forwarded-for": "194.233.96.151",
+            "x-forwarded-host": "n8n.srv1139834.hstgr.cloud",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "83f092dc9bdb",
+            "x-real-ip": "194.233.96.151"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "requestId": "JqoAAsKUvE9KbR2ll3K9",
+            "payload": {
+              "ingredients": [
+                {
+                  "name": "Tomaten",
+                  "amount": 100,
+                  "unit": "gram"
+                },
+                {
+                  "name": "Knoblau",
+                  "amount": 100,
+                  "unit": "gram"
+                },
+                {
+                  "name": "Hackfleisch",
+                  "amount": 100,
+                  "unit": "gram"
+                },
+                {
+                  "name": "Nudeln",
+                  "amount": 100,
+                  "unit": "gram"
+                },
+                {
+                  "name": "Käse",
+                  "amount": 100,
+                  "unit": "gram"
+                }
+              ],
+              "preferences": {
+                "portions": 2,
+                "helpers": 1,
+                "cookTime": "under20",
+                "cuisine": "Fusion",
+                "dietPreferences": [
+                  "No preferences"
+                ]
+              }
+            }
+          },
+          "webhookUrl": "https://n8n.srv1139834.hstgr.cloud/webhook/3c9eac64-47c3-4c75-b5d3-76c69dfa93fd",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
   "connections": {
     "Webhook": {
       "main": [
         [
           {
-            "node": "If",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "If": {
-      "main": [
-        [
-          {
-            "node": "Extract client IP",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Error - Missing Data",
+            "node": "If all data avable",
             "type": "main",
             "index": 0
           }
@@ -704,13 +834,75 @@
           }
         ]
       ]
+    },
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Error - Missing Data": {
+      "main": [
+        [
+          {
+            "node": "send error message to chat",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Error - Not Enough Recipes": {
+      "main": [
+        [
+          {
+            "node": "send error message to chat2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Error - limit reached": {
+      "main": [
+        [
+          {
+            "node": "send error message to chat1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If all data avable": {
+      "main": [
+        [
+          {
+            "node": "Extract client IP",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Error - Missing Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": true,
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "ca0fbf37-40d3-422e-8a58-bc0842e479b3",
+  "versionId": "0cc73eb3-3f17-4c0b-8dc0-1cb7bc571444",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "0b8a1778822a25b07f30c7dfa64e49cabf511bb34ce2b5fe530ab77113c1a274"

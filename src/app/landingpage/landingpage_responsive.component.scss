@@ -114,6 +114,12 @@
 @media (min-width: 1440px) {
     :host {
         justify-content: center;
+        height: 100dvh;
+    }
+
+    .landing__inner {
+        height: 100%;
+        align-items: stretch;
     }
 
     .landing__hero {
@@ -122,9 +128,19 @@
 
     .landing__hero__bigger1440 {
         position: unset;
+        height: 100%;
+        display: flex;
+        align-items: flex-end;
+
+        picture {
+            display: block;
+            height: 100%;
+        }
 
         img {
-            height: 100vh;
+            display: block;
+            height: 100%;
+            max-height: 100%;
         }
     }
 }
