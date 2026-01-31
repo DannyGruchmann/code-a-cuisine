@@ -49,3 +49,5 @@ dist/
 .angular/
 node_modules_bad/
 package-lock.bad
+node_modules.__trash__*/
+package-lock 2.json
