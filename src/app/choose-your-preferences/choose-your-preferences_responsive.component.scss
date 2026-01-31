@@ -1,115 +1,116 @@
 @media (min-width: 481px) {
-    .preferences__panel {
-        h1 {
-            font-size: 28px;
-        }
-
-        article {
-            h2 {
-                font-size: 18px;
-            }
-        }
+  .preferences__panel {
+    h1 {
+      font-size: 28px;
     }
 
-    .counter {
-        span {
-            font-size: 20px !important;
-        }
+    article {
+      h2 {
+        font-size: 18px;
+      }
+    }
+  }
+
+  .counter {
+    span {
+      font-size: 20px !important;
+    }
+  }
+
+  .preferences__options {
+    article {
+      h2 {
+        font-size: 26px;
+      }
     }
 
-    .preferences__options {
-        article {
-            h2 {
-                font-size: 26px;
-            }
-        }
-
-        .pill {
-            font-size: 18px;
-            padding: 0 12px;
-        }
+    .pill {
+      font-size: 18px;
+      padding: 0 12px;
     }
+  }
 }
 
 @media (min-width: 768px) {
-    .ingedients {
-        display: block;
-        font-size: 16px;
-        margin: 0;
-    }
+  .ingedients {
+    display: block;
+    font-size: 16px;
+    margin: 0;
+  }
 
-    .preferences__panel {
-        align-items: center;
-        width: 721px;
-    }
+  .preferences__panel {
+    align-items: center;
+    width: 721px;
+  }
 
-    .preferences__brand {
-        button {
-            display: flex;
-            gap: 12px;
-        }
+  .preferences__brand {
+    button {
+      display: flex;
+      gap: 12px;
     }
+  }
 
-    .preferences__heading__inner {
-        display: flex;
-        width: 100%;
-        justify-content: space-between;
-    }
+  .preferences__heading__inner {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+  }
 
-    .preferences__body {
-        align-items: center;
-    }
+  .preferences__body {
+    align-items: center;
+  }
 
-    .preferences__options {
-        width: 673px;
-    }
+  .preferences__options {
+    width: 673px;
+  }
 
-    .preferences__submit {
-        height: 62px;
-        width: 258px;
-        font-size: 24px;
-    }
+  .preferences__submit {
+    height: 62px;
+    width: 258px;
+    font-size: 24px;
+  }
 }
 
 @media (min-width: 1440px) {
-    .preferences {
-        align-items: center;
+  .preferences {
+    align-items: center;
+  }
+
+  .preferences__brand {
+    width: 1440px;
+    padding-left: 40px;
+  }
+
+  .preferences__panel {
+    h1 {
+      font-size: 36px;
     }
 
-    .preferences__brand {
-        width: 1440px;
+    button {
+      width: 34px;
+      height: 34px;
+    }
+  }
+
+  .preferences__heading__inner {
+    h2 {
+      font-size: 22px !important;
+    }
+  }
+
+  .counter {
+    span {
+      font-size: 22px !important;
+    }
+  }
+
+  .preferences__options {
+    .pill {
+      font-size: 20px;
     }
 
-    .preferences__panel {
-        h1 {
-            font-size: 36px;
-        }
-
-        button {
-            width: 34px;
-            height: 34px;
-        }
+    p {
+      font-size: 16px;
     }
-
-    .preferences__heading__inner {
-        h2 {
-            font-size: 22px !important;
-        }
-    }
-
-    .counter {
-        span {
-            font-size: 22px !important;
-        }
-    }
-
-    .preferences__options {
-        .pill {
-            font-size: 20px;
-        }
-
-        p {
-            font-size: 16px;
-        }
-    }
+  }
 }
