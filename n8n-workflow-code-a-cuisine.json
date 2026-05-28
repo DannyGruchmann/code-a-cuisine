@@ -655,7 +655,7 @@
               }
             }
           },
-          "webhookUrl": "https://n8n.srv1139834.hstgr.cloud/webhook/3c9eac64-47c3-4c75-b5d3-76c69dfa93fd",
+          "webhookUrl": "https://dglabs.app.n8n.cloud/webhook/3c9eac64-47c3-4c75-b5d3-76c69dfa93fd",
           "executionMode": "production"
         }
       }
