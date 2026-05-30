@@ -20,7 +20,7 @@ export async function parseJson(response: Response): Promise<unknown> {
 export function buildWebhookResult(response: Response, data: unknown): WebhookResult {
   const quota = extractQuota(data);
   if (!response.ok) {
-    const message = extractMessage(data, 'All requests used. Please try again tomorrow.');
+    const message = extractMessage(data, 'Something went wrong. Please try again.');
     return { ok: false, message, quota };
   }
   return { ok: true, quota };

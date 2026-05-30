@@ -57,7 +57,7 @@ export class RecipeRequestService implements OnDestroy {
   private readonly quotaLoadingSubject = new BehaviorSubject<boolean>(false);
   private readonly webhookUrl = environment.n8nWebhookUrl;
   private readonly quotaUrl = environment.n8nQuotaUrl;
-  private readonly workflowTimeoutMs = 30000;
+  private readonly workflowTimeoutMs = 120000;
   private workflowTimeoutId: number | null = null;
 
   private activeRequestId: string | null = null;
@@ -186,7 +186,7 @@ export class RecipeRequestService implements OnDestroy {
     docRef: DocumentReference<DocumentData>,
     webhookResult: { message?: string }
   ): Promise<boolean> {
-    const errorMessage = webhookResult.message ?? 'All requests used. Please try again tomorrow.';
+    const errorMessage = webhookResult.message ?? 'Something went wrong. Please try again.';
     this.quotaErrorSubject.next(errorMessage);
     await this.updateRequestErrorStatus(docRef, errorMessage);
     this.setWorkflowErrorState();
@@ -324,7 +324,7 @@ export class RecipeRequestService implements OnDestroy {
   private handleRequestListenerError(err: unknown): void {
     console.error('Error listening to recipe request', err);
     this.workflowStatusSubject.next('error');
-    this.quotaErrorSubject.next('All requests used. Please try again tomorrow.');
+    this.quotaErrorSubject.next('Connection error. Please try again.');
     this.stopGeneration();
   }
 
@@ -343,7 +343,7 @@ export class RecipeRequestService implements OnDestroy {
     this.clearWorkflowTimeout();
     this.workflowTimeoutId = window.setTimeout(() => {
       if (this.workflowStatusSubject.getValue() === 'loading') {
-        this.quotaErrorSubject.next('All requests used. Please try again tomorrow.');
+        this.quotaErrorSubject.next('Recipe generation timed out. Please try again.');
         this.workflowStatusSubject.next('error');
         this.generatingSubject.next(false);
       }
@@ -391,7 +391,7 @@ export class RecipeRequestService implements OnDestroy {
       return buildWebhookResult(response, data);
     } catch (error) {
       logWebhookError(error);
-      return { ok: false, message: 'All requests used. Please try again tomorrow.' };
+      return { ok: false, message: 'Connection error. Please try again.' };
     }
   }
 }
