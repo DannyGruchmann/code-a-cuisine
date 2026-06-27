@@ -7,6 +7,7 @@ import { RecipeDetailComponent } from './recipe-detail/recipe-detail.component';
 import { CookbookComponent } from './cookbook/cookbook.component';
 import { RecipeLibraryComponent } from './recipe-library/recipe-library.component';
 import { ImpressumComponent } from './impressum/impressum.component';
+import { DatenschutzComponent } from './datenschutz/datenschutz.component';
 
 export const routes: Routes = [
   {
@@ -45,5 +46,9 @@ export const routes: Routes = [
   {
     path: 'impressum',
     component: ImpressumComponent
+  },
+  {
+    path: 'datenschutz',
+    component: DatenschutzComponent
   }
 ];
